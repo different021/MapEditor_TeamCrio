@@ -2,6 +2,7 @@
 
 *.pdb
 *.lib
+*.idb
 
 ## ignore Folder ##
 
