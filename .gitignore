@@ -1,0 +1,8 @@
+## ignore File ##
+
+*.pdb
+*.lib
+
+## ignore Folder ##
+
+x64/
