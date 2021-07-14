@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="로더">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="예시">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{0d1c7d73-91c3-46b2-bc81-668811882078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{097ce579-7e3e-4a16-9601-53c8354c39c8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\example.cpp">
+      <Filter>예시</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MAPLOAD.cpp">
+      <Filter>로더</Filter>
+    </ClCompile>
+    <ClCompile Include="src\writeTest.cpp">
+      <Filter>예시</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\HGUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\CTextReader.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Defines.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\object_v0.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\object_v1.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\MAPLOAD.h">
+      <Filter>로더</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\HGUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\CTextReader.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Defines.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\object_v0.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\object_v1.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\object_v2.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

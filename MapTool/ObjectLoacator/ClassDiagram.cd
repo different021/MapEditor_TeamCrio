@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CObjectLoacatorApp" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>ObjectLoacator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MapLoader" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgBIgBAEgAAAAAAAAAAAAgAAAAAAAQAAAAAAJAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\MAPLOAD.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCallbackTimer" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAACAABAAAAAAAAAAAAAAAAJAAIAAAAAAAAAA=</HashCode>
+      <FileName>CCallbackTimer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Synchronization" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAAAAAAIAAAAAAAAAAAEIAAAAAAIAAAAACAAAA=</HashCode>
+      <FileName>Synchronization.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCharSetting" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEUAoAAhEBKIJEAGhIAQgACABAAAAAAggCkBEA=</HashCode>
+      <FileName>CCharSetting.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CCmd" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAUAAIAAAAgAEFAAAAEAAAAAAAABABAAAAAAAAA=</HashCode>
+      <FileName>CCmd.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CColliderControllerDlg" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAEACIAIAAgEgRAACIAAIAAIABBAAAAQCAEAAAQ=</HashCode>
+      <FileName>CColliderControllerDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CGrid" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAEQIICIAggICDAEEAAQAAEAgAAAQAAEAACAEAA=</HashCode>
+      <FileName>CGrid.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CHelpDlg" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CHelpDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLIGHTDLG" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAUQBAEAAAAKAAgCABEAZAAQBEwAAAAgAAAQIICAAEA=</HashCode>
+      <FileName>CLIGHTDLG.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Center" Collapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>g4UgiIsgIziIABjWThKWNInbgIEsIdQgewgoBMgIACw=</HashCode>
+      <FileName>Center.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CObjectLoacatorDlg" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>kADSypeBSEwIyw0TWzELEHoCWFoeoBRBIgCCMMHwgOQ=</HashCode>
+      <FileName>ObjectLoacatorDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Viewer" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>dwGBRJlAUDmIGpnuEQAAJMNAUBYAyBAlHAM+EkjQGCA=</HashCode>
+      <FileName>ViewDlg.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CamController" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUAACAQICAAAAAFAAEAAAAAAACIAAAAQAAAAAAACAA=</HashCode>
+      <FileName>CamController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CColliderManager" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAIoCAAKAAA0ACIiQEEQAAgBoBAQIEoUAAIQAAABgY=</HashCode>
+      <FileName>CColliderManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterManager" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAAAACAACACAIBAAQABAAAAAAAAAAAABAAAAQ=</HashCode>
+      <FileName>CharacterManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CLightManager" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEABAJIABIKAMAAEMCAAEBoHAQICAQDCYABSQAAY=</HashCode>
+      <FileName>CLightManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DrawInsManager" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADACQhgAAJwAAQgQMACABABgBSwAF6UAEAAAIICgQ=</HashCode>
+      <FileName>DrawInsManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FileManager" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ModelManager" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACCAAAAhAACAAQAEABIAAAAEBAAAAAEABAAAAAAAQAQ=</HashCode>
+      <FileName>ModelManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MaterialManager" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAGAEACAAAAAACAAAIIAAAABAAAAAEABAAUBAIAQAQ=</HashCode>
+      <FileName>MaterialManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CSaver" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEEoJIgEAAAAABBAiCABAgEBAAAEAEAAAAggEABAgQ=</HashCode>
+      <FileName>CSaver.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="MAP" Collapsed="true">
+    <Position X="10" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAEAAAABAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\MAPLOAD.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TextureSet" Collapsed="true">
+    <Position X="3" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\utility\HGUtility.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="comp" Collapsed="true">
+    <Position X="6.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAECAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>DrawInsManager.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Gizmo" Collapsed="true">
+    <Position X="3" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AKAAAAABDggABAQAAGMIJAgIMAEAAAAAAAAAAkAQACQ=</HashCode>
+      <FileName>Gizmo.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="comp_hGraphic" Collapsed="true">
+    <Position X="8.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAACBAAAAAAAA=</HashCode>
+      <FileName>DrawInsManager.cpp</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Light" Collapsed="true">
+    <Position X="6.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAACAAACAAAAAAAAAQAAAAgAAAAAAEAICACA=</HashCode>
+      <FileName>CLightManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="FbxFileInfo" Collapsed="true">
+    <Position X="10" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAFAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TextureFileInfo" Collapsed="true">
+    <Position X="10" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAFAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="CHARACTER" Collapsed="true">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>0ACAAAiAAAACAAIBAAAAgAQAUgEkAAIQCAAAAAABBAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="object" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IJACAAAAAAAAAAAIAAAAAIICAQBBAIAwCAAAYiAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="object_TOOL" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAQAgAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="collider" Collapsed="true">
+    <Position X="4.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAJAAAIACAQAEAAAAAAAAACACAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="strTEXTURE" Collapsed="true">
+    <Position X="8.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="LightData_Tool" Collapsed="true">
+    <Position X="8.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAgAAAAgIAAAAAAFAAAAQAAAAEAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="STAGE_HEADER" Collapsed="true">
+    <Position X="6.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IgCIAAAAAAAAAAAAAAAQAABAAAAAAAAQQAAAAAAAACA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MODEL" Collapsed="true">
+    <Position X="4.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAEAAAAABAAAAEAAAAABAAA=</HashCode>
+      <FileName>ToolDefine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="MATERIAL" Collapsed="true">
+    <Position X="3" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAQAAAAAAABAAA=</HashCode>
+      <FileName>ToolDefine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="GRID_INFO" Collapsed="true">
+    <Position X="4.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAACA=</HashCode>
+      <FileName>ToolDefine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="COLLIDER" Collapsed="true">
+    <Position X="3" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CColliderManager.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="DRAW_INSTANCE" Collapsed="true">
+    <Position X="4.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DrawInsManager.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="DrawInsList" Collapsed="true">
+    <Position X="6.5" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DrawInsManager.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="eSTAGE" Collapsed="true">
+    <Position X="4.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAIAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\MAPLOAD.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eTEXTURES" Collapsed="true">
+    <Position X="8.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAACAAAAAAAAAEAAAAAAAAAgAAAAAAEQEAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\utility\HGUtility.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eDlgs" Collapsed="true">
+    <Position X="4.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAgIAAAAAAAAAAIEAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Center.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="OBJ_EDIT_MODE" Collapsed="true">
+    <Position X="10" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIABAAAAAAAAgAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewDlg.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eFILE_TYPE" Collapsed="true">
+    <Position X="6.5" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAEAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FileManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eOBJECT_TYPE" Collapsed="true">
+    <Position X="10" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAEAAAgAAIIAA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eTEX" Collapsed="true">
+    <Position X="6.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAEAAAAAAAAAAAABAAAAAAgAAAAAAABgA=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eLightType" Collapsed="true">
+    <Position X="8.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAAAAAAAAAEAAACAAAAAAAQ=</HashCode>
+      <FileName>E:\svn_fin\5_Project\MapTool\src\Defines.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eDirection" Collapsed="true">
+    <Position X="3" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAQAAAAAAAAAAAAAAABIAAAAAAYAAgA=</HashCode>
+      <FileName>ToolDefine.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="eSELECT_MODE" Collapsed="true">
+    <Position X="3" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAACAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ToolDefine.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="10" />
+</ClassDiagram>

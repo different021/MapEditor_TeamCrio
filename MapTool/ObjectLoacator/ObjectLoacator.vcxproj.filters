@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{57b7c3b6-3713-4cd8-b824-6ec2ec876ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utill">
+      <UniqueIdentifier>{68ca73d1-3207-45b7-bcae-e9ea01fbc17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{a8dcffcd-b9e9-4a03-bff4-891dc9661239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Gizumo">
+      <UniqueIdentifier>{0db10d63-96cc-4f70-9143-246ffb2fd94c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SAVELOAD">
+      <UniqueIdentifier>{9277b2cd-a520-4cb5-a530-56007f94c04f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SAVELOAD\오브젝트헤더">
+      <UniqueIdentifier>{47162e1a-3c37-4b15-b801-197a4a8b4d7f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="WMDefine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolDefine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLoacator.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="MapUtil.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectLoacatorDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Synchronization.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+    <ClInclude Include="CGrid.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CCmd.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CCallbackTimer.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawInsManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Gizmo.h">
+      <Filter>Gizumo</Filter>
+    </ClInclude>
+    <ClInclude Include="Center.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderControllerDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CColliderManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CHelpDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\HGUtility.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+    <ClInclude Include="CamController.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CLightManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CLIGHTDLG.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\CTextReader.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MAP_v0.h">
+      <Filter>SAVELOAD\오브젝트헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MAP_v1.h">
+      <Filter>SAVELOAD\오브젝트헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="CSaver.h">
+      <Filter>SAVELOAD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MAP_v2.h">
+      <Filter>SAVELOAD\오브젝트헤더</Filter>
+    </ClInclude>
+    <ClInclude Include="CWaveDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CWaveManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Defines.h">
+      <Filter>SAVELOAD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\MAPLOAD.h">
+      <Filter>SAVELOAD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\utility\CFileManager.h">
+      <Filter>utill</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ObjectLoacator.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ObjectLoacator.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\ObjectLoacator.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLoacator.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="MapUtil.cpp">
+      <Filter>utill</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectLoacatorDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Synchronization.cpp">
+      <Filter>utill</Filter>
+    </ClCompile>
+    <ClCompile Include="CGrid.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ViewDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CCmd.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawInsManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Gizmo.cpp">
+      <Filter>Gizumo</Filter>
+    </ClCompile>
+    <ClCompile Include="Center.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderControllerDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CColliderManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CHelpDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\HGUtility.cpp">
+      <Filter>utill</Filter>
+    </ClCompile>
+    <ClCompile Include="CamController.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CLightManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CLIGHTDLG.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\CTextReader.cpp">
+      <Filter>utill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MAP_v0.cpp">
+      <Filter>SAVELOAD\오브젝트헤더</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MAP_v1.cpp">
+      <Filter>SAVELOAD\오브젝트헤더</Filter>
+    </ClCompile>
+    <ClCompile Include="CSaver.cpp">
+      <Filter>SAVELOAD</Filter>
+    </ClCompile>
+    <ClCompile Include="CWaveDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CWaveManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Defines.cpp">
+      <Filter>SAVELOAD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MAPLOAD.cpp">
+      <Filter>SAVELOAD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\CFileManager.cpp">
+      <Filter>utill</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
