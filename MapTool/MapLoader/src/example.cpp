@@ -14,19 +14,21 @@ FILE* stream, * stream2;
 
 int main()
 {
-	/*
-	MAP* pMap;
-	//MapLoader::Load((WCHAR*)(L"C:\\Users\\kocca\\Desktop\\map\\test.map"), pMap);
-	MapLoader::Load((L"E:\\svn_fin\\1_Executable\\MapTool\\maptoolVer2\\Media\\Stage\\S_stage1.stage"), pMap);
-	MapLoader::DeleteMap(pMap);
-	*/
+	//
+	//MAP* pMap;
+	////MapLoader::Load((WCHAR*)(L"C:\\Users\\kocca\\Desktop\\map\\test.map"), pMap);
+	//MapLoader::Load((L"E:\\svn_fin\\1_Executable\\MapTool\\maptoolVer2\\Media\\Stage\\S_stage1.stage"), pMap);
+	//MapLoader::DeleteMap(pMap);
+	//
 
+	const wchar_t* pFileName = L"newfile.txt";
 	std::vector<wchar_t*> fList;
 
 	CTextReader* pReader = new CTextReader;
-	pReader->OpenTxt((wchar_t*)L"newfile.txt");
+	pReader->OpenTxt(L"newfile.txt");
+	//pReader->OpenTxt(pFileName);
 	int Filesize = pReader->GetFileSize();
-	printf("File Size : %d", Filesize);	
+	printf("File Size : %d\n", Filesize);	
 	pReader->ReadTxt(NULL);
 	pReader->GetFileList(fList);
 

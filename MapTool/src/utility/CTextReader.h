@@ -24,6 +24,7 @@ private:
 
 public:
 	bool OpenTxt(wchar_t* szFileName);
+	bool OpenTxt(const wchar_t szFileName[]);
 	bool CloseTxt();
 	
 	size_t  ReadTxt(wchar_t* dest);

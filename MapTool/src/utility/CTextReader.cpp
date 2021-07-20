@@ -17,12 +17,18 @@ bool CTextReader::OpenTxt(wchar_t* szFileName)
 	errno_t err = _wfopen_s(&m_pFile, (const wchar_t*)szFileName, L"rt, ccs=UTF-8");
 	if (err != 0)
 	{
-		fclose(m_pFile);
+		if(m_pFile != nullptr) fclose(m_pFile);
 		bResult = false;
-		OutputDebugStringW(L"[FAIL]File Open\n");
+		OutputDebugStringW(L"[FAIL]CTextReader::OpenTxt()\n");
 	}
 
 	return bResult;
+}
+
+bool CTextReader::OpenTxt(const wchar_t szFileName[])
+{
+	//return OpenTxt( std::move(szFileName) );	//무한 루프
+	return OpenTxt((wchar_t*)(szFileName));
 }
 
 bool CTextReader::CloseTxt()

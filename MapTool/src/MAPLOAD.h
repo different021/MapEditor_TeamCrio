@@ -8,7 +8,7 @@ class MapLoader
 
 public:
 	static BOOL Load(wchar_t* pFileName, MAP* &pDest);									//USE this fuc
-	static BOOL Load(const wchar_t* pFileName, MAP* &pDest);
+	static BOOL Load(const wchar_t pFileName[], MAP* &pDest);
 	static void DeleteMap(MAP* pMap);
 
 	static BOOL OpenMapFileToSave(HANDLE& hFile, wchar_t* pFileName);					//Save

@@ -113,9 +113,10 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	return bResult;
 }
 
-BOOL MapLoader::Load(const wchar_t* pFileName, MAP*& pDest)
+BOOL MapLoader::Load(const wchar_t pFileName[], MAP*& pDest)
 {
-	return Load((wchar_t*)pFileName, pDest);
+	//return Load(std::move(pFileName), pDest);
+	return Load(pFileName, pDest);
 }
 
 void MapLoader::DeleteMap(MAP* pMap)
