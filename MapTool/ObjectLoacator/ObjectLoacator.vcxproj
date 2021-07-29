@@ -218,10 +218,14 @@
     <ClInclude Include="CCmd.h" />
     <ClInclude Include="CColliderControllerDlg.h" />
     <ClInclude Include="CColliderManager.h" />
+    <ClInclude Include="CContainerArray.h" />
     <ClInclude Include="CGrid.h" />
     <ClInclude Include="CHelpDlg.h" />
     <ClInclude Include="CLIGHTDLG.h" />
     <ClInclude Include="CLightManager.h" />
+    <ClInclude Include="CManager.h" />
+    <ClInclude Include="CContainer.h" />
+    <ClInclude Include="CSelectedArray.h" />
     <ClInclude Include="CWaveDlg.h" />
     <ClInclude Include="CWaveManager.h" />
     <ClInclude Include="DrawInsManager.h" />
@@ -292,6 +296,7 @@
     <ClCompile Include="CColliderManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CContainerArray.cpp" />
     <ClCompile Include="CGrid.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -300,6 +305,15 @@
     </ClCompile>
     <ClCompile Include="CLIGHTDLG.cpp" />
     <ClCompile Include="CLightManager.cpp" />
+    <ClCompile Include="CManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CContainer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="CSelectedArray.cpp" />
     <ClCompile Include="CWaveDlg.cpp" />
     <ClCompile Include="CWaveManager.cpp" />
     <ClCompile Include="DrawInsManager.cpp">

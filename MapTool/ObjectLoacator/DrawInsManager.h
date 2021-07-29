@@ -53,7 +53,7 @@ public:
 	void CreateObj(object* pObj, HInstanceData* pGraphicsData);
 
 	//Selected List 
-	object* AddSelected_public(HInstanceData* pHIns);//현재 셀렉트 모드에 따라 추가
+	object* AddSelected_public(HInstanceData* pHIns);					//현재 셀렉트 모드에 따라 추가
 	object* AddSelected(HInstanceData* pHIns);							//아무 고려 없이 추가
 	object* AddSelected_DeleteAlreadySelected(HInstanceData* pHIns);	//이미 선택된 오브젝트는 제거, 없을 경우 추가
 	object* AddSelected_OnlyOne(HInstanceData* pHIns);					//오로지 하나만 추가한다.

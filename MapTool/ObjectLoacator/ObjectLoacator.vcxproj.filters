@@ -31,6 +31,9 @@
     <Filter Include="SAVELOAD\오브젝트헤더">
       <UniqueIdentifier>{47162e1a-3c37-4b15-b801-197a4a8b4d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Container">
+      <UniqueIdentifier>{6ac2c2fd-b689-45bb-bc98-d201171e24c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -141,6 +144,18 @@
     <ClInclude Include="..\src\utility\CFileManager.h">
       <Filter>utill</Filter>
     </ClInclude>
+    <ClInclude Include="CContainer.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="CManager.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="CContainerArray.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="CSelectedArray.h">
+      <Filter>Container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ObjectLoacator.rc">
@@ -245,6 +260,18 @@
     </ClCompile>
     <ClCompile Include="..\src\utility\CFileManager.cpp">
       <Filter>utill</Filter>
+    </ClCompile>
+    <ClCompile Include="CContainer.cpp">
+      <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="CManager.cpp">
+      <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="CContainerArray.cpp">
+      <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="CSelectedArray.cpp">
+      <Filter>Container</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
