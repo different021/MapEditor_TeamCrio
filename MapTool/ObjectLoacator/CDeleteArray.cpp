@@ -1,18 +1,18 @@
 #include "pch.h"
+#include "CDeleteArray.h"
 #include "CContainer.h"
-#include "CSelectedArray.h"
 
-CSelectedArray::CSelectedArray()
+CDeleteArray::CDeleteArray()
 {
 }
 
-CSelectedArray::~CSelectedArray()
+CDeleteArray::~CDeleteArray()
 {
 }
 
-void CSelectedArray::ReleaseArray()
+void CDeleteArray::ReleaseArray()
 {
-	if (m_ppContainerArray == nullptr)
+	if(m_ppContainerArray == nullptr)
 	{
 		m_ArrayMaxCount = 0;
 		m_ArrayMaxIndex = 0;
@@ -26,19 +26,19 @@ void CSelectedArray::ReleaseArray()
 		delete[] m_ppContainerArray;
 		m_ppContainerArray = nullptr;
 	}
-	
+
 	//배열 정보 초기화
 	m_ArrayMaxCount = 0;
 	m_ArrayMaxIndex = 0;
 	m_CountOfContainer = 0;
 }
 
-int CSelectedArray::AddContainer(CContainer* pNewContainer)
+int CDeleteArray::AddContainer(CContainer* pNewContainer)
 {
 	return CContainerArray::AddContainer(pNewContainer);
 }
 
-int CSelectedArray::DeleteContainerInArray(CContainer* pContainerDeleting)
+int CDeleteArray::DeleteContainerInArray(CContainer* pContainerDeleting)
 {
 	CContainer* pTarget = pContainerDeleting;
 	if (pTarget == nullptr) return -1;
@@ -61,7 +61,7 @@ int CSelectedArray::DeleteContainerInArray(CContainer* pContainerDeleting)
 	return m_CountOfContainer;
 }
 
-void CSelectedArray::ClearArray()
+void CDeleteArray::ClearArray()
 {
 	//내용만 비운다.
 	for (int i = 0; i < m_CountOfContainer; i++)
@@ -75,3 +75,16 @@ void CSelectedArray::ClearArray()
 	m_CountOfContainer = 0;
 }
 
+void CDeleteArray::DeleteContainerInstanceInArray()
+{
+	for (int i = 0; i < m_CountOfContainer; i++)
+	{
+		if (m_ppContainerArray != nullptr)
+		{
+			m_ppContainerArray[i]->DeleteMe();
+			m_ppContainerArray[i] = nullptr;
+		}
+	}
+
+	ClearArray();
+}

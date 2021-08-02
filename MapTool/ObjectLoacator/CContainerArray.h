@@ -20,14 +20,15 @@ protected:
 
 public:
 	CContainerArray();
-	CContainerArray(unsigned int MaxArrayCount);
 	virtual ~CContainerArray();
-	virtual void ReleaseArray();												//Relese Memory Allocated -> private?
+	virtual void ReleaseArray();										//Relese Memory Allocated -> private?
 	virtual int  AddContainer(CContainer* pNewObject);					//return object Count
 	virtual int  DeleteContainerInArray(CContainer* pObjectDeleting);	//return object Count
-	virtual int  FindContainerInArray(CContainer* pObjectFinding);		//return index of object
 	virtual void ClearArray();											//Delete Object List
 
-	CContainer* GetContainer(int index);						//It return nullptr When can not Find
+public:
+	bool		CreateArray(int MaxArrayCount = MAX_OBJECT_COUNT);		//You must do this func when you initialate this class
+	int		    GetContainerIndex(CContainer* pContainerFinding);		//return -1 when It can not find, return -2 when parameter is nullptr
+	CContainer* GetContainerPointer(int index);							//It return nullptr When can not Find
 };
 

@@ -219,6 +219,7 @@
     <ClInclude Include="CColliderControllerDlg.h" />
     <ClInclude Include="CColliderManager.h" />
     <ClInclude Include="CContainerArray.h" />
+    <ClInclude Include="CDeleteArray.h" />
     <ClInclude Include="CGrid.h" />
     <ClInclude Include="CHelpDlg.h" />
     <ClInclude Include="CLIGHTDLG.h" />
@@ -297,6 +298,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CContainerArray.cpp" />
+    <ClCompile Include="CDeleteArray.cpp" />
     <ClCompile Include="CGrid.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>

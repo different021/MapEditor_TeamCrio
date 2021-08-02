@@ -29,21 +29,6 @@ bool CContainerArray::FilltheBlankInArray(int blankIndex)
 
 CContainerArray::CContainerArray()
 {
-	CContainerArray(MAX_OBJECT_COUNT);
-}
-
-CContainerArray::CContainerArray(unsigned int MaxArrayCount)
-{
-	m_ppContainerArray = new CContainer*[MaxArrayCount];
-	if (m_ppContainerArray == nullptr)
-	{
-		//메모리 할당 실패 
-		OutputDebugStringW(L"[CContainerArray]CContainerArray(): Fail Memory Allocate");
-		assert(false);
-	}
-	m_ArrayMaxCount		= MaxArrayCount;
-	m_ArrayMaxIndex		= MaxArrayCount - 1;
-	m_CountOfContainer		= 0;
 }
 
 CContainerArray::~CContainerArray()
@@ -155,28 +140,6 @@ int CContainerArray::DeleteContainerInArray(CContainer* pObjectDeleting)
 	return m_CountOfContainer;
 }
 
-/*
-* return Value
-*	-1 : can't Find
-*	-2 : parameter is nullptr
-*/
-int CContainerArray::FindContainerInArray(CContainer* pObjectFinding)
-{
-	CContainer* pTarget = pObjectFinding;
-	int iResult = -1;
-	if (pTarget == nullptr) return -2;
-	
-	for (int i = 0; i < m_CountOfContainer; i++)
-	{
-		if (pTarget == m_ppContainerArray[i])
-		{
-			iResult = i;
-			break;
-		}
-	}
-
-	return iResult;
-}
 
 void CContainerArray::ClearArray()
 {
@@ -192,7 +155,41 @@ void CContainerArray::ClearArray()
 	m_CountOfContainer = 0;
 }
 
-CContainer* CContainerArray::GetContainer(int index)
+bool CContainerArray::CreateArray(int MaxArrayCount)
+{
+	m_ppContainerArray = new CContainer * [MaxArrayCount];
+	if (m_ppContainerArray == nullptr)
+	{
+		//메모리 할당 실패 
+		OutputDebugStringW(L"[CContainerArray]CContainerArray(): Fail Memory Allocate");
+		assert(false);
+	}
+	m_ArrayMaxCount = MaxArrayCount;
+	m_ArrayMaxIndex = MaxArrayCount - 1;
+	m_CountOfContainer = 0;
+	return false;
+}
+
+int CContainerArray::GetContainerIndex(CContainer* pContainerFinding)
+{
+
+	CContainer* pTarget = pContainerFinding;
+	int iResult = -1;
+	if (pTarget == nullptr) return -2;
+
+	for (int i = 0; i < m_CountOfContainer; i++)
+	{
+		if (pTarget == m_ppContainerArray[i])
+		{
+			iResult = i;
+			break;
+		}
+	}
+
+	return iResult;
+}
+
+CContainer* CContainerArray::GetContainerPointer(int index)
 {
 	CContainer* pResult = nullptr;
 	int objectIndex = index;
