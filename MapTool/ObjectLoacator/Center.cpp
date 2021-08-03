@@ -808,7 +808,8 @@ void Center::LoadMap()
 	std::thread t1(&CSaver::Load, m_pSaver, &iResult);
 	std::thread::id ID = t1.get_id();
 	t1.join();
-
+	
+	//다시 그리기. 분리 고려.
 	if (iResult == 0)
 	{
 		//성공 -> 다시 그려라

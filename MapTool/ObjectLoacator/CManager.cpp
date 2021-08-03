@@ -77,6 +77,14 @@ void CManager::Cleanup()
 	}
 }
 
+void CManager::RemoveContainer(CContainer* pContainer)
+{
+	CContainer* pTarget = pContainer;
+	if (pTarget == nullptr) return;
+
+	m_pArray->RemoveContainer(pContainer);
+}
+
 CManager::CManager()
 {
 }
@@ -92,5 +100,24 @@ void CManager::Initialize(int maxResourceCount, eCONTAINER_TYPE type)
 	SetContainerType(type);
 
 }
+
+void CManager::AddContainer(CContainer* pContainer)
+{
+	if (pContainer == nullptr) return;
+	eCONTAINER_TYPE type = pContainer->GetType();
+	if (type == m_ContainerType)
+	{
+		//Does it handle in this manager?
+		m_pArray->AddContainer(pContainer);
+	}
+	else
+	{
+		//wrong Type 
+		//Does not handle it in ths manager
+		OutputDebugStringW(L"CManager::AddContainer(): Add Worng Type\n");
+		assert(false);
+	}
+}
+
 
 

@@ -27,6 +27,22 @@ bool CContainerArray::FilltheBlankInArray(int blankIndex)
 	return bResult;
 }
 
+//배열 내의 모든 원소 검사.
+bool CContainerArray::IsInArray(CContainer* pContainer)
+{
+	bool bResult = false;
+	for (int i = 0; i < m_CountOfContainer; i++)
+	{
+		if (m_ppContainerArray[i] == pContainer)
+		{
+			bResult = true;
+		}
+		
+	}
+
+	return bResult;
+}
+
 CContainerArray::CContainerArray()
 {
 }
@@ -77,15 +93,15 @@ void CContainerArray::ReleaseArray()
 /*
 	return value:
 		-1 is [Object is nullptr]
-		-2 is [Full Of Array]
+		-2 is [Already Exist in Array]
 */
-int CContainerArray::AddContainer(CContainer* pNewObject)
+int CContainerArray::AddContainer(CContainer* pNewContainer)
 {
-	if (pNewObject == nullptr)
-	{
-		//Invaildate parameter 
-		return -1;
-	}
+	CContainer* pNewOne = pNewContainer;
+	if (pNewOne == nullptr) return -1;		//null check
+	
+	bool bExist = IsInArray(pNewOne);
+	if (bExist == true) return -2;			//duplicate check
 
 	if(m_CountOfContainer >= m_ArrayMaxCount)
 	{
@@ -105,10 +121,9 @@ int CContainerArray::AddContainer(CContainer* pNewObject)
 			m_ArrayMaxCount = newArraySize;
 			m_ArrayMaxIndex = newArraySize - 1;
 		}
-		
 	}
 
-	m_ppContainerArray[m_CountOfContainer] = pNewObject;
+	m_ppContainerArray[m_CountOfContainer] = pNewOne;
 	m_CountOfContainer++;
 
 	return m_CountOfContainer;
@@ -118,27 +133,28 @@ int CContainerArray::AddContainer(CContainer* pNewObject)
 * return value
 *	-1 : Invaild Parameter
 */
-int CContainerArray::DeleteContainerInArray(CContainer* pObjectDeleting)
-{
-	if (pObjectDeleting == nullptr) return -1;
-
-	//찾을때까지 순회
-	for (int i = 0; i < m_CountOfContainer; i++)
-	{
-		if (m_ppContainerArray[i] == pObjectDeleting)	//찾음
-		{
-			m_ppContainerArray[i]->DeleteMe();
-			m_ppContainerArray[i] = nullptr;
-
-			FilltheBlankInArray(i);			//삭제로 인해 배열 한칸씩 밀기.
-			
-			m_CountOfContainer--;
-			break;
-		}
-	}
-
-	return m_CountOfContainer;
-}
+//DeleteArray의 고유 함수로 변경 예정.
+//int CContainerArray::DeleteContainerInArray(CContainer* pObjectDeleting)
+//{
+//	if (pObjectDeleting == nullptr) return -1;
+//
+//	//찾을때까지 순회
+//	for (int i = 0; i < m_CountOfContainer; i++)
+//	{
+//		if (m_ppContainerArray[i] == pObjectDeleting)	//찾음
+//		{
+//			m_ppContainerArray[i]->DeleteMe();
+//			m_ppContainerArray[i] = nullptr;
+//
+//			FilltheBlankInArray(i);			//삭제로 인해 배열 한칸씩 밀기.
+//			
+//			m_CountOfContainer--;
+//			break;
+//		}
+//	}
+//
+//	return m_CountOfContainer;
+//}
 
 
 void CContainerArray::ClearArray()
@@ -200,4 +216,32 @@ CContainer* CContainerArray::GetContainerPointer(int index)
 	}
 
 	return pResult;
+}
+
+//인스턴스는 삭제하지 않고 Array에서 제거만.
+int CContainerArray::RemoveContainer(CContainer* pRemove)
+{
+	CContainer* pTarget = pRemove;
+	if (pTarget == nullptr) return -1;
+
+	//찾을때까지 순회
+	for (int i = 0; i < m_CountOfContainer; i++)
+	{
+		if (m_ppContainerArray[i] == pTarget)	//찾음
+		{
+			m_ppContainerArray[i] = nullptr;	//인스턴스를 삭제하지 않고 비우기만 한다.
+
+			FilltheBlankInArray(i);				//빈자리 한칸씩 밀기
+
+			m_CountOfContainer--;
+			break;
+		}
+	}
+
+	return m_CountOfContainer;
+}
+
+int CContainerArray::RemoveAll()
+{
+	return 0;
 }

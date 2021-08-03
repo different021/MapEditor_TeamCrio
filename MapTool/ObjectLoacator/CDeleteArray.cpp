@@ -38,28 +38,6 @@ int CDeleteArray::AddContainer(CContainer* pNewContainer)
 	return CContainerArray::AddContainer(pNewContainer);
 }
 
-int CDeleteArray::DeleteContainerInArray(CContainer* pContainerDeleting)
-{
-	CContainer* pTarget = pContainerDeleting;
-	if (pTarget == nullptr) return -1;
-
-	//찾을때까지 순회
-	for (int i = 0; i < m_CountOfContainer; i++)
-	{
-		if (m_ppContainerArray[i] == pTarget)	//찾음
-		{
-			//삭제하지 않고 목록에서만 지운다.
-			m_ppContainerArray[i] = nullptr;
-
-			FilltheBlankInArray(i);			//삭제로 인해 배열 한칸씩 밀기.
-
-			m_CountOfContainer--;
-			break;
-		}
-	}
-
-	return m_CountOfContainer;
-}
 
 void CDeleteArray::ClearArray()
 {

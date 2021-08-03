@@ -17,7 +17,7 @@ public:
 
 	virtual void ReleaseArray() override;											//Relese Memory Allocated -> private?
 	virtual int  AddContainer(CContainer* pNewContainer) override;					//return object Count
-	virtual int  DeleteContainerInArray(CContainer* pContainerDeleting) override;	//return object Count
+	//virtual int  DeleteContainerInArray(CContainer* pContainerDeleting) override;	//return object Count
 	virtual void ClearArray() override;												//Delete Object List
 
 };
