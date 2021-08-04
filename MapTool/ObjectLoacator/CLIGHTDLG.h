@@ -20,6 +20,7 @@ private:
 public:
 	CLIGHTDLG(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CLIGHTDLG();
+	static CLIGHTDLG* CreateLightDlg(CWnd* pParent);
 	void LightDlgCleanup();
 
 	void SetDlgFloat(UINT uId, float data);

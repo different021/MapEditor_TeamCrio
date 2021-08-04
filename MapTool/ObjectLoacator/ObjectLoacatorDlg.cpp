@@ -588,7 +588,7 @@ void CObjectLoacatorDlg::DeleteGraphicInstance(object* pObj)
 	if (pObj == NULL)
 		return;
 
-	RequestCenter(WM_DELETE_OBJ, (WPARAM)pObj, 0);
+	RequestCenter(WM_OBJECT_DELETE, (WPARAM)pObj, 0);
 }
 
 DirectX::XMFLOAT4 CObjectLoacatorDlg::ConvertMatrixToQuaternion(DirectX::XMFLOAT3& oiler)
@@ -1404,7 +1404,7 @@ void CObjectLoacatorDlg::OnBnClickedBtnObjedit()
 	if (size == 1)
 	{
 		EditObject(pObj);
-		RequestCenter(WM_EDIT_OBJ, (WPARAM)(pObj), NULL);
+		RequestCenter(WM_OBJECT_EDIT, (WPARAM)(pObj), NULL);
 
 	}
 	else

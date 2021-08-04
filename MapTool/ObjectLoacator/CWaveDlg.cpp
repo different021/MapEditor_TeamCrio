@@ -48,6 +48,18 @@ CWaveDlg::~CWaveDlg()
 	//Cleanup();
 }
 
+CWaveDlg* CWaveDlg::CreateWaveDlg(CWnd* pParent)
+{
+	//WaveDlg instance 생성
+	//메모리 해제 책임은 사용자에게 있다.
+	CWaveDlg* pWaveDlg = new CWaveDlg;
+	pWaveDlg->Create(IDD_WAVE_DLG);
+	pWaveDlg->SetParent(pParent);
+	pWaveDlg->ModifyStyle(WS_POPUP, WS_CHILD);
+	pWaveDlg->ShowWindow(SW_SHOW);
+	return pWaveDlg;
+}
+
 void CWaveDlg::Cleanup()
 {
 	//딱히 해줄게 없다. 

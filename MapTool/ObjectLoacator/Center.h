@@ -53,7 +53,6 @@ class Center : public CDialogEx
 	CHelpDlg	 m_HelpDlg;					//도움말
 	CLIGHTDLG*   m_pLightDlg;				//라이트 
 	CWaveDlg*	 m_pWaveDlg;
-	//CCharSetting m_CharSetting;				//캐릭터 
 	//CCmd		 m_Cmd;						//MFC
 	
 	CMenu m_MainMenu;
@@ -61,13 +60,15 @@ class Center : public CDialogEx
 	
 	CSaver* m_pSaver;			//SAVE/Load
 
+	//resource
+	MaterialManager* m_pMatManager;			//메테리얼
+	ModelManager*	 m_pModelManager;		//모델
+
+	//instance
 	DrawInsManager*		m_pDrawInsManager;	//오브젝트 관리
-	MaterialManager*	m_pMatManager;		//메테리얼
-	ModelManager*		m_pModelManager;	//모델
 	CColliderManager*	m_pColliderManager;	//콜라이더 매니저
 	CLightManager*		m_pLightManager;	//빛 매니저
 	CWaveManager*		m_pWaveManager;		//물.
-	//int m_HighestColliderIndex = 0;
 
 public:
 	Center(CWnd* pParent = nullptr);   // 표준 생성자입니다.
@@ -84,13 +85,12 @@ private:
 	void Init_Viewer();			//Viewer
 	void SeperateWnd_Viewer();	//
 	void Init_GridController();	//MapGridController
-	void Init_HelpDlg();		//도움말
-	void Init_LightDlg();		//빛 
+	void Init_HelpDlg(CWnd* pParent);		//도움말
+	void Init_LightDlg(CWnd* pParent);		//빛 
 
 	void Init_MainMenu();		//상단 메뉴
-	void Init_CharSetting();	//캐릭터 셋팅
 	void Init_ColliderDlg();
-	void Init_WaveDlg();
+	void Init_WaveDlg(CWnd* pParent);
 
 	//삭제.
 	void CleanUp();

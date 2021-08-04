@@ -46,6 +46,18 @@ CLIGHTDLG::~CLIGHTDLG()
 	LightDlgCleanup();
 }
 
+CLIGHTDLG* CLIGHTDLG::CreateLightDlg(CWnd* pParent)
+{
+	//인스턴스를 생성해서 리턴한다.
+	//인스턴스 삭제의무는 사용자에게 있다.
+	CLIGHTDLG* pLightDlg = new CLIGHTDLG;
+	pLightDlg->Create(IDD_LIGHTDLG);
+	pLightDlg->SetParent(pParent);
+	pLightDlg->ModifyStyle(WS_POPUP, WS_CHILD);
+	pLightDlg->ShowWindow(SW_SHOW);
+	return pLightDlg;
+}
+
 void CLIGHTDLG::LightDlgCleanup()
 {
 	if (m_pLightManager)

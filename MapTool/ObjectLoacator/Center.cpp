@@ -128,24 +128,19 @@ void Center::Init_GridController()
 	m_GridController.ShowWindow(SW_SHOW);
 }
 
-void Center::Init_HelpDlg()
+void Center::Init_HelpDlg(CWnd* pParent)
 {
+	//m_HelpDlg = new CHelpDlg;
 	m_HelpDlg.Create(IDD_HELP_DLG);
-	//m_HelpDlg.SetParent(this);
-	//m_HelpDlg.ModifyStyle(WS_POPUP, WS_CHILD);
-	m_HelpDlg.ModifyStyle(NULL, WS_POPUP);
+	m_HelpDlg.SetParent(pParent);
+	//m_HelpDlg->ModifyStyle(WS_POPUP, WS_CHILD);
+	//m_HelpDlg->ModifyStyle(NULL, WS_POPUP);
 	m_HelpDlg.ShowWindow(SW_HIDE);
 }
 
-void Center::Init_LightDlg()
+void Center::Init_LightDlg(CWnd* pParent)
 {
-	m_pLightDlg = new CLIGHTDLG;
-	m_pLightDlg->Create(IDD_LIGHTDLG);
-	m_pLightDlg->SetParent(this);
-	m_pLightDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	m_pLightDlg->ShowWindow(SW_SHOW);
-
-	//m_pLightDlg.SetEngine(m_pEngine);
+	m_pLightDlg = CLIGHTDLG::CreateLightDlg(pParent);
 }
 
 void Center::Init_MainMenu()
@@ -153,24 +148,6 @@ void Center::Init_MainMenu()
 	m_MainMenu.LoadMenuW(IDR_MAIN_MENU);
 	SetMenu(&m_MainMenu);
 }
-
-void Center::Init_CharSetting()
-{
-	//m_CharSetting.Create(IDD_CHAR_SETTING);
-	//m_CharSetting.SetParent(this);
-	//m_CharSetting.ModifyStyle(WS_POPUP, WS_CHILD);
-	//m_CharSetting.ShowWindow(SW_HIDE);					//숨겨둠
-	//m_CharSetting.SetCenter(m_hWnd);
-	//m_CharSetting.RequestList();
-}
-
-//void Center::Init_Cmd()
-//{
-//	m_Cmd.Create(IDD_CMD);
-//	m_Cmd.SetParent(this);
-//	m_Cmd.ModifyStyle(WS_POPUP, WS_CHILD);
-//	m_Cmd.ShowWindow(SW_SHOW);
-//}
 
 void Center::Init_ColliderDlg()
 {
@@ -181,13 +158,14 @@ void Center::Init_ColliderDlg()
 
 }
 
-void Center::Init_WaveDlg()
+void Center::Init_WaveDlg(CWnd* pParent)
 {
-	m_pWaveDlg = new CWaveDlg;
+	m_pWaveDlg = CWaveDlg::CreateWaveDlg(pParent);
+	/*m_pWaveDlg = new CWaveDlg;
 	m_pWaveDlg->Create(IDD_WAVE_DLG);
-	m_pWaveDlg->SetParent(this);
+	m_pWaveDlg->SetParent(pParent);
 	m_pWaveDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	m_pWaveDlg->ShowWindow(SW_SHOW);
+	m_pWaveDlg->ShowWindow(SW_SHOW);*/
 }
 
 void Center::CleanUp()
@@ -1166,12 +1144,11 @@ BOOL Center::OnInitDialog()
 	Init_Loc();
 	Init_GridController();
 	Init_MainMenu();
-	Init_CharSetting();
 	//Init_Cmd();
 	Init_ColliderDlg();
-	Init_HelpDlg();
-	Init_LightDlg();
-	Init_WaveDlg();
+	Init_HelpDlg(this);
+	Init_LightDlg(this);
+	Init_WaveDlg(this);
 
 	
 	CRect rcMain;
@@ -1281,7 +1258,7 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 				
 		}
 
-		BoardCast(pMsg);
+		//BoardCast(pMsg);
 		break;
 
 	case WM_KEYUP:
@@ -1289,6 +1266,8 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 		{
 		case VK_F1:
 			m_HelpDlg.ShowWindow(SW_SHOW);
+			//int a = 0;
+			//break;
 			return TRUE;
 		case VK_F2:
 
@@ -1404,7 +1383,7 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 		}
 
 		}
-		BoardCast(pMsg);
+		//BoardCast(pMsg);
 		break;
 
 	case WM_SYSKEYDOWN:
@@ -1430,8 +1409,8 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_HIDE_WINDOW, &Center::OnHideWindow)
 	ON_MESSAGE(WM_REQUEST_MODEL_LIST, &Center::OnRequestModelList)
 	ON_MESSAGE(WM_REQUEST_MAT_LIST, &Center::OnRequestMatList)
-	ON_MESSAGE(WM_EDIT_OBJ, &Center::OnEditObj)
-	ON_MESSAGE(WM_DELETE_OBJ, &Center::OnDeleteObj)
+	ON_MESSAGE(WM_OBJECT_EDIT, &Center::OnEditObj)
+	ON_MESSAGE(WM_OBJECT_DELETE, &Center::OnDeleteObj)
 	ON_MESSAGE(WM_UPDATE_MODEL_LIST, &Center::OnUpdateModelList)
 	ON_MESSAGE(WM_UPDATE_MATERIAL_LIST, &Center::OnUpdateMatList)
 	ON_MESSAGE(WM_SAVE_MAP, &Center::OnSaveMap)
