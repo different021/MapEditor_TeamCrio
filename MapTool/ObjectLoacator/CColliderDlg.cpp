@@ -3,7 +3,7 @@
 
 #include "pch.h"
 #include "ObjectLoacator.h"
-#include "CColliderControllerDlg.h"
+#include "CColliderDlg.h"
 #include "afxdialogex.h"
 #include "WMDefine.h"
 #include "../src/Defines.h"
@@ -17,9 +17,9 @@ Vector3 Default_Collider_Size = { 1.f, 1.f, 1.f };
 
 // CColliderControllerDlg 대화 상자
 
-IMPLEMENT_DYNAMIC(CColliderControllerDlg, CDialogEx)
+IMPLEMENT_DYNAMIC(CColliderDlg, CDialogEx)
 
-void CColliderControllerDlg::MoveFocusNext()
+void CColliderDlg::MoveFocusNext()
 {
 	//edit control 포커스 이동
 	m_curFocus = GetFocus()->GetDlgCtrlID();
@@ -31,7 +31,7 @@ void CColliderControllerDlg::MoveFocusNext()
 	pEdit->SetFocus();
 }
 
-void CColliderControllerDlg::MoveFocusBack()
+void CColliderDlg::MoveFocusBack()
 {
 	m_curFocus = GetFocus()->GetDlgCtrlID();
 	m_curFocus--;
@@ -43,17 +43,50 @@ void CColliderControllerDlg::MoveFocusBack()
 }
 
 
-CColliderControllerDlg::CColliderControllerDlg(CWnd* pParent /*=nullptr*/)
+CColliderDlg::CColliderDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_COLLIDER_CONTROLLER, pParent)
 {
 	m_bIsShiftDown = false;
 }
 
-CColliderControllerDlg::~CColliderControllerDlg()
+CColliderDlg::~CColliderDlg()
 {
 }
 
-void CColliderControllerDlg::Move(int x, int y)
+CColliderDlg* CColliderDlg::CreateColliderDlg(CWnd* pParent)
+{
+	CColliderDlg* pResult = new CColliderDlg;
+	if (pResult != nullptr)
+	{
+		pResult->Initialize(pParent);
+	}
+	
+	return pResult;
+}
+
+void CColliderDlg::Initialize(CWnd* pParent)
+{
+	Create(IDD_COLLIDER_CONTROLLER);
+	SetDocking(pParent);
+	ShowWindow(SW_SHOW);
+}
+
+void CColliderDlg::SetDocking(CWnd* pParent)
+{
+	CWnd* pCWndParent = pParent;
+	if (pCWndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+	}
+
+	SetParent(pCWndParent);
+}
+
+void CColliderDlg::Move(int x, int y)
 {
 	CRect rc;
 	GetClientRect(rc);
@@ -61,7 +94,7 @@ void CColliderControllerDlg::Move(int x, int y)
 	MoveWindow(x, y, rc.Width(), rc.Height());
 }
 
-void CColliderControllerDlg::AddColliderToListBox(collider* pCollider)
+void CColliderDlg::AddColliderToListBox(collider* pCollider)
 {
 	if (pCollider == NULL) return;
 	int idx = m_ColliderListBox.AddString(pCollider->name);
@@ -69,7 +102,7 @@ void CColliderControllerDlg::AddColliderToListBox(collider* pCollider)
 	m_ColliderListBox.SetCurSel(idx);
 }
 
-void CColliderControllerDlg::SetEditBoxByCollider(collider* pCollider)
+void CColliderDlg::SetEditBoxByCollider(collider* pCollider)
 {
 	collider* pCol = pCollider;
 	CString temp;
@@ -143,7 +176,7 @@ void CColliderControllerDlg::SetEditBoxByCollider(collider* pCollider)
 
 }
 
-void CColliderControllerDlg::SetEditBoxZero()
+void CColliderDlg::SetEditBoxZero()
 {
 	CString temp;
 	int index = GetComboIndexByColliderType(eCOLLIDER_TYPE::eCOLLIDER_NORMAL);
@@ -176,7 +209,7 @@ void CColliderControllerDlg::SetEditBoxZero()
 	((CButton*)GetDlgItem(IDC_CHECK_VISIBLE))->SetCheck(false);
 }
 
-void CColliderControllerDlg::SetColliderByEditControl(collider* pDest)
+void CColliderDlg::SetColliderByEditControl(collider* pDest)
 {
 	if (pDest == NULL)
 	{
@@ -237,7 +270,7 @@ void CColliderControllerDlg::SetColliderByEditControl(collider* pDest)
 
 }
 
-void CColliderControllerDlg::CreateCollider(collider* pSrc)
+void CColliderDlg::CreateCollider(collider* pSrc)
 {
 
 	collider* pCollider = NULL;
@@ -260,7 +293,7 @@ void CColliderControllerDlg::CreateCollider(collider* pSrc)
 	AddColliderToListBox(pCollider);
 }
 
-int CColliderControllerDlg::GetColliderListBoxIndex(collider* pCollider)
+int CColliderDlg::GetColliderListBoxIndex(collider* pCollider)
 {
 	if (!pCollider)
 	{
@@ -282,11 +315,11 @@ int CColliderControllerDlg::GetColliderListBoxIndex(collider* pCollider)
 }
 
 //에딧 컨트롤에 있는 숫자로 인덱스 생성. -> 주의 같은 숫자로 될수 있다. -> 보류
-void CColliderControllerDlg::SetColliderIndexByEditControl(collider* pDest)
+void CColliderDlg::SetColliderIndexByEditControl(collider* pDest)
 {
 }
 
-void CColliderControllerDlg::SetColliderRot(collider* pDest, DirectX::XMFLOAT3& oiler)
+void CColliderDlg::SetColliderRot(collider* pDest, DirectX::XMFLOAT3& oiler)
 {
 	pDest->oiler.x = oiler.x;
 	pDest->oiler.y = oiler.y;
@@ -299,7 +332,7 @@ void CColliderControllerDlg::SetColliderRot(collider* pDest, DirectX::XMFLOAT3& 
 	pDest->quaternion.w = quatRot.w;
 }
 
-void CColliderControllerDlg::SelectCollider(collider* pCollider)
+void CColliderDlg::SelectCollider(collider* pCollider)
 {
 	if (pCollider)
 	{
@@ -313,7 +346,7 @@ void CColliderControllerDlg::SelectCollider(collider* pCollider)
 	m_ColliderListBox.SetCurSel(index);
 }
 
-void CColliderControllerDlg::UpdateColliderList(std::vector<COLLIDER>* pList)
+void CColliderDlg::UpdateColliderList(std::vector<COLLIDER>* pList)
 {
 	m_ColliderListBox.ResetContent();
 	if (pList == nullptr) return;
@@ -332,13 +365,13 @@ void CColliderControllerDlg::UpdateColliderList(std::vector<COLLIDER>* pList)
 	return;
 }
 
-eCOLLIDER_TYPE CColliderControllerDlg::GetColliderTypeByComboIndex()
+eCOLLIDER_TYPE CColliderDlg::GetColliderTypeByComboIndex()
 {
 	int index = m_ColliderTypeBox.GetCurSel();
 	return (eCOLLIDER_TYPE)m_ColliderTypeBox.GetItemData(index);
 }
 
-int CColliderControllerDlg::GetComboIndexByColliderType(eCOLLIDER_TYPE type)
+int CColliderDlg::GetComboIndexByColliderType(eCOLLIDER_TYPE type)
 {
 	int index = -1;
 	int count = m_ColliderTypeBox.GetCount();
@@ -356,27 +389,26 @@ int CColliderControllerDlg::GetComboIndexByColliderType(eCOLLIDER_TYPE type)
 
 
 // CColliderControllerDlg 메시지 처리기
-BEGIN_MESSAGE_MAP(CColliderControllerDlg, CDialogEx)
-	ON_BN_CLICKED(ID_CREATE_COLLIDER, &CColliderControllerDlg::OnBnClickedCreateCollider)
-	ON_BN_CLICKED(ID_DELETE_COLLIDER, &CColliderControllerDlg::OnBnClickedDeleteCollider)
-	ON_LBN_SELCHANGE(IDC_COLLIDER_LISTBOX, &CColliderControllerDlg::OnLbnSelchangeColliderListbox)
-	ON_BN_CLICKED(ID_EDIT_COLLIDER, &CColliderControllerDlg::OnBnClickedEditCollider)
-	ON_MESSAGE(WM_CREATE_COLLIDER, &CColliderControllerDlg::OnCreateCollider)
-	ON_MESSAGE(WM_CLEAR_COLLIDER_LIST, &CColliderControllerDlg::OnClearColliderList)
+BEGIN_MESSAGE_MAP(CColliderDlg, CDialogEx)
+	ON_BN_CLICKED(ID_CREATE_COLLIDER, &CColliderDlg::OnBnClickedCreateCollider)
+	ON_BN_CLICKED(ID_DELETE_COLLIDER, &CColliderDlg::OnBnClickedDeleteCollider)
+	ON_LBN_SELCHANGE(IDC_COLLIDER_LISTBOX, &CColliderDlg::OnLbnSelchangeColliderListbox)
+	ON_BN_CLICKED(ID_EDIT_COLLIDER, &CColliderDlg::OnBnClickedEditCollider)
+	ON_MESSAGE(WM_CREATE_COLLIDER, &CColliderDlg::OnCreateCollider)
+	ON_MESSAGE(WM_CLEAR_COLLIDER_LIST, &CColliderDlg::OnClearColliderList)
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
-void CColliderControllerDlg::DoDataExchange(CDataExchange* pDX)
+void CColliderDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COLLIDER_LISTBOX, m_ColliderListBox);
-
 	DDX_Control(pDX, IDC_COMBO_COL_TYPE, m_ColliderTypeBox);
 }
 
-afx_msg LRESULT CColliderControllerDlg::OnCreateCollider(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CColliderDlg::OnCreateCollider(WPARAM wParam, LPARAM lParam)
 {
 	collider* pCol = (collider*)wParam;
 	CreateCollider(pCol);
@@ -385,14 +417,14 @@ afx_msg LRESULT CColliderControllerDlg::OnCreateCollider(WPARAM wParam, LPARAM l
 }
 
 
-afx_msg LRESULT CColliderControllerDlg::OnClearColliderList(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CColliderDlg::OnClearColliderList(WPARAM wParam, LPARAM lParam)
 {
 	m_ColliderListBox.ResetContent();
 	return 0;
 }
 
 
-void CColliderControllerDlg::OnBnClickedCreateCollider()
+void CColliderDlg::OnBnClickedCreateCollider()
 {
 	//InsertColliderList -> 같은 로직이 두번 쓰인다. 
 	//버튼 클릭
@@ -402,7 +434,7 @@ void CColliderControllerDlg::OnBnClickedCreateCollider()
 }
 
 
-void CColliderControllerDlg::OnBnClickedDeleteCollider()
+void CColliderDlg::OnBnClickedDeleteCollider()
 {
 	int index = m_ColliderListBox.GetCurSel();
 	if (index == LB_ERR) return;
@@ -418,7 +450,7 @@ void CColliderControllerDlg::OnBnClickedDeleteCollider()
 }
 
 
-void CColliderControllerDlg::OnBnClickedEditCollider()
+void CColliderDlg::OnBnClickedEditCollider()
 {
 	int index = m_ColliderListBox.GetCurSel();
 	int count = m_ColliderListBox.GetCount();
@@ -436,7 +468,7 @@ void CColliderControllerDlg::OnBnClickedEditCollider()
 }
 
 
-void CColliderControllerDlg::OnLbnSelchangeColliderListbox()
+void CColliderDlg::OnLbnSelchangeColliderListbox()
 {
 	int index = m_ColliderListBox.GetCurSel();
 
@@ -451,7 +483,7 @@ void CColliderControllerDlg::OnLbnSelchangeColliderListbox()
 }
 
 
-BOOL CColliderControllerDlg::OnInitDialog()
+BOOL CColliderDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -475,7 +507,7 @@ BOOL CColliderControllerDlg::OnInitDialog()
 }
 
 
-BOOL CColliderControllerDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CColliderDlg::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	UINT msg = pMsg->message;
@@ -505,7 +537,7 @@ BOOL CColliderControllerDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-void CColliderControllerDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+void CColliderDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if (nChar == VK_SHIFT)
 		m_bIsShiftDown = true;
@@ -513,7 +545,7 @@ void CColliderControllerDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-void CColliderControllerDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+void CColliderDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if (nChar == VK_SHIFT)
 		m_bIsShiftDown = false;
@@ -521,7 +553,7 @@ void CColliderControllerDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-void CColliderControllerDlg::OnClose()
+void CColliderDlg::OnClose()
 {
 
 	CDialogEx::OnClose();

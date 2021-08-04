@@ -43,6 +43,36 @@ END_MESSAGE_MAP()
 
 DirectX::XMFLOAT3 g_StartingCamPos = DirectX::XMFLOAT3(0.f, 100.f, 0.f);
 
+void Viewer::InitEngine(int iWidth, int iHeight)
+{
+	g_hWndViewer = m_hWnd;
+
+	MoveWindow(0, 0, iWidth, iHeight);
+	InitGraphicEngin();
+	InitManagers();
+
+	m_pCamController = new CamController;
+
+	//CreateGraphicResource();
+	//CreateGraphicResource_TEST();
+	//CreaetModelByText(NULL);
+	CreateModelByFolder();
+	CreateMaterialByText(NULL);
+	//CreateMaterialByFolder();
+
+	SetMainView(g_vCamPos);
+
+	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);
+
+	m_Gizmo.Setup(m_pEngine);
+
+	CRect rc;
+	GetClientRect(rc);
+	m_iScreenWidth = rc.Width();
+	m_iScreenHeight = rc.Height();
+}
+
+
 Viewer::Viewer(CWnd* pParent)
 {
 	//m_hLoacator = pParent->m_hWnd;
@@ -51,6 +81,49 @@ Viewer::Viewer(CWnd* pParent)
 Viewer::~Viewer()
 {
 	CleanUp();
+}
+
+Viewer* Viewer::CreateViewer(CWnd* pParent, int iWidth, int iHeight)
+{
+	Viewer* pViewer = new Viewer;
+	if (pViewer != nullptr)
+	{
+		pViewer->Initialize(pParent, iWidth, iHeight);
+	}
+	
+	return pViewer;
+}
+
+void Viewer::Initialize(CWnd* pParent, int iWidth, int iHeight)
+{
+	Create(IDD_VIEW_DLG);
+	SetDocking(pParent);
+	ShowWindow(SW_SHOW);
+
+	int iFrameX = GetSystemMetrics(SM_CXFRAME);
+	int iFrameY = GetSystemMetrics(SM_CYFRAME);
+	int iCaptionY = GetSystemMetrics(SM_CYCAPTION);
+
+	int width = iWidth + (iFrameX << 2);
+	int height = iHeight + (iFrameY << 2) + iCaptionY;
+
+	InitEngine(width, height);
+
+}
+
+void Viewer::SetDocking(CWnd* pParent)
+{
+	CWnd* pCwndParent = pParent;
+	if (pCwndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+		SetParent(pCwndParent);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+		SetParent(NULL);
+	}
 }
 
 void Viewer::CleanUp()
@@ -72,50 +145,6 @@ void Viewer::CleanUp()
 	m_pEngine->EndEngine();
 }
 
-void Viewer::Init(int iWidth, int iHeight)
-{
-	g_hWndViewer = m_hWnd;
-
-	MoveWindow(0, 0, iWidth, iHeight);
-	InitGraphicEngin();
-	InitManagers();
-
-	m_pCamController = new CamController;
-
-	//CreateGraphicResource();
-	//CreateGraphicResource_TEST();
-	//CreaetModelByText(NULL);
-	CreateModelByFolder();
-	CreateMaterialByText(NULL);
-	//CreateMaterialByFolder();
-	
-	SetMainView(g_vCamPos);
-
-	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);
-
-	m_Gizmo.Setup(m_pEngine);
-
-	CRect rc;
-	GetClientRect(rc);
-	m_iScreenWidth = rc.Width();
-	m_iScreenHeight = rc.Height();
-
-
-	//DebugString dStr;
-	//dStr.pos.x = 10;
-	//dStr.pos.y = 10;
-	//dStr.color.x = 1.0f;
-	//dStr.color.y = 0.1f;
-	//dStr.color.z = 0.1f;
-
-	//dStr.message = "tEST\n\n\n";
-
-	//m_pEngine->AddDebugString(dStr);
-
-	////default : 128, 128, 1.0f, 0.03f, 4.0f, 0.2f 
-	//HWaveData* pWave = m_pEngine->CreateWave(128, 128, 10.0f, 4.0f, 0.2f);
-	//pWave->worldTM;
-}
 
 void Viewer::Update()
 {

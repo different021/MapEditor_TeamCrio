@@ -9,7 +9,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-#include "ObjectLoacatorDlg.h"
+#include "CObjectDlg.h"
 #include "Center.h"
 
 #include "framework.h"
@@ -50,32 +50,6 @@ template <class T> void SafeRelease(T** ppT)
 		*ppT = NULL;
 	}
 }
-//
-//struct comp
-//{
-//	comp(object* pObj) : _pObj(pObj) {}
-//
-//	bool operator() (DRAW_INSTANCE ins)
-//	{
-//		return ((ins.first) == _pObj);
-//	}
-//
-//	object* _pObj;
-//};
-
-//XMFLOAT3 QuaternionToOiler(Quaternion q) {
-//	XMFLOAT3 angles;
-//
-//	double yaw = atan2(2.0 * (q.y * q.z + q.w * q.x), q.w * q.w - q.x * q.x - q.y * q.y + q.z * q.z);
-//	double pitch = asin(-2.0 * (q.x * q.z - q.w * q.y));
-//	double roll = atan2(2.0 * (q.x * q.y + q.w * q.z), q.w * q.w + q.x * q.x - q.y * q.y - q.z * q.z);
-//	double rad = 180.f / XM_PI;
-//	angles.x = yaw * rad;
-//	angles.y = pitch * rad;
-//	angles.z = roll * rad;
-//
-//	return angles;
-//}
 
 #ifdef DEBUG
 DWORD CheckFileDlgError()
@@ -124,24 +98,19 @@ void OutputErrorCode(WCHAR* str)
 }
 
 
-
-
 // CObjectLoacatorDlg 대화 상자
-CObjectLoacatorDlg::CObjectLoacatorDlg(CWnd* pParent /*=nullptr*/)
+CObjectDlg::CObjectDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_OBJECTLOACATOR_DIALOG, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_curFocus = IDC_POS_X;
 }
 
-CObjectLoacatorDlg::~CObjectLoacatorDlg()
+CObjectDlg::~CObjectDlg()
 {
-
-
-
 }
 
-void CObjectLoacatorDlg::DoDataExchange(CDataExchange* pDX)
+void CObjectDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_OBJLIST, m_objListBox);
@@ -155,41 +124,41 @@ void CObjectLoacatorDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 // CObjectLoacatorDlg 메시지 처리기
-BEGIN_MESSAGE_MAP(CObjectLoacatorDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CObjectDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_EN_KILLFOCUS(IDC_POS_X, &CObjectLoacatorDlg::OnKillfocusPosX)
-	ON_EN_KILLFOCUS(IDC_POS_Y, &CObjectLoacatorDlg::OnKillfocusPosY)
-	ON_EN_KILLFOCUS(IDC_POS_Z, &CObjectLoacatorDlg::OnKillfocusPosZ)
-	ON_EN_KILLFOCUS(IDC_ROT_X, &CObjectLoacatorDlg::OnKillfocusRotX)
-	ON_EN_KILLFOCUS(IDC_ROT_Y, &CObjectLoacatorDlg::OnKillfocusRotY)
-	ON_EN_KILLFOCUS(IDC_ROT_Z, &CObjectLoacatorDlg::OnKillfocusRotZ)
-	ON_EN_KILLFOCUS(IDC_SCALE_X, &CObjectLoacatorDlg::OnKillfocusScaleX)
-	ON_EN_KILLFOCUS(IDC_SCALE_Y, &CObjectLoacatorDlg::OnKillfocusScaleY)
-	ON_EN_KILLFOCUS(IDC_SCALE_Z, &CObjectLoacatorDlg::OnKillfocusScaleZ)
-	ON_EN_KILLFOCUS(IDC_MOVE_OFFSET, &CObjectLoacatorDlg::OnKillfocusMoveOffset)
-	ON_BN_CLICKED(IDC_BTN_OBJEDIT, &CObjectLoacatorDlg::OnBnClickedBtnObjedit)
-	ON_BN_CLICKED(IDC_BTN_OBJDEL, &CObjectLoacatorDlg::OnBnClickedBtnObjdel)
-	ON_BN_CLICKED(IDC_BTN_OBJCREATE, &CObjectLoacatorDlg::OnBnClickedBtnObjcreate)
-	ON_LBN_SELCHANGE(IDC_OBJLIST, &CObjectLoacatorDlg::OnSelchangeObjlist)
-	ON_BN_CLICKED(IDC_BTN_SAVE, &CObjectLoacatorDlg::OnBnClickedBtnSave)
-	ON_BN_CLICKED(IDC_BTN_LOAD, &CObjectLoacatorDlg::OnBnClickedBtnLoad)
-	ON_LBN_SELCHANGE(IDC_MODELLIST, &CObjectLoacatorDlg::OnLbnSelchangeModellist)
-	ON_LBN_SELCHANGE(IDC_MATLIST, &CObjectLoacatorDlg::OnLbnSelchangeMatlist)
-	ON_MESSAGE(WM_UPDATE_OBJECT_LIST, &CObjectLoacatorDlg::OnUpdateObjectList)
-	ON_MESSAGE(WM_UPDATE_MODEL_LIST, &CObjectLoacatorDlg::OnUpdateModelList)
-	ON_MESSAGE(WM_UPDATE_MATERIAL_LIST, &CObjectLoacatorDlg::OnUpdateMatList)
-	ON_MESSAGE(WM_LIST_BOX_NONE, &CObjectLoacatorDlg::OnListBoxNone)
-	ON_BN_CLICKED(IDC_BUTTON_EDIT_MAT_SELECTED, &CObjectLoacatorDlg::OnBnClickedButtonEditMatSelected)
-	ON_EN_CHANGE(IDC_POS_X, &CObjectLoacatorDlg::OnEnChangePosX)
+	ON_EN_KILLFOCUS(IDC_POS_X, &CObjectDlg::OnKillfocusPosX)
+	ON_EN_KILLFOCUS(IDC_POS_Y, &CObjectDlg::OnKillfocusPosY)
+	ON_EN_KILLFOCUS(IDC_POS_Z, &CObjectDlg::OnKillfocusPosZ)
+	ON_EN_KILLFOCUS(IDC_ROT_X, &CObjectDlg::OnKillfocusRotX)
+	ON_EN_KILLFOCUS(IDC_ROT_Y, &CObjectDlg::OnKillfocusRotY)
+	ON_EN_KILLFOCUS(IDC_ROT_Z, &CObjectDlg::OnKillfocusRotZ)
+	ON_EN_KILLFOCUS(IDC_SCALE_X, &CObjectDlg::OnKillfocusScaleX)
+	ON_EN_KILLFOCUS(IDC_SCALE_Y, &CObjectDlg::OnKillfocusScaleY)
+	ON_EN_KILLFOCUS(IDC_SCALE_Z, &CObjectDlg::OnKillfocusScaleZ)
+	ON_EN_KILLFOCUS(IDC_MOVE_OFFSET, &CObjectDlg::OnKillfocusMoveOffset)
+	ON_BN_CLICKED(IDC_BTN_OBJEDIT, &CObjectDlg::OnBnClickedBtnObjedit)
+	ON_BN_CLICKED(IDC_BTN_OBJDEL, &CObjectDlg::OnBnClickedBtnObjdel)
+	ON_BN_CLICKED(IDC_BTN_OBJCREATE, &CObjectDlg::OnBnClickedBtnObjcreate)
+	ON_LBN_SELCHANGE(IDC_OBJLIST, &CObjectDlg::OnSelchangeObjlist)
+	ON_BN_CLICKED(IDC_BTN_SAVE, &CObjectDlg::OnBnClickedBtnSave)
+	ON_BN_CLICKED(IDC_BTN_LOAD, &CObjectDlg::OnBnClickedBtnLoad)
+	ON_LBN_SELCHANGE(IDC_MODELLIST, &CObjectDlg::OnLbnSelchangeModellist)
+	ON_LBN_SELCHANGE(IDC_MATLIST, &CObjectDlg::OnLbnSelchangeMatlist)
+	ON_MESSAGE(WM_UPDATE_OBJECT_LIST, &CObjectDlg::OnUpdateObjectList)
+	ON_MESSAGE(WM_UPDATE_MODEL_LIST, &CObjectDlg::OnUpdateModelList)
+	ON_MESSAGE(WM_UPDATE_MATERIAL_LIST, &CObjectDlg::OnUpdateMatList)
+	ON_MESSAGE(WM_LIST_BOX_NONE, &CObjectDlg::OnListBoxNone)
+	ON_BN_CLICKED(IDC_BUTTON_EDIT_MAT_SELECTED, &CObjectDlg::OnBnClickedButtonEditMatSelected)
+	ON_EN_CHANGE(IDC_POS_X, &CObjectDlg::OnEnChangePosX)
 	ON_WM_KEYDOWN()
 	ON_WM_KEYUP()
-	ON_CBN_SELCHANGE(IDC_COMBO_OBJTYPE, &CObjectLoacatorDlg::OnCbnSelchangeComboObjtype)
+	ON_CBN_SELCHANGE(IDC_COMBO_OBJTYPE, &CObjectDlg::OnCbnSelchangeComboObjtype)
 	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
-BOOL CObjectLoacatorDlg::OnInitDialog()
+BOOL CObjectDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -234,7 +203,7 @@ BOOL CObjectLoacatorDlg::OnInitDialog()
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
-void CObjectLoacatorDlg::OnSysCommand(UINT nID, LPARAM lParam)
+void CObjectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
 	{
@@ -252,7 +221,7 @@ void CObjectLoacatorDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-void CObjectLoacatorDlg::OnPaint()
+void CObjectDlg::OnPaint()
 {
 	//Update ListBoxes  
 	//처움부터 다시 그려주기때문에 오브젝트가 많으면 느려질 수 있다
@@ -285,13 +254,13 @@ void CObjectLoacatorDlg::OnPaint()
 
 // 사용자가 최소화된 창을 끄는 동안에 커서가 표시되도록 시스템에서
 //  이 함수를 호출합니다.
-HCURSOR CObjectLoacatorDlg::OnQueryDragIcon()
+HCURSOR CObjectDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
 //세이브 창 띄우기
-INT_PTR CObjectLoacatorDlg::GetNamePath(CStringW& outName, CStringW& outPath)
+INT_PTR CObjectDlg::GetNamePath(CStringW& outName, CStringW& outPath)
 {
 	CFileDialog saveDlg(FALSE, NULL, NULL, OFN_EXPLORER | OFN_HIDEREADONLY, NULL, this, 0, TRUE);	//| OFN_ALLOWMULTISELECT 다 수 파일 선택	
 	INT_PTR nResponse = saveDlg.DoModal();
@@ -317,7 +286,7 @@ INT_PTR CObjectLoacatorDlg::GetNamePath(CStringW& outName, CStringW& outPath)
 
 
 
-float CObjectLoacatorDlg::CheckInput_Float(int controllerID)
+float CObjectDlg::CheckInput_Float(int controllerID)
 {
 	WCHAR strValue[64];
 	::GetDlgItemTextW(m_hWnd, controllerID, strValue, 64);
@@ -331,7 +300,7 @@ float CObjectLoacatorDlg::CheckInput_Float(int controllerID)
 	return fValue;
 }
 
-void CObjectLoacatorDlg::SetDlgFloat(int controllerID, float value)
+void CObjectDlg::SetDlgFloat(int controllerID, float value)
 {
 	//WCHAR ret[64];
 	CString ret;
@@ -340,12 +309,12 @@ void CObjectLoacatorDlg::SetDlgFloat(int controllerID, float value)
 	GetDlgItem(controllerID)->UpdateWindow();
 }
 
-void CObjectLoacatorDlg::GetStringFromIDC(int controllerID, CString& dest)
+void CObjectDlg::GetStringFromIDC(int controllerID, CString& dest)
 {
 	GetDlgItemText(controllerID, dest);
 }
 
-void CObjectLoacatorDlg::SetObjName(int controllerID, object* pDest)
+void CObjectDlg::SetObjName(int controllerID, object* pDest)
 {
 	CString blank = L"";
 	CString name;
@@ -358,7 +327,7 @@ void CObjectLoacatorDlg::SetObjName(int controllerID, object* pDest)
 	}
 }
 
-void CObjectLoacatorDlg::SetObjMaterialName(int controllerID, object* pDest)
+void CObjectDlg::SetObjMaterialName(int controllerID, object* pDest)
 {
 	CString blank = L"";
 	CString materialName;
@@ -371,7 +340,7 @@ void CObjectLoacatorDlg::SetObjMaterialName(int controllerID, object* pDest)
 	}
 }
 
-void CObjectLoacatorDlg::InitComboBox_ObjectType()
+void CObjectDlg::InitComboBox_ObjectType()
 {
 	LPCTSTR szTypeName[eOBJECT_MAX] = {  L"FIELD_COLLISION_YES", L"FIELD_COLLISION_NO", L"ENEMY_NORMAL", L"ENEMY_RANGE", L"ENEMY_DASH", L"NPC_REINFORCE", L"ENEMY_BOSS" };
 	
@@ -406,7 +375,7 @@ void CObjectLoacatorDlg::InitComboBox_ObjectType()
 	m_ComboBox_ObjectType.SetCurSel(0);
 }
 
-void CObjectLoacatorDlg::MoveFocusNext()
+void CObjectDlg::MoveFocusNext()
 {
 	UINT editlist[12] =
 	{
@@ -434,7 +403,7 @@ void CObjectLoacatorDlg::MoveFocusNext()
 	pEdit->SetFocus();
 }
 
-void CObjectLoacatorDlg::MoveFocusBack()
+void CObjectDlg::MoveFocusBack()
 {
 	//edit control 포커스 이동
 	m_curFocus = GetFocus()->GetDlgCtrlID();
@@ -461,17 +430,17 @@ void CObjectLoacatorDlg::MoveFocusBack()
 
 
 
-void CObjectLoacatorDlg::SetObjSelectedModel(object* pObj)
+void CObjectDlg::SetObjSelectedModel(object* pObj)
 {
 	pObj->modelIndex = GetSelectedModelIndex();
 }
 
-void CObjectLoacatorDlg::SetObjSelectedMat(object* pObj)
+void CObjectDlg::SetObjSelectedMat(object* pObj)
 {
 	pObj->matIndex = GetSelectedMaterialIndex();
 }
 
-void CObjectLoacatorDlg::SetDefaultName(object* pObj)
+void CObjectDlg::SetDefaultName(object* pObj)
 {
 	static int count = 0;
 	int index = m_ModelListBox.FindString(0, pObj->modelName);
@@ -488,7 +457,7 @@ void CObjectLoacatorDlg::SetDefaultName(object* pObj)
 
 }
 
-void CObjectLoacatorDlg::SetModelName(object* pDest, int modelIndex)
+void CObjectDlg::SetModelName(object* pDest, int modelIndex)
 {
 	int index = m_ModelListBox.GetCurSel();
 	CString modelName;
@@ -499,7 +468,7 @@ void CObjectLoacatorDlg::SetModelName(object* pDest, int modelIndex)
 
 
 //리스트 박스에서 선택한 오브젝트를 가져온다.
-object* CObjectLoacatorDlg::GetSelectedObj()
+object* CObjectDlg::GetSelectedObj()
 {
 	object* pResult = NULL;
 	int index = m_objListBox.GetCurSel();
@@ -511,7 +480,7 @@ object* CObjectLoacatorDlg::GetSelectedObj()
 	return pResult;
 }
 
-object* CObjectLoacatorDlg::GetObjectByIndex(int index)
+object* CObjectDlg::GetObjectByIndex(int index)
 {
 	int numOfObj = m_objListBox.GetCount();
 
@@ -523,7 +492,7 @@ object* CObjectLoacatorDlg::GetObjectByIndex(int index)
 		return NULL;
 }
 
-int CObjectLoacatorDlg::GetSelectedModelIndex()
+int CObjectDlg::GetSelectedModelIndex()
 {
 	int index = m_ModelListBox.GetCurSel();
 	MODEL* pModel = NULL;
@@ -546,7 +515,7 @@ int CObjectLoacatorDlg::GetSelectedModelIndex()
 	return iResult;
 }
 
-int CObjectLoacatorDlg::GetSelectedMaterialIndex()
+int CObjectDlg::GetSelectedMaterialIndex()
 {
 	int index = m_MatListBox.GetCurSel();
 	if (index == LB_ERR)
@@ -569,13 +538,13 @@ int CObjectLoacatorDlg::GetSelectedMaterialIndex()
 }
 
 
-MODEL* CObjectLoacatorDlg::GetModelFromListBox(int index)
+MODEL* CObjectDlg::GetModelFromListBox(int index)
 {
 	MODEL* pModel = g_pCenter->GetModelByInde(index);
 	return pModel;
 }
 
-MATERIAL* CObjectLoacatorDlg::GetMaterialListBox(int index)
+MATERIAL* CObjectDlg::GetMaterialListBox(int index)
 {
 	MATERIAL* pMat = (MATERIAL*)m_MatListBox.GetItemDataPtr(index);
 
@@ -583,7 +552,7 @@ MATERIAL* CObjectLoacatorDlg::GetMaterialListBox(int index)
 }
 
 //해당 오브젝트에 해당하는 그래픽 인스턴스를 삭제한다.
-void CObjectLoacatorDlg::DeleteGraphicInstance(object* pObj)
+void CObjectDlg::DeleteGraphicInstance(object* pObj)
 {
 	if (pObj == NULL)
 		return;
@@ -591,7 +560,7 @@ void CObjectLoacatorDlg::DeleteGraphicInstance(object* pObj)
 	RequestCenter(WM_OBJECT_DELETE, (WPARAM)pObj, 0);
 }
 
-DirectX::XMFLOAT4 CObjectLoacatorDlg::ConvertMatrixToQuaternion(DirectX::XMFLOAT3& oiler)
+DirectX::XMFLOAT4 CObjectDlg::ConvertMatrixToQuaternion(DirectX::XMFLOAT3& oiler)
 {
 	XMFLOAT4 rot = {};
 	XMMATRIX matrix = XMMatrixRotationRollPitchYaw(oiler.x, oiler.y, oiler.z);
@@ -606,7 +575,7 @@ DirectX::XMFLOAT4 CObjectLoacatorDlg::ConvertMatrixToQuaternion(DirectX::XMFLOAT
 	return rot;
 }
 
-DirectX::XMFLOAT4X4 CObjectLoacatorDlg::ConvertQuaternionToMatrix(DirectX::XMFLOAT4& quaternion)
+DirectX::XMFLOAT4X4 CObjectDlg::ConvertQuaternionToMatrix(DirectX::XMFLOAT4& quaternion)
 {
 	XMMATRIX matrix = XMMatrixRotationQuaternion( XMLoadFloat4(&quaternion) );		//matrix를 리턴해서 앞에 둔다.
 	XMFLOAT4X4 result;
@@ -615,8 +584,40 @@ DirectX::XMFLOAT4X4 CObjectLoacatorDlg::ConvertQuaternionToMatrix(DirectX::XMFLO
 	return result;
 }
 
-//
-void CObjectLoacatorDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)
+CObjectDlg* CObjectDlg::CreateObjectDlg(CWnd* pParent)
+{
+	CObjectDlg* pResult = new CObjectDlg;
+	if (pResult != nullptr)
+	{
+		pResult->Initialize(pParent);
+	}
+
+	return pResult;
+}
+
+void CObjectDlg::Initialize(CWnd* pParent)
+{
+	Create(IDD_OBJECTLOACATOR_DIALOG);
+	SetDocking(pParent);
+	ShowWindow(SW_SHOW);
+}
+
+void CObjectDlg::SetDocking(CWnd* pParent)
+{
+	CWnd* pCWndParent = pParent;
+	if (pCWndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+	}
+
+	SetParent(pCWndParent);
+}
+
+void CObjectDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)
 {
 	m_objListBox.ResetContent();
 
@@ -640,7 +641,7 @@ void CObjectLoacatorDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)
 	m_objListBox.UpdateWindow();
 }
 
-void CObjectLoacatorDlg::UpdateModelListBox(std::vector<MODEL*>* pModelList)
+void CObjectDlg::UpdateModelListBox(std::vector<MODEL*>* pModelList)
 {
 	m_ModelListBox.ResetContent();	//ListBox 리셋
 
@@ -668,7 +669,7 @@ void CObjectLoacatorDlg::UpdateModelListBox(std::vector<MODEL*>* pModelList)
 	
 }
 
-void CObjectLoacatorDlg::UpdateMatListBox(std::vector<MATERIAL*>* pMatList)
+void CObjectDlg::UpdateMatListBox(std::vector<MATERIAL*>* pMatList)
 {
 	m_MatListBox.ResetContent();	//ListBox 리셋
 
@@ -690,7 +691,7 @@ void CObjectLoacatorDlg::UpdateMatListBox(std::vector<MATERIAL*>* pMatList)
 	m_MatListBox.UpdateWindow();
 }
 
-void CObjectLoacatorDlg::DeleteObjInListBox(std::vector<object*>* pList)
+void CObjectDlg::DeleteObjInListBox(std::vector<object*>* pList)
 {
 	if (pList == nullptr) return;
 	std::vector<object*>::iterator it;
@@ -715,28 +716,28 @@ void CObjectLoacatorDlg::DeleteObjInListBox(std::vector<object*>* pList)
 }
 
 
-void CObjectLoacatorDlg::GetVector(UINT id, DirectX::XMFLOAT3& dest)
+void CObjectDlg::GetVector(UINT id, DirectX::XMFLOAT3& dest)
 {
 	dest.x = GetValueFromDlg(id, 0.f);;
 	dest.y = GetValueFromDlg(id + 1, 0.f);;
 	dest.z = GetValueFromDlg(id + 2, 0.f);;
 }
 
-void CObjectLoacatorDlg::GetPos(DirectX::XMFLOAT3& pos)
+void CObjectDlg::GetPos(DirectX::XMFLOAT3& pos)
 {
 	pos.x = GetValueFromDlg(IDC_POS_X, 0.f);;
 	pos.y = GetValueFromDlg(IDC_POS_Y, 0.f);;
 	pos.z = GetValueFromDlg(IDC_POS_Z, 0.f);;
 }
 
-void CObjectLoacatorDlg::GetOiler(DirectX::XMFLOAT3& oil)
+void CObjectDlg::GetOiler(DirectX::XMFLOAT3& oil)
 {
 	oil.x = GetValueFromDlg(IDC_ROT_X, 0.f);		//라디안 X값
 	oil.y = GetValueFromDlg(IDC_ROT_Y, 0.f);		//라디안 Y값
 	oil.z = GetValueFromDlg(IDC_ROT_Z, 0.f);		//라디안 Z값
 }
 
-void CObjectLoacatorDlg::GetQuaternion(DirectX::XMFLOAT4& rot)
+void CObjectDlg::GetQuaternion(DirectX::XMFLOAT4& rot)
 {
 	//쿼터니언 변환이 필요하다.
 	DirectX::XMFLOAT3 radian;
@@ -749,14 +750,14 @@ void CObjectLoacatorDlg::GetQuaternion(DirectX::XMFLOAT4& rot)
 	rot = ConvertMatrixToQuaternion(radian);
 }
 
-void CObjectLoacatorDlg::GetScale(DirectX::XMFLOAT3& scale)
+void CObjectDlg::GetScale(DirectX::XMFLOAT3& scale)
 {
 	scale.x = GetValueFromDlg(IDC_SCALE_X, 1.0f);
 	scale.y = GetValueFromDlg(IDC_SCALE_Y, 1.0f);
 	scale.z = GetValueFromDlg(IDC_SCALE_Z, 1.0f);
 }
 
-float CObjectLoacatorDlg::GetValueFromDlg(int id, float defaultValue)
+float CObjectDlg::GetValueFromDlg(int id, float defaultValue)
 {
 	float fReturn;
 	CString strValue;
@@ -769,7 +770,7 @@ float CObjectLoacatorDlg::GetValueFromDlg(int id, float defaultValue)
 	return fReturn;
 }
 
-eOBJECT_TYPE CObjectLoacatorDlg::SetObjTypeFromComboBox(object* pDest)
+eOBJECT_TYPE CObjectDlg::SetObjTypeFromComboBox(object* pDest)
 {
 	int index = m_ComboBox_ObjectType.GetCurSel();
 	eOBJECT_TYPE type;
@@ -801,7 +802,7 @@ eOBJECT_TYPE CObjectLoacatorDlg::SetObjTypeFromComboBox(object* pDest)
 //	return isCollision;
 //}
 
-void CObjectLoacatorDlg::SetComboBoxType(object* pObj)
+void CObjectDlg::SetComboBoxType(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -868,14 +869,14 @@ void CObjectLoacatorDlg::SetComboBoxType(object* pObj)
 //		m_ComboBox_IsCollision.SetCurSel(-1);
 //}
 
-void CObjectLoacatorDlg::SetPosEditBoxText(float x, float y, float z)
+void CObjectDlg::SetPosEditBoxText(float x, float y, float z)
 {
 	SetDlgFloat(IDC_POS_X, x);
 	SetDlgFloat(IDC_POS_Y, y);
 	SetDlgFloat(IDC_POS_Z, z);
 }
 
-void CObjectLoacatorDlg::SetPosEditBoxText(DirectX::XMFLOAT3& pos)
+void CObjectDlg::SetPosEditBoxText(DirectX::XMFLOAT3& pos)
 {
 	SetDlgFloat(IDC_POS_X, pos.x);
 	SetDlgFloat(IDC_POS_Y, pos.y);
@@ -885,28 +886,28 @@ void CObjectLoacatorDlg::SetPosEditBoxText(DirectX::XMFLOAT3& pos)
 
 
 
-void CObjectLoacatorDlg::SetRotEditBoxText(DirectX::XMFLOAT3& olier)
+void CObjectDlg::SetRotEditBoxText(DirectX::XMFLOAT3& olier)
 {
 	SetDlgFloat(IDC_ROT_X, olier.x);
 	SetDlgFloat(IDC_ROT_Y, olier.y);
 	SetDlgFloat(IDC_ROT_Z, olier.z);
 }
 
-void CObjectLoacatorDlg::SetScaleEditBoxText(float x, float y, float z)
+void CObjectDlg::SetScaleEditBoxText(float x, float y, float z)
 {
 	SetDlgFloat(IDC_SCALE_X, x);
 	SetDlgFloat(IDC_SCALE_Y, y);
 	SetDlgFloat(IDC_SCALE_Z, z);
 }
 
-void CObjectLoacatorDlg::SetScaleEditBoxText(DirectX::XMFLOAT3& scale)
+void CObjectDlg::SetScaleEditBoxText(DirectX::XMFLOAT3& scale)
 {
 	SetDlgFloat(IDC_SCALE_X, scale.x);
 	SetDlgFloat(IDC_SCALE_Y, scale.y);
 	SetDlgFloat(IDC_SCALE_Z, scale.z);
 }
 
-void CObjectLoacatorDlg::SetNameEditBoxText(object* pObj)
+void CObjectDlg::SetNameEditBoxText(object* pObj)
 {
 	CString ret;
 	if (pObj == NULL)
@@ -917,14 +918,14 @@ void CObjectLoacatorDlg::SetNameEditBoxText(object* pObj)
 	GetDlgItem(IDC_OBJECT_NAME)->UpdateWindow();
 }
 
-void CObjectLoacatorDlg::SetNameEditBoxText(WCHAR* pStr)
+void CObjectDlg::SetNameEditBoxText(WCHAR* pStr)
 {
 	CString ret = CString(pStr);
 	SetDlgItemText(IDC_OBJECT_NAME, ret);
 	GetDlgItem(IDC_OBJECT_NAME)->UpdateWindow();
 }
 
-void CObjectLoacatorDlg::SetModelBoxIndex(object* pObj)
+void CObjectDlg::SetModelBoxIndex(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -948,7 +949,7 @@ void CObjectLoacatorDlg::SetModelBoxIndex(object* pObj)
 	m_ModelListBox.SetCurSel(index);
 }
 
-void CObjectLoacatorDlg::SetMatBoxIndex(object* pObj)
+void CObjectDlg::SetMatBoxIndex(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -972,7 +973,7 @@ void CObjectLoacatorDlg::SetMatBoxIndex(object* pObj)
 	m_MatListBox.SetCurSel(index);
 }
 
-void CObjectLoacatorDlg::SetObjBoxIndex(object* pObj)
+void CObjectDlg::SetObjBoxIndex(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -997,7 +998,7 @@ void CObjectLoacatorDlg::SetObjBoxIndex(object* pObj)
 }
 
 
-void CObjectLoacatorDlg::SetModelIndexEditBox(int index)
+void CObjectDlg::SetModelIndexEditBox(int index)
 {
 	CString ret;
 	ret.Format(L"%d", index);
@@ -1005,14 +1006,14 @@ void CObjectLoacatorDlg::SetModelIndexEditBox(int index)
 	GetDlgItem(IDC_MODEL_INDEX)->UpdateWindow();
 }
 
-void CObjectLoacatorDlg::SetModelNameEditBox(CString strModelName)
+void CObjectDlg::SetModelNameEditBox(CString strModelName)
 {
 	SetDlgItemText(IDC_MODEL_NAME, strModelName);
 	GetDlgItem(IDC_MODEL_NAME)->UpdateWindow();
 	strModelName.Empty();
 }
 
-void CObjectLoacatorDlg::SetMatIndexEditbox(int index)
+void CObjectDlg::SetMatIndexEditbox(int index)
 {
 	CString ret;
 	ret.Format(L"%d", index);
@@ -1021,7 +1022,7 @@ void CObjectLoacatorDlg::SetMatIndexEditbox(int index)
 	ret.Empty();
 }
 
-void CObjectLoacatorDlg::SetMatNameEditBox(CString strMatName)
+void CObjectDlg::SetMatNameEditBox(CString strMatName)
 {
 	SetDlgItemText(IDC_MAT_NAME, strMatName);
 	GetDlgItem(IDC_MAT_NAME)->UpdateWindow();
@@ -1030,7 +1031,7 @@ void CObjectLoacatorDlg::SetMatNameEditBox(CString strMatName)
 
 
 
-void CObjectLoacatorDlg::ClearFileName()
+void CObjectDlg::ClearFileName()
 {
 	CEdit* pEdit = (CEdit*)GetDlgItem(IDC_FILE_NAME);
 	pEdit->SetSel(0, -1, TRUE);
@@ -1038,7 +1039,7 @@ void CObjectLoacatorDlg::ClearFileName()
 }
 
 
-void CObjectLoacatorDlg::UpdateRegenColiderList(const std::vector<COLLIDER>* pColList)
+void CObjectDlg::UpdateRegenColiderList(const std::vector<COLLIDER>* pColList)
 {
 	m_ComboBox_RegenColliderList.ResetContent();
 	std::vector<COLLIDER>::const_iterator it;
@@ -1063,7 +1064,7 @@ void CObjectLoacatorDlg::UpdateRegenColiderList(const std::vector<COLLIDER>* pCo
 
 }
 
-void CObjectLoacatorDlg::SetRegenComboBoxNONE()
+void CObjectDlg::SetRegenComboBoxNONE()
 {
 	int count = m_ComboBox_RegenColliderList.GetCount();
 	for (int i = 0; i < count; i++)
@@ -1077,7 +1078,7 @@ void CObjectLoacatorDlg::SetRegenComboBoxNONE()
 	}
 }
 
-void CObjectLoacatorDlg::SetRegenColliderComboBox(int index)
+void CObjectDlg::SetRegenColliderComboBox(int index)
 {
 	if (index < 0)
 	{
@@ -1101,7 +1102,7 @@ void CObjectLoacatorDlg::SetRegenColliderComboBox(int index)
 }
 
 //리젠 콜라이더박스 인덱스 셋팅.
-void CObjectLoacatorDlg::SetRegenIndexFromComboBox(object* pDest)
+void CObjectDlg::SetRegenIndexFromComboBox(object* pDest)
 {
 	if (pDest == NULL) return;
 	collider* pRegenCollider = GetRegenColliderFromCombo();
@@ -1113,7 +1114,7 @@ void CObjectLoacatorDlg::SetRegenIndexFromComboBox(object* pDest)
 	pDest->regenIndex = RegenIndex;
 }
 
-collider* CObjectLoacatorDlg::GetRegenColliderFromCombo()
+collider* CObjectDlg::GetRegenColliderFromCombo()
 {
 	int curIndex = m_ComboBox_RegenColliderList.GetCurSel();
 	if (curIndex == -1) return NULL;
@@ -1122,7 +1123,7 @@ collider* CObjectLoacatorDlg::GetRegenColliderFromCombo()
 	return pCollider;
 }
 
-void CObjectLoacatorDlg::SetObjRegenIndexByComboBox(object* pDest)
+void CObjectDlg::SetObjRegenIndexByComboBox(object* pDest)
 {
 	if (pDest == NULL) return;
 	collider* pCollider = GetRegenColliderFromCombo();
@@ -1132,7 +1133,7 @@ void CObjectLoacatorDlg::SetObjRegenIndexByComboBox(object* pDest)
 		pDest->regenIndex = pCollider->index;
 }
 
-void CObjectLoacatorDlg::SetObjectEditBoxes(object* pObj)
+void CObjectDlg::SetObjectEditBoxes(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -1176,7 +1177,7 @@ void CObjectLoacatorDlg::SetObjectEditBoxes(object* pObj)
 	SetMatBoxIndex(pObj);
 }
 
-void CObjectLoacatorDlg::SetIndex(int index)
+void CObjectDlg::SetIndex(int index)
 {
 	int num = m_objListBox.GetCount();
 	if (num < index || index < 0)
@@ -1219,21 +1220,21 @@ void CObjectLoacatorDlg::SetIndex(int index)
 	}
 }
 
-int CObjectLoacatorDlg::GetIndex()
+int CObjectDlg::GetIndex()
 {
 	return m_objListBox.GetCurSel();
 }
 
 
 
-void CObjectLoacatorDlg::GetMapNameFromDlg(int id, CString& dest)
+void CObjectDlg::GetMapNameFromDlg(int id, CString& dest)
 {
 	GetDlgItemTextW(id, dest);
 	dest = dest + L".map";
 }
 
 //폴더가 없을 경우 생성.
-void CObjectLoacatorDlg::CreateFolder(CStringW& folderName)
+void CObjectDlg::CreateFolder(CStringW& folderName)
 {
 	//파일 경로 생성.
 	if ((_waccess(folderName.GetBuffer(), 0)) == -1)
@@ -1243,7 +1244,7 @@ void CObjectLoacatorDlg::CreateFolder(CStringW& folderName)
 	}
 }
 
-void CObjectLoacatorDlg::OutputDebugCode(wchar_t* pStr)
+void CObjectDlg::OutputDebugCode(wchar_t* pStr)
 {
 	//에러 코드 출력
 	DWORD dwRet = GetLastError();
@@ -1252,18 +1253,18 @@ void CObjectLoacatorDlg::OutputDebugCode(wchar_t* pStr)
 	OutputDebugStringW(buffer);
 }
 
-void CObjectLoacatorDlg::RequestModelList()
+void CObjectDlg::RequestModelList()
 {
 	::SendMessageW(g_hCenter, WM_REQUEST_MODEL_LIST, (WPARAM)m_hWnd, NULL);
 }
 
-void CObjectLoacatorDlg::RequestMatList()
+void CObjectDlg::RequestMatList()
 {
 	::SendMessageW(g_hCenter, WM_REQUEST_MAT_LIST, (WPARAM)m_hWnd, NULL);
 }
 
 
-void CObjectLoacatorDlg::EditObject(object* pObj)
+void CObjectDlg::EditObject(object* pObj)
 {
 	if (pObj != NULL)
 	{
@@ -1319,7 +1320,7 @@ void CObjectLoacatorDlg::EditObject(object* pObj)
 }
 
 
-void CObjectLoacatorDlg::HideAndShow()
+void CObjectDlg::HideAndShow()
 {
 	m_bIsShow = !m_bIsShow;
 
@@ -1333,22 +1334,22 @@ void CObjectLoacatorDlg::HideAndShow()
 	ShowWindow(para);
 }
 
-bool CObjectLoacatorDlg::IsDocking()
+bool CObjectDlg::IsDocking()
 {
 	return m_bIsDocking;
 }
 
-void CObjectLoacatorDlg::ToggleDocking_()
+void CObjectDlg::ToggleDocking_()
 {
 	m_bIsDocking = !m_bIsDocking;
 }
 
-void CObjectLoacatorDlg::ClearLogBuffer()
+void CObjectDlg::ClearLogBuffer()
 {
 	ZeroMemory(m_strLog, sizeof(m_strLog));
 }
 
-void CObjectLoacatorDlg::AddLogStr(wchar_t* strLog)
+void CObjectDlg::AddLogStr(wchar_t* strLog)
 {
 	int logSize = sizeof(strLog);
 	if (logSize > STR_MAX * 2)
@@ -1361,7 +1362,7 @@ void CObjectLoacatorDlg::AddLogStr(wchar_t* strLog)
 	UpdateLogBox();
 }
 
-void CObjectLoacatorDlg::AddLogTest(LPCWSTR pStr, ...)
+void CObjectDlg::AddLogTest(LPCWSTR pStr, ...)
 {
 	//CString str;
 	LPCWSTR str = pStr;
@@ -1379,14 +1380,14 @@ void CObjectLoacatorDlg::AddLogTest(LPCWSTR pStr, ...)
 	return;
 }
 
-void CObjectLoacatorDlg::OutCurDirAfterStr(wchar_t* strLog)
+void CObjectDlg::OutCurDirAfterStr(wchar_t* strLog)
 {
 	GetCurrentDirectoryW(STR_MAX, m_strLog);
 	wcscat_s(m_strLog, strLog);
 	UpdateLogBox();
 }
 
-void CObjectLoacatorDlg::UpdateLogBox()
+void CObjectDlg::UpdateLogBox()
 {
 	int index =m_LogBox.AddString(m_strLog);
 	m_LogBox.UpdateWindow();
@@ -1396,7 +1397,7 @@ void CObjectLoacatorDlg::UpdateLogBox()
 
 
 //선택된 오브젝트 값 수정
-void CObjectLoacatorDlg::OnBnClickedBtnObjedit()
+void CObjectDlg::OnBnClickedBtnObjedit()
 {
 	object* pObj = GetSelectedObj();
 	
@@ -1417,7 +1418,7 @@ void CObjectLoacatorDlg::OnBnClickedBtnObjedit()
 }
 
 //기존 오브젝트를 삭제.
-void CObjectLoacatorDlg::OnBnClickedBtnObjdel()
+void CObjectDlg::OnBnClickedBtnObjdel()
 {
 	object* pTemp = GetSelectedObj();
 	if (pTemp == NULL)
@@ -1438,7 +1439,7 @@ void CObjectLoacatorDlg::OnBnClickedBtnObjdel()
 	//AddLogStr(buf);
 }
 
-void CObjectLoacatorDlg::OnBnClickedBtnObjcreate()
+void CObjectDlg::OnBnClickedBtnObjcreate()
 {
 	XMFLOAT3 pos	= { 0.f, 0.f, 0.f };
 	XMFLOAT3 oiler  = { 0.f, 0.f, 0.f };
@@ -1498,7 +1499,7 @@ void CObjectLoacatorDlg::OnBnClickedBtnObjcreate()
 	matName.ReleaseBuffer();
 }
 
-void CObjectLoacatorDlg::OnSelchangeObjlist()
+void CObjectDlg::OnSelchangeObjlist()
 {
 	//리스트 박스에 오브젝트를 선택했을 경우
 	object* pTemp = GetSelectedObj();
@@ -1512,7 +1513,7 @@ void CObjectLoacatorDlg::OnSelchangeObjlist()
 }
 
 
-void CObjectLoacatorDlg::OnBnClickedBtnSave()
+void CObjectDlg::OnBnClickedBtnSave()
 {
 	
 	CStringW fileName;
@@ -1526,7 +1527,7 @@ void CObjectLoacatorDlg::OnBnClickedBtnSave()
 	ClearFileName();
 }
 
-void CObjectLoacatorDlg::OnBnClickedBtnLoad()
+void CObjectDlg::OnBnClickedBtnLoad()
 {
 	CStringW fileName;
 
@@ -1538,53 +1539,53 @@ void CObjectLoacatorDlg::OnBnClickedBtnLoad()
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusPosX()
+void CObjectDlg::OnKillfocusPosX()
 {
 	float f1 = CheckInput_Float(IDC_POS_X);
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusPosY()
+void CObjectDlg::OnKillfocusPosY()
 {
 	float f1 = CheckInput_Float(IDC_POS_Y);
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusPosZ()
+void CObjectDlg::OnKillfocusPosZ()
 {
 	float f1 = CheckInput_Float(IDC_POS_Z);
 }
 
-void CObjectLoacatorDlg::OnKillfocusRotX()
+void CObjectDlg::OnKillfocusRotX()
 {
 	float f1 = CheckInput_Float(IDC_ROT_X);
 }
 
-void CObjectLoacatorDlg::OnKillfocusRotY()
+void CObjectDlg::OnKillfocusRotY()
 {
 	float f1 = CheckInput_Float(IDC_ROT_Y);
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusRotZ()
+void CObjectDlg::OnKillfocusRotZ()
 {
 	float f1 = CheckInput_Float(IDC_ROT_Z);
 }
 
-void CObjectLoacatorDlg::OnKillfocusScaleX()
+void CObjectDlg::OnKillfocusScaleX()
 {
 	float f1 = CheckInput_Float(IDC_SCALE_X);
 
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusScaleY()
+void CObjectDlg::OnKillfocusScaleY()
 {
 	float f1 = CheckInput_Float(IDC_SCALE_Y);
 
 }
 
-void CObjectLoacatorDlg::OnKillfocusScaleZ()
+void CObjectDlg::OnKillfocusScaleZ()
 {
 	float f1 = CheckInput_Float(IDC_SCALE_Z);
 
@@ -1595,14 +1596,14 @@ void CObjectLoacatorDlg::OnKillfocusScaleZ()
 	EditObject(pObj);
 }
 
-void CObjectLoacatorDlg::OnKillfocusMoveOffset()
+void CObjectDlg::OnKillfocusMoveOffset()
 {
 	//킬포커스를 쓰는 경우 다른 컨트롤을 클릭하여 포커스가 넘어가야 진입.
 	float f1 = CheckInput_Float(IDC_MOVE_OFFSET);
 	m_fMovingOffset = f1;
 }
 
-void CObjectLoacatorDlg::OnLbnSelchangeModellist()
+void CObjectDlg::OnLbnSelchangeModellist()
 {
 	//MapUtil::PassFocus(m_hWndViewer);
 	
@@ -1620,7 +1621,7 @@ void CObjectLoacatorDlg::OnLbnSelchangeModellist()
 	OnPaint();
 }
 
-void CObjectLoacatorDlg::OnLbnSelchangeMatlist()
+void CObjectDlg::OnLbnSelchangeMatlist()
 {
 	//MapUtil::PassFocus(m_hWndViewer);
 	int iSel = m_MatListBox.GetCurSel();
@@ -1637,7 +1638,7 @@ void CObjectLoacatorDlg::OnLbnSelchangeMatlist()
 	OnPaint();
 }
 
-BOOL CObjectLoacatorDlg::PreTranslateMessage(MSG* pMsg)
+BOOL CObjectDlg::PreTranslateMessage(MSG* pMsg)
 {
 	WPARAM wp = pMsg->wParam;
 	if (pMsg->message == WM_KEYUP)
@@ -1660,7 +1661,7 @@ BOOL CObjectLoacatorDlg::PreTranslateMessage(MSG* pMsg)
 }
 
 
-afx_msg LRESULT CObjectLoacatorDlg::OnUpdateObjectList(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CObjectDlg::OnUpdateObjectList(WPARAM wParam, LPARAM lParam)
 {
 	std::vector<DRAW_INSTANCE*>* pList = (std::vector<DRAW_INSTANCE*>*)(wParam);
 	UpdateObjListBox(pList);
@@ -1670,7 +1671,7 @@ afx_msg LRESULT CObjectLoacatorDlg::OnUpdateObjectList(WPARAM wParam, LPARAM lPa
 }
 
 
-afx_msg LRESULT CObjectLoacatorDlg::OnUpdateModelList(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CObjectDlg::OnUpdateModelList(WPARAM wParam, LPARAM lParam)
 {
 	std::vector<MODEL*>* pList = (std::vector<MODEL*>*)wParam;
 	UpdateModelListBox(pList);
@@ -1678,7 +1679,7 @@ afx_msg LRESULT CObjectLoacatorDlg::OnUpdateModelList(WPARAM wParam, LPARAM lPar
 }
 
 
-afx_msg LRESULT CObjectLoacatorDlg::OnUpdateMatList(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CObjectDlg::OnUpdateMatList(WPARAM wParam, LPARAM lParam)
 {
 	std::vector<MATERIAL*>* pList = (std::vector<MATERIAL*>*)wParam;
 	UpdateMatListBox(pList);
@@ -1687,7 +1688,7 @@ afx_msg LRESULT CObjectLoacatorDlg::OnUpdateMatList(WPARAM wParam, LPARAM lParam
 
 
 
-afx_msg LRESULT CObjectLoacatorDlg::OnListBoxNone(WPARAM wParam, LPARAM lParam)
+afx_msg LRESULT CObjectDlg::OnListBoxNone(WPARAM wParam, LPARAM lParam)
 {
 	SetObjectEditBoxes(NULL);
 
@@ -1700,7 +1701,7 @@ afx_msg LRESULT CObjectLoacatorDlg::OnListBoxNone(WPARAM wParam, LPARAM lParam)
 
 
 
-void CObjectLoacatorDlg::OnBnClickedButtonEditMatSelected()
+void CObjectDlg::OnBnClickedButtonEditMatSelected()
 {
 	int index = m_MatListBox.GetCurSel();
 	if (index > -1)
@@ -1711,7 +1712,7 @@ void CObjectLoacatorDlg::OnBnClickedButtonEditMatSelected()
 
 
 
-void CObjectLoacatorDlg::OnEnChangePosX()
+void CObjectDlg::OnEnChangePosX()
 {
 	
 	// TODO:  RICHEDIT 컨트롤인 경우, 이 컨트롤은
@@ -1723,7 +1724,7 @@ void CObjectLoacatorDlg::OnEnChangePosX()
 }
 
 
-void CObjectLoacatorDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+void CObjectDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if(nChar == VK_SHIFT)
 		m_bShiftKeyDown = true;
@@ -1731,7 +1732,7 @@ void CObjectLoacatorDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-void CObjectLoacatorDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+void CObjectDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if (nChar == VK_SHIFT)
 		m_bShiftKeyDown = false;
@@ -1739,7 +1740,7 @@ void CObjectLoacatorDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-void CObjectLoacatorDlg::OnCbnSelchangeComboObjtype()
+void CObjectDlg::OnCbnSelchangeComboObjtype()
 {
 	int index = m_ComboBox_ObjectType.GetCurSel();
 	eOBJECT_TYPE type = (eOBJECT_TYPE)m_ComboBox_ObjectType.GetItemData(index);
@@ -1763,7 +1764,7 @@ void CObjectLoacatorDlg::OnCbnSelchangeComboObjtype()
 }
 
 
-void CObjectLoacatorDlg::OnClose()
+void CObjectDlg::OnClose()
 {
 	//여기부터.
 	if (m_objListBox.m_hWnd != NULL)

@@ -72,12 +72,17 @@ private:
 
     CamController* m_pCamController;        //카메라 조작용.
 
+private:
+    void InitEngine(int iWidth, int iHeight);
+
 public:
     Viewer(CWnd* pParent = nullptr);
     ~Viewer();
+    static Viewer* CreateViewer(CWnd* pParent, int iWidth = 1920, int iHeight = 1080);
+    void Initialize(CWnd* pParent, int iWidth, int iHeight);
+    void SetDocking(CWnd* pParent);
     void CleanUp();
-    void Init(int iWidth, int iHeight);
-
+    
 
     void Update();
     void Draw();

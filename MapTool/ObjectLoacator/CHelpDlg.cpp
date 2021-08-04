@@ -21,6 +21,36 @@ CHelpDlg::~CHelpDlg()
 {
 }
 
+CHelpDlg* CHelpDlg::CreateHelpDlg(CWnd* pParent)
+{
+	CHelpDlg* pResult = new CHelpDlg;
+	pResult->Initialize(pParent);
+	return pResult;
+}
+
+void CHelpDlg::Initialize(CWnd* pParent)
+{
+	//m_HelpDlg = new CHelpDlg;
+	Create(IDD_HELP_DLG);
+	SetDocking(pParent);
+	ShowWindow(SW_HIDE);
+}
+
+void CHelpDlg::SetDocking(CWnd* pParent)
+{
+	CWnd* pCWndParent = pParent;
+	if (pCWndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+	}
+
+	SetParent(pCWndParent);
+}
+
 void CHelpDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);

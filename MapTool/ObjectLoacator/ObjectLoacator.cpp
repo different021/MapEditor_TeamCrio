@@ -7,9 +7,8 @@
 #include "pch.h"
 #include "framework.h"
 #include "Center.h"
-#include "ObjectLoacator.h"
 
-#include "ObjectLoacatorDlg.h"
+#include "ObjectLoacator.h"
 
 
 #ifdef _DEBUG

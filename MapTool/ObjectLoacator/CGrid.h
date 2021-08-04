@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class CObjectLoacatorDlg;
+class CObjectDlg;
 class Viewer;
 
 class CGrid : public CDialogEx
@@ -17,6 +17,8 @@ public:
 public:
 	CGrid(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CGrid();
+	static CGrid* CreateGridDlg(CWnd* pParent);
+	void Initialize(CWnd* pParent);
 
 	float GetDlgItemFloat(int ID);				//EditControl값 받기 시리즈
 	int  GetDlgItemInt(int ID);

@@ -216,13 +216,14 @@
     <ClInclude Include="CamController.h" />
     <ClInclude Include="CCallbackTimer.h" />
     <ClInclude Include="CCmd.h" />
-    <ClInclude Include="CColliderControllerDlg.h" />
+    <ClInclude Include="CColliderDlg.h" />
     <ClInclude Include="CColliderManager.h" />
     <ClInclude Include="CContainerArray.h" />
     <ClInclude Include="CDeleteArray.h" />
+    <ClInclude Include="CDlgManager.h" />
     <ClInclude Include="CGrid.h" />
     <ClInclude Include="CHelpDlg.h" />
-    <ClInclude Include="CLIGHTDLG.h" />
+    <ClInclude Include="CLightDlg.h" />
     <ClInclude Include="CLightManager.h" />
     <ClInclude Include="CManager.h" />
     <ClInclude Include="CContainer.h" />
@@ -237,7 +238,7 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="MaterialManager.h" />
     <ClInclude Include="ObjectLoacator.h" />
-    <ClInclude Include="ObjectLoacatorDlg.h">
+    <ClInclude Include="CObjectDlg.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="CSaver.h">
@@ -291,7 +292,7 @@
     <ClCompile Include="CCmd.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CColliderControllerDlg.cpp">
+    <ClCompile Include="CColliderDlg.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CColliderManager.cpp">
@@ -299,13 +300,14 @@
     </ClCompile>
     <ClCompile Include="CContainerArray.cpp" />
     <ClCompile Include="CDeleteArray.cpp" />
+    <ClCompile Include="CDlgManager.cpp" />
     <ClCompile Include="CGrid.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CHelpDlg.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CLIGHTDLG.cpp" />
+    <ClCompile Include="CLightDlg.cpp" />
     <ClCompile Include="CLightManager.cpp" />
     <ClCompile Include="CManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
@@ -333,7 +335,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ObjectLoacator.cpp" />
-    <ClCompile Include="ObjectLoacatorDlg.cpp">
+    <ClCompile Include="CObjectDlg.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>

@@ -5,9 +5,9 @@ struct lightData;
 class  CLightManager;
 struct Light;
 
-class CLIGHTDLG : public CDialogEx
+class CLightDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CLIGHTDLG)
+	DECLARE_DYNAMIC(CLightDlg)
 	bool m_bShiftKeyDown;
 	UINT m_curFocus;
 	CComboBox* m_pLightType;
@@ -18,11 +18,13 @@ private:
 	void MoveFocusBack();
 
 public:
-	CLIGHTDLG(CWnd* pParent = nullptr);   // 표준 생성자입니다.
-	virtual ~CLIGHTDLG();
-	static CLIGHTDLG* CreateLightDlg(CWnd* pParent);
+	CLightDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	virtual ~CLightDlg();
+	static CLightDlg* CreateLightDlg(CWnd* pParent);
+	void Initialize(CWnd* pParent);
 	void LightDlgCleanup();
-
+	
+	void SetDocking(CWnd* pParent);
 	void SetDlgFloat(UINT uId, float data);
 
 	void SetEditBox(Light* pLight);

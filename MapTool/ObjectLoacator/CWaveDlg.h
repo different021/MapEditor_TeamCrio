@@ -22,6 +22,8 @@ public:
 public:
 	//초기화 및 삭제
 	static CWaveDlg* CreateWaveDlg(CWnd* pParent);
+	void Initialize(CWnd* pParent);
+	void SetDocking(CWnd* pParent);
 	void Cleanup();
 
 	//Edit Control 관련

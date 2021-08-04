@@ -21,6 +21,25 @@ CGrid::~CGrid()
 {
 }
 
+CGrid* CGrid::CreateGridDlg(CWnd* pParent)
+{
+	CGrid* pResult = new CGrid;
+	if (pResult != nullptr)
+	{
+		pResult->Initialize(pParent);
+	}
+	
+	return pResult;
+}
+
+void CGrid::Initialize(CWnd* pParent)
+{
+	Create(IDD_GRIDCON);
+	SetParent(pParent);
+	ModifyStyle(WS_POPUP, WS_CHILD);
+	ShowWindow(SW_SHOW);
+}
+
 float CGrid::GetDlgItemFloat(int ID)
 {
 	CString strValue;

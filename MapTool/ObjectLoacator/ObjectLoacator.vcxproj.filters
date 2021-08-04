@@ -63,7 +63,7 @@
     <ClInclude Include="MapUtil.h">
       <Filter>utill</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectLoacatorDlg.h">
+    <ClInclude Include="CObjectDlg.h">
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="Synchronization.h">
@@ -93,7 +93,7 @@
     <ClInclude Include="Center.h">
       <Filter>Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="CColliderControllerDlg.h">
+    <ClInclude Include="CColliderDlg.h">
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="CColliderManager.h">
@@ -111,7 +111,7 @@
     <ClInclude Include="CLightManager.h">
       <Filter>Manager</Filter>
     </ClInclude>
-    <ClInclude Include="CLIGHTDLG.h">
+    <ClInclude Include="CLightDlg.h">
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="..\src\utility\CTextReader.h">
@@ -159,6 +159,9 @@
     <ClInclude Include="CDeleteArray.h">
       <Filter>Container</Filter>
     </ClInclude>
+    <ClInclude Include="CDlgManager.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ObjectLoacator.rc">
@@ -186,7 +189,7 @@
     <ClCompile Include="MapUtil.cpp">
       <Filter>utill</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectLoacatorDlg.cpp">
+    <ClCompile Include="CObjectDlg.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="Synchronization.cpp">
@@ -216,7 +219,7 @@
     <ClCompile Include="Center.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
-    <ClCompile Include="CColliderControllerDlg.cpp">
+    <ClCompile Include="CColliderDlg.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="CColliderManager.cpp">
@@ -234,7 +237,7 @@
     <ClCompile Include="CLightManager.cpp">
       <Filter>Manager</Filter>
     </ClCompile>
-    <ClCompile Include="CLIGHTDLG.cpp">
+    <ClCompile Include="CLightDlg.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="..\src\utility\CTextReader.cpp">
@@ -278,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="CDeleteArray.cpp">
       <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="CDlgManager.cpp">
+      <Filter>Dialog</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

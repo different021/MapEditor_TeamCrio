@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include "ObjectLoacatorDlg.h"
+#include "CObjectDlg.h"
 #include "ViewDlg.h"
 #include "CGrid.h"
 //#include "CCharSetting.h"
 #include "CCmd.h"
-#include "CColliderControllerDlg.h"
+#include "CColliderDlg.h"
 #include "CHelpDlg.h"
 #include "CLIGHTDLG.h"
 
@@ -46,12 +46,12 @@ class Center : public CDialogEx
 	STAGE_HEADER m_MapHeader;			//헤터
 
 	//Dialogs
-	CObjectLoacatorDlg		m_ObjLocator;		//오브젝트
-	CColliderControllerDlg	m_ColliderDlg;	//콜라이더
+	CObjectDlg		m_ObjLocator;		//오브젝트
+	CColliderDlg	m_ColliderDlg;	//콜라이더
 	Viewer*		 m_Viewer;					//뷰어
 	CGrid		 m_GridController;			//그리드 조절
 	CHelpDlg	 m_HelpDlg;					//도움말
-	CLIGHTDLG*   m_pLightDlg;				//라이트 
+	CLightDlg	 m_pLightDlg;				//라이트 
 	CWaveDlg*	 m_pWaveDlg;
 	//CCmd		 m_Cmd;						//MFC
 	
@@ -80,18 +80,10 @@ public:
 #endif
 private:
 	//Dialog상자 초기화
-	void Init_Loc();			//ObjectLocator
-	void SeperateWnd_Loc();
-	void Init_Viewer();			//Viewer
-	void SeperateWnd_Viewer();	//
-	void Init_GridController();	//MapGridController
-	void Init_HelpDlg(CWnd* pParent);		//도움말
-	void Init_LightDlg(CWnd* pParent);		//빛 
+	void InitializeDlgs(CWnd* pParent);
 
 	void Init_MainMenu();		//상단 메뉴
-	void Init_ColliderDlg();
-	void Init_WaveDlg(CWnd* pParent);
-
+	
 	//삭제.
 	void CleanUp();
 	void CleanupDlg();

@@ -66,81 +66,16 @@ Center::~Center()
 	//CleanUp();	//-> OnClose()로 이동
 }
 
-void Center::Init_Loc()
+void Center::InitializeDlgs(CWnd* pParent)
 {
-	m_ObjLocator.Create(IDD_OBJECTLOACATOR_DIALOG);
-	SeperateWnd_Loc();
-	m_ObjLocator.ShowWindow(SW_SHOW);
-	//m_ObjLocator.SetCenter(m_hWnd);
-}
-
-void Center::SeperateWnd_Loc()
-{
-	if (m_ObjLocator.IsDocking())
-	{
-		m_ObjLocator.ModifyStyle(WS_POPUP, WS_CHILD);
-		m_ObjLocator.SetParent(this);
-	}
-	else
-	{
-		m_ObjLocator.ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-		m_ObjLocator.SetParent(NULL);
-	}
-}
-
-void Center::Init_Viewer()
-{
-	m_Viewer = new Viewer;
-	m_Viewer->Create(IDD_VIEW_DLG);
-	int iFrameX = GetSystemMetrics(SM_CXFRAME);
-	int iFrameY = GetSystemMetrics(SM_CYFRAME);
-	int iCaptionY = GetSystemMetrics(SM_CYCAPTION);
-
-	int iWidth = 1920 + (iFrameX << 2);
-	int iHeight = 1080 + (iFrameY << 2) + iCaptionY;
-
-	m_Viewer->Init(iWidth, iHeight);
-	//m_Viewer->GetModelManager(1920, 1080);
+	m_Viewer = Viewer::CreateViewer(pParent);
+	m_ObjLocator.Initialize(pParent);
+	m_GridController.Initialize(pParent);
+	m_ColliderDlg.Initialize(pParent);
+	m_pLightDlg.Initialize(pParent);
+	m_pWaveDlg = CWaveDlg::CreateWaveDlg(pParent);
 	
-	SeperateWnd_Viewer();
-	m_Viewer->ShowWindow(SW_SHOW);
-}
-
-void Center::SeperateWnd_Viewer()
-{
-	if (m_bIsDockingViewr)
-	{
-		m_Viewer->ModifyStyle(WS_POPUP, WS_CHILD);
-		m_Viewer->SetParent(this);
-	}
-	else
-	{
-		m_Viewer->ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-		m_Viewer->SetParent(NULL);
-	}
-}
-
-void Center::Init_GridController()
-{
-	m_GridController.Create(IDD_GRIDCON);
-	m_GridController.SetParent(this);
-	m_GridController.ModifyStyle(WS_POPUP, WS_CHILD);
-	m_GridController.ShowWindow(SW_SHOW);
-}
-
-void Center::Init_HelpDlg(CWnd* pParent)
-{
-	//m_HelpDlg = new CHelpDlg;
-	m_HelpDlg.Create(IDD_HELP_DLG);
-	m_HelpDlg.SetParent(pParent);
-	//m_HelpDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	//m_HelpDlg->ModifyStyle(NULL, WS_POPUP);
-	m_HelpDlg.ShowWindow(SW_HIDE);
-}
-
-void Center::Init_LightDlg(CWnd* pParent)
-{
-	m_pLightDlg = CLIGHTDLG::CreateLightDlg(pParent);
+	m_HelpDlg.Initialize(pParent);
 }
 
 void Center::Init_MainMenu()
@@ -149,24 +84,6 @@ void Center::Init_MainMenu()
 	SetMenu(&m_MainMenu);
 }
 
-void Center::Init_ColliderDlg()
-{
-	m_ColliderDlg.Create(IDD_COLLIDER_CONTROLLER);
-	m_ColliderDlg.ModifyStyle(WS_POPUP, WS_CHILD);
-	m_ColliderDlg.ShowWindow(SW_SHOW);
-	m_ColliderDlg.SetParent(this);
-
-}
-
-void Center::Init_WaveDlg(CWnd* pParent)
-{
-	m_pWaveDlg = CWaveDlg::CreateWaveDlg(pParent);
-	/*m_pWaveDlg = new CWaveDlg;
-	m_pWaveDlg->Create(IDD_WAVE_DLG);
-	m_pWaveDlg->SetParent(pParent);
-	m_pWaveDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	m_pWaveDlg->ShowWindow(SW_SHOW);*/
-}
 
 void Center::CleanUp()
 {
@@ -176,11 +93,11 @@ void Center::CleanUp()
 
 void Center::CleanupDlg()
 {
-	if (m_pLightDlg != NULL)
+	/*if (m_pLightDlg != NULL)
 	{
 		delete m_pLightDlg;
 		m_pLightDlg = NULL;
-	}
+	}*/
 
 	if (m_pWaveDlg != NULL)
 	{
@@ -228,7 +145,8 @@ void Center::UpdateColliderList()
 
 void Center::UpdateLightList()
 {
-	m_pLightDlg->UpdateLightList();
+	//m_pLightDlg->UpdateLightList();
+	m_pLightDlg.UpdateLightList();
 }
 
 void Center::UpdateRegenColliderList()
@@ -321,8 +239,8 @@ void Center::DeleteInDeleteList()
 
 	std::vector<Light*> deleteLightList;
 	m_pLightManager->DelteInDelList(&deleteLightList);
-	m_pLightDlg->DeleteLightInListBox(&deleteLightList);
-
+	//m_pLightDlg->DeleteLightInListBox(&deleteLightList);
+	m_pLightDlg.DeleteLightInListBox(&deleteLightList);
 	m_pWaveManager->DeleteWaveInDeleteList();
 }
 
@@ -967,7 +885,9 @@ void Center::DuplicateLightSelectedList()
 void Center::DeleteSelectedLight()
 {
 	m_pLightManager->DeleteSelectedLight();
-	m_pLightDlg->UpdateLightList();
+	//m_pLightDlg->UpdateLightList();
+	m_pLightDlg.UpdateLightList();
+
 }
 
 Light* Center::PickingLight(int screenX, int screenY)
@@ -991,14 +911,16 @@ Light* Center::PickingLight(int screenX, int screenY)
 	}
 
 	//Update Dialog
-	m_pLightDlg->SetSelIndexInListBox(pLight);
+	//m_pLightDlg->SetSelIndexInListBox(pLight);
+	m_pLightDlg.SetSelIndexInListBox(pLight);
 
 	return pLight;
 }
 
 void Center::UpdateSelectedLight()
 {
-	m_pLightDlg->UpdateSelectedLight();
+	//m_pLightDlg->UpdateSelectedLight();
+	m_pLightDlg.UpdateSelectedLight();
 }
 
 void Center::DrawGrid(int width, int height, int offset)
@@ -1101,7 +1023,8 @@ void Center::UpdateListBox()
 	//오브젝트 리스트 박스 업데이트.
 	UpdateObjList();
 	UpdateColliderList();
-	m_pLightDlg->UpdateLightList();
+	//m_pLightDlg->UpdateLightList();
+	m_pLightDlg.UpdateLightList();
 	UpdateRegenColliderList();
 	UpdateWaveLlist();
 }
@@ -1138,18 +1061,8 @@ BOOL Center::OnInitDialog()
 	m_pWaveManager		= CWaveManager::GetInstance();
 	m_pWaveManager->Initialize();	//엔진이 초기화 된 이후 얻을 것.
 
-	Init_Viewer();		//매니저 업데이트가 들어잇어 먼저 업데이트 할 것.	
-	
-
-	Init_Loc();
-	Init_GridController();
 	Init_MainMenu();
-	//Init_Cmd();
-	Init_ColliderDlg();
-	Init_HelpDlg(this);
-	Init_LightDlg(this);
-	Init_WaveDlg(this);
-
+	InitializeDlgs(this);
 	
 	CRect rcMain;
 	GetClientRect(rcMain);
@@ -1787,12 +1700,14 @@ void Center::OnLightWindow()
 	if (m_MainMenu.GetMenuState(ID_LIGHT_WINDOW, MF_BYCOMMAND) != MF_CHECKED)
 	{
 		m_MainMenu.CheckMenuItem(ID_LIGHT_WINDOW, MF_CHECKED);
-		m_pLightDlg->ShowWindow(SW_SHOW);
+		//m_pLightDlg->ShowWindow(SW_SHOW);
+		m_pLightDlg.ShowWindow(SW_SHOW);
 	}
 	else
 	{
 		m_MainMenu.CheckMenuItem(ID_LIGHT_WINDOW, MF_UNCHECKED);
-		m_pLightDlg->ShowWindow(SW_HIDE);
+		//m_pLightDlg->ShowWindow(SW_HIDE);
+		m_pLightDlg.ShowWindow(SW_HIDE);
 	}
 
 }

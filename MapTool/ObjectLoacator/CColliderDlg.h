@@ -7,9 +7,9 @@
 // CColliderControllerDlg 대화 상자
 struct collider;
 
-class CColliderControllerDlg : public CDialogEx
+class CColliderDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(CColliderControllerDlg)
+	DECLARE_DYNAMIC(CColliderDlg)
 	bool m_bIsShiftDown;
 	int  m_curFocus;
 	int  m_ColliderHighestIndex = 0;
@@ -21,8 +21,12 @@ private:
 	void MoveFocusBack();
 
 public:
-	CColliderControllerDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
-	virtual ~CColliderControllerDlg();
+	CColliderDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	virtual ~CColliderDlg();
+	
+	static CColliderDlg* CreateColliderDlg(CWnd* pParent);
+	void Initialize(CWnd* pParent);
+	void SetDocking(CWnd* pParent);
 
 	void Move(int x, int y);
 	void AddColliderToListBox(collider* pCollider);

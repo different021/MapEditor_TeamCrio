@@ -20,7 +20,7 @@ class CColliderManager;
 static const int STR_MAX = 512;
 
 // CObjectLoacatorDlg 대화 상자
-class CObjectLoacatorDlg : public CDialogEx
+class CObjectDlg : public CDialogEx
 {
 private:
 	bool m_bIsShow		 = true;
@@ -42,8 +42,8 @@ private:
 
 	UINT m_curFocus;
 public:
-	CObjectLoacatorDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
-	~CObjectLoacatorDlg();
+	CObjectDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	~CObjectDlg();
 
 
 	// 대화 상자 데이터입니다.
@@ -98,6 +98,11 @@ private:
 
 	//콘트롤러 수치Get/Set/Update
 public:
+	//생성 및 코기화
+	static CObjectDlg* CreateObjectDlg(CWnd* pParent);
+	void Initialize(CWnd* pParent);
+	void SetDocking(CWnd* pParent);									//부모 연결.
+
 	void UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList);									//dlg박스의 다이얼로그 인스턴스 업데이트
 	void UpdateModelListBox(std::vector<MODEL*>* pModelList);
 	void UpdateMatListBox(std::vector<MATERIAL*>* pMatList);

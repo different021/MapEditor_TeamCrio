@@ -3,7 +3,7 @@
 
 #include "pch.h"
 #include "ObjectLoacator.h"
-#include "CLIGHTDLG.h"
+#include "CLightDlg.h"
 #include "afxdialogex.h"
 
 #include "../src/utility/HGUtility.h"
@@ -11,9 +11,9 @@
 #include "CLightManager.h"
 // CLIGHTDLG 대화 상자
 
-IMPLEMENT_DYNAMIC(CLIGHTDLG, CDialogEx)
+IMPLEMENT_DYNAMIC(CLightDlg, CDialogEx)
 
-void CLIGHTDLG::MoveFocusNext()
+void CLightDlg::MoveFocusNext()
 {
 	m_curFocus = GetFocus()->GetDlgCtrlID();
 	m_curFocus++;
@@ -24,7 +24,7 @@ void CLIGHTDLG::MoveFocusNext()
 	pEdit->SetFocus();
 }
 
-void CLIGHTDLG::MoveFocusBack()
+void CLightDlg::MoveFocusBack()
 {
 	m_curFocus = GetFocus()->GetDlgCtrlID();
 	m_curFocus--;
@@ -35,30 +35,36 @@ void CLIGHTDLG::MoveFocusBack()
 	pEdit->SetFocus();
 }
 
-CLIGHTDLG::CLIGHTDLG(CWnd* pParent /*=nullptr*/)
+CLightDlg::CLightDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_LIGHTDLG, pParent)
 {
 	m_bShiftKeyDown = false;
 }
 
-CLIGHTDLG::~CLIGHTDLG()
+CLightDlg::~CLightDlg()
 {
 	LightDlgCleanup();
 }
 
-CLIGHTDLG* CLIGHTDLG::CreateLightDlg(CWnd* pParent)
+CLightDlg* CLightDlg::CreateLightDlg(CWnd* pParent)
 {
 	//인스턴스를 생성해서 리턴한다.
 	//인스턴스 삭제의무는 사용자에게 있다.
-	CLIGHTDLG* pLightDlg = new CLIGHTDLG;
-	pLightDlg->Create(IDD_LIGHTDLG);
-	pLightDlg->SetParent(pParent);
-	pLightDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	pLightDlg->ShowWindow(SW_SHOW);
+	CLightDlg* pLightDlg = new CLightDlg;
+	if (pLightDlg != nullptr)
+		pLightDlg->Initialize(pParent);
+
 	return pLightDlg;
 }
 
-void CLIGHTDLG::LightDlgCleanup()
+void CLightDlg::Initialize(CWnd* pParent)
+{
+	Create(IDD_LIGHTDLG);
+	SetDocking(pParent);
+	ShowWindow(SW_SHOW);
+}
+
+void CLightDlg::LightDlgCleanup()
 {
 	if (m_pLightManager)
 	{
@@ -67,7 +73,22 @@ void CLIGHTDLG::LightDlgCleanup()
 	}
 }
 
-void CLIGHTDLG::SetDlgFloat(UINT uId, float data)
+void CLightDlg::SetDocking(CWnd* pParent)
+{
+	CWnd* pCWndParent = pParent;
+	if (pCWndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+	}
+
+	SetParent(pCWndParent);
+}
+
+void CLightDlg::SetDlgFloat(UINT uId, float data)
 {
 	CString ret;
 	ret.Format(L"%0.2f", data);
@@ -76,7 +97,7 @@ void CLIGHTDLG::SetDlgFloat(UINT uId, float data)
 	ret.Empty();
 }
 
-void CLIGHTDLG::SetEditBox(Light* pLight)
+void CLightDlg::SetEditBox(Light* pLight)
 {
 	lightData data;
 	//memset(&data, 0, sizeof(data));
@@ -129,7 +150,7 @@ void CLIGHTDLG::SetEditBox(Light* pLight)
 	SetDlgFloat(IDC_EDIT_SPOTPOWER, data.spotPower);
 }
 
-void CLIGHTDLG::GetDataFromControl(lightData& pDest)
+void CLightDlg::GetDataFromControl(lightData& pDest)
 {
 	WCHAR szName[256];
 	::GetDlgItemTextW(m_hWnd, IDC_EDIT_LIGHT_NAME, szName, 256);
@@ -156,7 +177,7 @@ void CLIGHTDLG::GetDataFromControl(lightData& pDest)
 	
 }
 
-void CLIGHTDLG::GetDataFromEditBox(Light* pLight)
+void CLightDlg::GetDataFromEditBox(Light* pLight)
 {
 	lightData data;
 	GetDataFromControl(data);
@@ -165,7 +186,7 @@ void CLIGHTDLG::GetDataFromEditBox(Light* pLight)
 	pLight->UpdateLightData();
 }
 
-eLightType CLIGHTDLG::GetSelectedType()
+eLightType CLightDlg::GetSelectedType()
 {
 	int idx = m_pLightType->GetCurSel();
 	eLightType type = (eLightType)m_pLightType->GetItemData(idx);
@@ -173,7 +194,7 @@ eLightType CLIGHTDLG::GetSelectedType()
 	return type;
 }
 
-void CLIGHTDLG::SetEditBoxActive(eLightType type)
+void CLightDlg::SetEditBoxActive(eLightType type)
 {
 	switch (type)
 	{
@@ -194,7 +215,7 @@ void CLIGHTDLG::SetEditBoxActive(eLightType type)
 	}
 }
 
-void CLIGHTDLG::AllOn()
+void CLightDlg::AllOn()
 {
 	GetDlgItem(IDC_EDIT_FALLOFFSTART)->EnableWindow(TRUE);
 	GetDlgItem(IDC_EDIT_DIRECTION_X)->EnableWindow(TRUE);
@@ -207,7 +228,7 @@ void CLIGHTDLG::AllOn()
 	GetDlgItem(IDC_EDIT_SPOTPOWER)->EnableWindow(TRUE);
 }
 
-void CLIGHTDLG::DirectionInputOFF()
+void CLightDlg::DirectionInputOFF()
 {
 	AllOn();
 	GetDlgItem(IDC_EDIT_FALLOFFSTART)->EnableWindow(FALSE);
@@ -218,7 +239,7 @@ void CLIGHTDLG::DirectionInputOFF()
 	GetDlgItem(IDC_EDIT_SPOTPOWER)->EnableWindow(FALSE);
 }
 
-void CLIGHTDLG::PointInputOFF()
+void CLightDlg::PointInputOFF()
 {
 	AllOn();
 	GetDlgItem(IDC_EDIT_DIRECTION_X)->EnableWindow(FALSE);
@@ -227,12 +248,12 @@ void CLIGHTDLG::PointInputOFF()
 	GetDlgItem(IDC_EDIT_SPOTPOWER)->EnableWindow(FALSE);
 }
 
-void CLIGHTDLG::SpotInputOFF()
+void CLightDlg::SpotInputOFF()
 {
 	AllOn();
 }
 
-int CLIGHTDLG::AddLightToListBox(Light* pLight)
+int CLightDlg::AddLightToListBox(Light* pLight)
 {
 	WCHAR buffer[256];
 	memset(buffer, 0, sizeof(buffer));
@@ -269,7 +290,7 @@ int CLIGHTDLG::AddLightToListBox(Light* pLight)
 	return idx;
 }
 
-int CLIGHTDLG::SetSelIndexInListBox(Light* pLight)
+int CLightDlg::SetSelIndexInListBox(Light* pLight)
 {
 	CListBox* pListBox = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	int iResult = 0;
@@ -297,7 +318,7 @@ int CLIGHTDLG::SetSelIndexInListBox(Light* pLight)
 	return iResult;
 }
 
-void CLIGHTDLG::UpdateLightList()
+void CLightDlg::UpdateLightList()
 {
 	ClearLightList();
 	std::vector<Light*>* pList = m_pLightManager->GetList();
@@ -310,19 +331,19 @@ void CLIGHTDLG::UpdateLightList()
 
 }
 
-void CLIGHTDLG::ClearLightList()
+void CLightDlg::ClearLightList()
 {
 	CListBox* pList = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	pList->ResetContent();
 }
 
-void CLIGHTDLG::UpdateSelectedLight()
+void CLightDlg::UpdateSelectedLight()
 {
 	Light* pLight = m_pLightManager->GetLastSelected();
 	SetEditBox(pLight);
 }
 
-void CLIGHTDLG::UpdateTypeByLight(lightData* pData)
+void CLightDlg::UpdateTypeByLight(lightData* pData)
 {
 	if (pData == NULL) m_pLightType->SetCurSel(0);
 
@@ -339,7 +360,7 @@ void CLIGHTDLG::UpdateTypeByLight(lightData* pData)
 }
 
 
-void CLIGHTDLG::DeleteLightInListBox(std::vector<Light*>* pList)
+void CLightDlg::DeleteLightInListBox(std::vector<Light*>* pList)
 {
 	CListBox* pListBox = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	
@@ -364,18 +385,18 @@ void CLIGHTDLG::DeleteLightInListBox(std::vector<Light*>* pList)
 }
 
 
-void CLIGHTDLG::DoDataExchange(CDataExchange* pDX)
+void CLightDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 }
 
 
-BEGIN_MESSAGE_MAP(CLIGHTDLG, CDialogEx)
-	ON_CBN_SELCHANGE(IDC_COMBO_LIGHT_TYPE, &CLIGHTDLG::OnCbnSelchangeComboLightType)
-	ON_BN_CLICKED(IDC_BUTTON_CREATE, &CLIGHTDLG::OnBnClickedButtonCreate)
-	ON_BN_CLICKED(IDC_BUTTON_EDIT, &CLIGHTDLG::OnBnClickedButtonEdit)
-	ON_BN_CLICKED(IDC_BUTTON_DELETE, &CLIGHTDLG::OnBnClickedButtonDelete)
-	ON_LBN_SELCHANGE(IDC_LIST_LIGHT, &CLIGHTDLG::OnLbnSelchangeListLight)
+BEGIN_MESSAGE_MAP(CLightDlg, CDialogEx)
+	ON_CBN_SELCHANGE(IDC_COMBO_LIGHT_TYPE, &CLightDlg::OnCbnSelchangeComboLightType)
+	ON_BN_CLICKED(IDC_BUTTON_CREATE, &CLightDlg::OnBnClickedButtonCreate)
+	ON_BN_CLICKED(IDC_BUTTON_EDIT, &CLightDlg::OnBnClickedButtonEdit)
+	ON_BN_CLICKED(IDC_BUTTON_DELETE, &CLightDlg::OnBnClickedButtonDelete)
+	ON_LBN_SELCHANGE(IDC_LIST_LIGHT, &CLightDlg::OnLbnSelchangeListLight)
 	//ON_WM_KEYDOWN()
 	//ON_WM_KEYUP()
 	ON_WM_CLOSE()
@@ -387,7 +408,7 @@ END_MESSAGE_MAP()
 
 
 
-BOOL CLIGHTDLG::PreTranslateMessage(MSG* pMsg)
+BOOL CLightDlg::PreTranslateMessage(MSG* pMsg)
 {
 	WPARAM wp = pMsg->wParam;
 	if (pMsg->message == WM_KEYUP)
@@ -418,7 +439,7 @@ BOOL CLIGHTDLG::PreTranslateMessage(MSG* pMsg)
 }
 
 
-BOOL CLIGHTDLG::OnInitDialog()
+BOOL CLightDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
@@ -440,7 +461,7 @@ BOOL CLIGHTDLG::OnInitDialog()
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.
 }
 
-void CLIGHTDLG::OnCbnSelchangeComboLightType()
+void CLightDlg::OnCbnSelchangeComboLightType()
 {
 	
 	int idx = m_pLightType->GetCurSel();
@@ -448,7 +469,7 @@ void CLIGHTDLG::OnCbnSelchangeComboLightType()
 	SetEditBoxActive(type);
 }
 
-void CLIGHTDLG::OnBnClickedButtonCreate()
+void CLightDlg::OnBnClickedButtonCreate()
 {
 	lightData lightData;
 	memset(&lightData, 0, sizeof(lightData));
@@ -460,7 +481,7 @@ void CLIGHTDLG::OnBnClickedButtonCreate()
 }
 
 
-void CLIGHTDLG::OnBnClickedButtonEdit()
+void CLightDlg::OnBnClickedButtonEdit()
 {
 	CListBox* pListBox = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	int idx = pListBox->GetCurSel();
@@ -487,7 +508,7 @@ void CLIGHTDLG::OnBnClickedButtonEdit()
 }
 
 
-void CLIGHTDLG::OnBnClickedButtonDelete()
+void CLightDlg::OnBnClickedButtonDelete()
 {
 	CListBox* pList = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	int idx = pList->GetCurSel();
@@ -507,7 +528,7 @@ void CLIGHTDLG::OnBnClickedButtonDelete()
 }
 
 
-void CLIGHTDLG::OnLbnSelchangeListLight()
+void CLightDlg::OnLbnSelchangeListLight()
 {
 	Light* pLight = NULL;
 	CListBox* pList = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
@@ -530,7 +551,7 @@ void CLIGHTDLG::OnLbnSelchangeListLight()
 }
 
 
-void CLIGHTDLG::OnClose()
+void CLightDlg::OnClose()
 {
 	int a = 0;
 	CDialogEx::OnClose();

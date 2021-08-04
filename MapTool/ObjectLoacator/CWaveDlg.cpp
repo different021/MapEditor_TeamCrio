@@ -52,12 +52,35 @@ CWaveDlg* CWaveDlg::CreateWaveDlg(CWnd* pParent)
 {
 	//WaveDlg instance 생성
 	//메모리 해제 책임은 사용자에게 있다.
+	//메모리 할당 실패시 null 리턴
 	CWaveDlg* pWaveDlg = new CWaveDlg;
-	pWaveDlg->Create(IDD_WAVE_DLG);
-	pWaveDlg->SetParent(pParent);
-	pWaveDlg->ModifyStyle(WS_POPUP, WS_CHILD);
-	pWaveDlg->ShowWindow(SW_SHOW);
+	if (pWaveDlg != nullptr)
+	{
+		pWaveDlg->Initialize(pParent);
+	}
 	return pWaveDlg;
+}
+
+void CWaveDlg::Initialize(CWnd* pParent)
+{
+	Create(IDD_WAVE_DLG);
+	SetDocking(pParent);
+	ShowWindow(SW_SHOW);
+}
+
+void CWaveDlg::SetDocking(CWnd* pParent)
+{
+	CWnd* pCWndParent = pParent;
+	if (pCWndParent != nullptr)
+	{
+		ModifyStyle(WS_POPUP, WS_CHILD);
+	}
+	else
+	{
+		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
+	}
+
+	SetParent(pCWndParent);
 }
 
 void CWaveDlg::Cleanup()
