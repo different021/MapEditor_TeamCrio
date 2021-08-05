@@ -221,6 +221,7 @@
     <ClInclude Include="CContainerArray.h" />
     <ClInclude Include="CDeleteArray.h" />
     <ClInclude Include="CDlgManager.h" />
+    <ClInclude Include="CEditorDlg.h" />
     <ClInclude Include="CGrid.h" />
     <ClInclude Include="CHelpDlg.h" />
     <ClInclude Include="CLightDlg.h" />
@@ -301,6 +302,7 @@
     <ClCompile Include="CContainerArray.cpp" />
     <ClCompile Include="CDeleteArray.cpp" />
     <ClCompile Include="CDlgManager.cpp" />
+    <ClCompile Include="CEditorDlg.cpp" />
     <ClCompile Include="CGrid.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>

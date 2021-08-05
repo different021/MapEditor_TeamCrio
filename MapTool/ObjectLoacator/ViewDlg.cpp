@@ -75,7 +75,6 @@ void Viewer::InitEngine(int iWidth, int iHeight)
 
 Viewer::Viewer(CWnd* pParent)
 {
-	//m_hLoacator = pParent->m_hWnd;
 }
 
 Viewer::~Viewer()
@@ -83,23 +82,10 @@ Viewer::~Viewer()
 	CleanUp();
 }
 
-Viewer* Viewer::CreateViewer(CWnd* pParent, int iWidth, int iHeight)
+void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 {
-	Viewer* pViewer = new Viewer;
-	if (pViewer != nullptr)
-	{
-		pViewer->Initialize(pParent, iWidth, iHeight);
-	}
+	CEditorDlg::Initialize(pParent, id);
 	
-	return pViewer;
-}
-
-void Viewer::Initialize(CWnd* pParent, int iWidth, int iHeight)
-{
-	Create(IDD_VIEW_DLG);
-	SetDocking(pParent);
-	ShowWindow(SW_SHOW);
-
 	int iFrameX = GetSystemMetrics(SM_CXFRAME);
 	int iFrameY = GetSystemMetrics(SM_CYFRAME);
 	int iCaptionY = GetSystemMetrics(SM_CYCAPTION);
@@ -109,21 +95,6 @@ void Viewer::Initialize(CWnd* pParent, int iWidth, int iHeight)
 
 	InitEngine(width, height);
 
-}
-
-void Viewer::SetDocking(CWnd* pParent)
-{
-	CWnd* pCwndParent = pParent;
-	if (pCwndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-		SetParent(pCwndParent);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-		SetParent(NULL);
-	}
 }
 
 void Viewer::CleanUp()

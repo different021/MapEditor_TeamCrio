@@ -3,6 +3,7 @@
 #pragma once
 #include <vector>
 #include <utility>
+#include "CEditorDlg.h"
 
 #include "Defines.h"
 #include "ViewDlg.h"
@@ -20,7 +21,7 @@ class CColliderManager;
 static const int STR_MAX = 512;
 
 // CObjectLoacatorDlg 대화 상자
-class CObjectDlg : public CDialogEx
+class CObjectDlg : public CEditorDlg
 {
 private:
 	bool m_bIsShow		 = true;
@@ -98,11 +99,6 @@ private:
 
 	//콘트롤러 수치Get/Set/Update
 public:
-	//생성 및 코기화
-	static CObjectDlg* CreateObjectDlg(CWnd* pParent);
-	void Initialize(CWnd* pParent);
-	void SetDocking(CWnd* pParent);									//부모 연결.
-
 	void UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList);									//dlg박스의 다이얼로그 인스턴스 업데이트
 	void UpdateModelListBox(std::vector<MODEL*>* pModelList);
 	void UpdateMatListBox(std::vector<MATERIAL*>* pMatList);

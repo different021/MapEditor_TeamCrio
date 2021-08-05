@@ -1,6 +1,7 @@
 #pragma once
 #include <afxdialogex.h>
 #include <DirectXMath.h>
+#include "CEditorDlg.h"
 
 #include "../src/Defines.h"
 #include "ToolDefine.h"
@@ -31,7 +32,7 @@ enum OBJ_EDIT_MODE
 };
 
 class Viewer :
-    public CDialogEx
+    public CEditorDlg
 {
 private:
     HEngine_DX12_3D* m_pEngine;				    //그래픽 엔진
@@ -77,13 +78,10 @@ private:
 
 public:
     Viewer(CWnd* pParent = nullptr);
-    ~Viewer();
-    static Viewer* CreateViewer(CWnd* pParent, int iWidth = 1920, int iHeight = 1080);
-    void Initialize(CWnd* pParent, int iWidth, int iHeight);
-    void SetDocking(CWnd* pParent);
-    void CleanUp();
+    virtual ~Viewer();
+    virtual void Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight);
+    virtual void CleanUp();
     
-
     void Update();
     void Draw();
     void DrawEditMode(int x, int y);

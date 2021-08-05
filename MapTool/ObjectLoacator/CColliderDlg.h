@@ -2,12 +2,13 @@
 #include <directxmath.h>
 #include <vector>
 #include "Defines.h"
+#include "CEditorDlg.h"
 #include "CColliderManager.h"
 
 // CColliderControllerDlg 대화 상자
 struct collider;
 
-class CColliderDlg : public CDialogEx
+class CColliderDlg : public CEditorDlg
 {
 	DECLARE_DYNAMIC(CColliderDlg)
 	bool m_bIsShiftDown;
@@ -24,10 +25,6 @@ public:
 	CColliderDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CColliderDlg();
 	
-	static CColliderDlg* CreateColliderDlg(CWnd* pParent);
-	void Initialize(CWnd* pParent);
-	void SetDocking(CWnd* pParent);
-
 	void Move(int x, int y);
 	void AddColliderToListBox(collider* pCollider);
 	void SetEditBoxByCollider(collider* pCollider);

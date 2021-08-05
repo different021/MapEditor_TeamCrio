@@ -68,14 +68,19 @@ Center::~Center()
 
 void Center::InitializeDlgs(CWnd* pParent)
 {
-	m_Viewer = Viewer::CreateViewer(pParent);
-	m_ObjLocator.Initialize(pParent);
-	m_GridController.Initialize(pParent);
-	m_ColliderDlg.Initialize(pParent);
-	m_pLightDlg.Initialize(pParent);
-	m_pWaveDlg = CWaveDlg::CreateWaveDlg(pParent);
+	m_Viewer = new Viewer;
+	m_Viewer->Initialize(pParent, IDD_VIEW_DLG, 800, 600);
 	
-	m_HelpDlg.Initialize(pParent);
+	m_ObjLocator.Initialize(pParent, IDD_OBJECTLOACATOR_DIALOG);
+	m_GridController.Initialize(pParent, IDD_GRIDCON);
+	m_ColliderDlg.Initialize(pParent, IDD_COLLIDER_CONTROLLER);
+	m_pLightDlg.Initialize(pParent, IDD_LIGHT_DLG);
+	
+	m_pWaveDlg = new CWaveDlg;
+	m_pWaveDlg->Initialize(pParent, IDD_WAVE_DLG);
+	
+	m_HelpDlg.Initialize(pParent, IDD_HELP_DLG);
+	m_HelpDlg.ShowWindow(SW_HIDE);
 }
 
 void Center::Init_MainMenu()
@@ -1099,6 +1104,7 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 	switch (msg)
 	{
 	case WM_KEYDOWN:
+		m_HelpDlg.ShowWindow(SW_HIDE);
 		switch (wParam)
 		{
 		case VK_F1:

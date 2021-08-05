@@ -44,46 +44,13 @@ void CColliderDlg::MoveFocusBack()
 
 
 CColliderDlg::CColliderDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_COLLIDER_CONTROLLER, pParent)
+	: CEditorDlg()
 {
 	m_bIsShiftDown = false;
 }
 
 CColliderDlg::~CColliderDlg()
 {
-}
-
-CColliderDlg* CColliderDlg::CreateColliderDlg(CWnd* pParent)
-{
-	CColliderDlg* pResult = new CColliderDlg;
-	if (pResult != nullptr)
-	{
-		pResult->Initialize(pParent);
-	}
-	
-	return pResult;
-}
-
-void CColliderDlg::Initialize(CWnd* pParent)
-{
-	Create(IDD_COLLIDER_CONTROLLER);
-	SetDocking(pParent);
-	ShowWindow(SW_SHOW);
-}
-
-void CColliderDlg::SetDocking(CWnd* pParent)
-{
-	CWnd* pCWndParent = pParent;
-	if (pCWndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-	}
-
-	SetParent(pCWndParent);
 }
 
 void CColliderDlg::Move(int x, int y)

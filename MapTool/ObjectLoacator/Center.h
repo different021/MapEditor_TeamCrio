@@ -6,7 +6,7 @@
 #include "CCmd.h"
 #include "CColliderDlg.h"
 #include "CHelpDlg.h"
-#include "CLIGHTDLG.h"
+#include "CLightDlg.h"
 
 #include "EngineInterface.h"
 

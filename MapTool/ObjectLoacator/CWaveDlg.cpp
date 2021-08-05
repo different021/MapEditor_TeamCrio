@@ -38,49 +38,14 @@ void InitDefaultData()
 IMPLEMENT_DYNAMIC(CWaveDlg, CDialogEx)
 
 CWaveDlg::CWaveDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_WAVE_DLG, pParent)
+	: CEditorDlg()
 {
-	InitDefaultData();
+	
 }
 
 CWaveDlg::~CWaveDlg()
 {
 	//Cleanup();
-}
-
-CWaveDlg* CWaveDlg::CreateWaveDlg(CWnd* pParent)
-{
-	//WaveDlg instance 생성
-	//메모리 해제 책임은 사용자에게 있다.
-	//메모리 할당 실패시 null 리턴
-	CWaveDlg* pWaveDlg = new CWaveDlg;
-	if (pWaveDlg != nullptr)
-	{
-		pWaveDlg->Initialize(pParent);
-	}
-	return pWaveDlg;
-}
-
-void CWaveDlg::Initialize(CWnd* pParent)
-{
-	Create(IDD_WAVE_DLG);
-	SetDocking(pParent);
-	ShowWindow(SW_SHOW);
-}
-
-void CWaveDlg::SetDocking(CWnd* pParent)
-{
-	CWnd* pCWndParent = pParent;
-	if (pCWndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-	}
-
-	SetParent(pCWndParent);
 }
 
 void CWaveDlg::Cleanup()
@@ -254,7 +219,8 @@ BOOL CWaveDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	SetDataToEditCtrl(&g_WaveData);
+	InitDefaultData();
+	//SetDataToEditCtrl(&g_WaveData);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 				  // 예외: OCX 속성 페이지는 FALSE를 반환해야 합니다.

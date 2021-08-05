@@ -1,9 +1,9 @@
 ﻿#pragma once
-
+#include "CEditorDlg.h"
 class CObjectDlg;
 class Viewer;
 
-class CGrid : public CDialogEx
+class CGrid : public CEditorDlg
 {
 	DECLARE_DYNAMIC(CGrid)
 public:
@@ -17,8 +17,6 @@ public:
 public:
 	CGrid(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CGrid();
-	static CGrid* CreateGridDlg(CWnd* pParent);
-	void Initialize(CWnd* pParent);
 
 	float GetDlgItemFloat(int ID);				//EditControl값 받기 시리즈
 	int  GetDlgItemInt(int ID);

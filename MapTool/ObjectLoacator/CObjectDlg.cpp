@@ -100,7 +100,7 @@ void OutputErrorCode(WCHAR* str)
 
 // CObjectLoacatorDlg 대화 상자
 CObjectDlg::CObjectDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_OBJECTLOACATOR_DIALOG, pParent)
+	: CEditorDlg()
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_curFocus = IDC_POS_X;
@@ -582,39 +582,6 @@ DirectX::XMFLOAT4X4 CObjectDlg::ConvertQuaternionToMatrix(DirectX::XMFLOAT4& qua
 	XMStoreFloat4x4(&result, matrix);		//일반적인 메모리에서쓰는 XMFLOAT4x4
 	
 	return result;
-}
-
-CObjectDlg* CObjectDlg::CreateObjectDlg(CWnd* pParent)
-{
-	CObjectDlg* pResult = new CObjectDlg;
-	if (pResult != nullptr)
-	{
-		pResult->Initialize(pParent);
-	}
-
-	return pResult;
-}
-
-void CObjectDlg::Initialize(CWnd* pParent)
-{
-	Create(IDD_OBJECTLOACATOR_DIALOG);
-	SetDocking(pParent);
-	ShowWindow(SW_SHOW);
-}
-
-void CObjectDlg::SetDocking(CWnd* pParent)
-{
-	CWnd* pCWndParent = pParent;
-	if (pCWndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-	}
-
-	SetParent(pCWndParent);
 }
 
 void CObjectDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)

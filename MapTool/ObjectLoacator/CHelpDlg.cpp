@@ -12,43 +12,12 @@
 IMPLEMENT_DYNAMIC(CHelpDlg, CDialogEx)
 
 CHelpDlg::CHelpDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_HELP_DLG, pParent)
+	: CEditorDlg()
 {
-
 }
 
 CHelpDlg::~CHelpDlg()
 {
-}
-
-CHelpDlg* CHelpDlg::CreateHelpDlg(CWnd* pParent)
-{
-	CHelpDlg* pResult = new CHelpDlg;
-	pResult->Initialize(pParent);
-	return pResult;
-}
-
-void CHelpDlg::Initialize(CWnd* pParent)
-{
-	//m_HelpDlg = new CHelpDlg;
-	Create(IDD_HELP_DLG);
-	SetDocking(pParent);
-	ShowWindow(SW_HIDE);
-}
-
-void CHelpDlg::SetDocking(CWnd* pParent)
-{
-	CWnd* pCWndParent = pParent;
-	if (pCWndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-	}
-
-	SetParent(pCWndParent);
 }
 
 void CHelpDlg::DoDataExchange(CDataExchange* pDX)
@@ -70,7 +39,7 @@ void CHelpDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
 	if (nID == SC_CLOSE)
 	{
-		this->ShowWindow(SW_HIDE);
+		ShowWindow(SW_HIDE);
 	}
 
 	CDialogEx::OnSysCommand(nID, lParam);
@@ -84,10 +53,3 @@ void CHelpDlg::OnClose()
 	CDialogEx::OnClose();
 }
 
-
-BOOL CHelpDlg::PreTranslateMessage(MSG* pMsg)
-{
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-
-	return CDialogEx::PreTranslateMessage(pMsg);
-}

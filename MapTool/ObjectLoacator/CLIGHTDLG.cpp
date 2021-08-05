@@ -36,56 +36,23 @@ void CLightDlg::MoveFocusBack()
 }
 
 CLightDlg::CLightDlg(CWnd* pParent /*=nullptr*/)
-	: CDialogEx(IDD_LIGHTDLG, pParent)
+	: CEditorDlg()
 {
 	m_bShiftKeyDown = false;
 }
 
 CLightDlg::~CLightDlg()
 {
-	LightDlgCleanup();
+	Cleanup();
 }
 
-CLightDlg* CLightDlg::CreateLightDlg(CWnd* pParent)
-{
-	//인스턴스를 생성해서 리턴한다.
-	//인스턴스 삭제의무는 사용자에게 있다.
-	CLightDlg* pLightDlg = new CLightDlg;
-	if (pLightDlg != nullptr)
-		pLightDlg->Initialize(pParent);
-
-	return pLightDlg;
-}
-
-void CLightDlg::Initialize(CWnd* pParent)
-{
-	Create(IDD_LIGHTDLG);
-	SetDocking(pParent);
-	ShowWindow(SW_SHOW);
-}
-
-void CLightDlg::LightDlgCleanup()
+void CLightDlg::Cleanup()
 {
 	if (m_pLightManager)
 	{
 		m_pLightManager->Release();
 		m_pLightManager = NULL;
 	}
-}
-
-void CLightDlg::SetDocking(CWnd* pParent)
-{
-	CWnd* pCWndParent = pParent;
-	if (pCWndParent != nullptr)
-	{
-		ModifyStyle(WS_POPUP, WS_CHILD);
-	}
-	else
-	{
-		ModifyStyle(WS_CHILD, WS_POPUP | WS_BORDER | WS_CAPTION);
-	}
-
-	SetParent(pCWndParent);
 }
 
 void CLightDlg::SetDlgFloat(UINT uId, float data)

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "resource.h"
 #include "CDlgManager.h"
 
 CDlgManager::~CDlgManager()
@@ -8,14 +9,14 @@ CDlgManager::~CDlgManager()
 void CDlgManager::InitializeDialogs(CWnd* pParent, int iWidth, int iHeight)
 {
 	CWnd* pCwndParent = pParent;
-	m_Viewer.Initialize(pCwndParent, iWidth,  iHeight);
+	m_Viewer.Initialize(pCwndParent, IDD_VIEW_DLG ,iWidth, iHeight);
 	
-	m_ObjLocator.Initialize(pCwndParent);
-	m_ColliderDlg.Initialize(pCwndParent);
-	m_GridController.Initialize(pCwndParent);
-	m_HelpDlg.Initialize(pCwndParent);
-	m_LightDlg.Initialize(pCwndParent);
-	m_WaveDlg.Initialize(pCwndParent);
+	m_ObjectDlg.Initialize(pCwndParent, IDD_OBJECTLOACATOR_DIALOG);
+	m_ColliderDlg.Initialize(pCwndParent, IDD_COLLIDER_CONTROLLER);
+	m_GridDlg.Initialize(pCwndParent, IDD_GRIDCON);
+	m_HelpDlg.Initialize(pCwndParent, IDD_HELP_DLG);
+	m_LightDlg.Initialize(pCwndParent, IDD_LIGHT_DLG);
+	m_WaveDlg.Initialize(pCwndParent, IDD_WAVE_DLG);
 }
 
 void CDlgManager::Release()

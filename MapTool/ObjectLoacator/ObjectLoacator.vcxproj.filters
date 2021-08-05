@@ -162,6 +162,9 @@
     <ClInclude Include="CDlgManager.h">
       <Filter>Dialog</Filter>
     </ClInclude>
+    <ClInclude Include="CEditorDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ObjectLoacator.rc">
@@ -283,6 +286,9 @@
       <Filter>Container</Filter>
     </ClCompile>
     <ClCompile Include="CDlgManager.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditorDlg.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
   </ItemGroup>

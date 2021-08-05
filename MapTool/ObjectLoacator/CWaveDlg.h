@@ -1,9 +1,10 @@
 ﻿#pragma once
+#include "CEditorDlg.h"
 
 // CWaveDlg 대화 상자
 class WAVE;
 
-class CWaveDlg : public CDialogEx
+class CWaveDlg : public CEditorDlg
 {
 	DECLARE_DYNAMIC(CWaveDlg)
 
@@ -11,7 +12,7 @@ public:
 	CListBox m_WaveListBox;
 
 public:
-	CWaveDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	CWaveDlg(CWnd* pParent = nullptr); 
 	virtual ~CWaveDlg();
 
 // 대화 상자 데이터입니다.
@@ -21,10 +22,7 @@ public:
 
 public:
 	//초기화 및 삭제
-	static CWaveDlg* CreateWaveDlg(CWnd* pParent);
-	void Initialize(CWnd* pParent);
-	void SetDocking(CWnd* pParent);
-	void Cleanup();
+	virtual void Cleanup();
 
 	//Edit Control 관련
 	void GetDataFromEditCtrl(waveData* pDest);

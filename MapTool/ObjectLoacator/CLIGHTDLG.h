@@ -1,11 +1,12 @@
 ﻿#pragma once
 #include "../src/Defines.h"
+#include "CEditorDlg.h"
 
 struct lightData;
 class  CLightManager;
 struct Light;
 
-class CLightDlg : public CDialogEx
+class CLightDlg : public CEditorDlg
 {
 	DECLARE_DYNAMIC(CLightDlg)
 	bool m_bShiftKeyDown;
@@ -18,13 +19,10 @@ private:
 	void MoveFocusBack();
 
 public:
-	CLightDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
+	CLightDlg(CWnd* pParent = nullptr);   
 	virtual ~CLightDlg();
-	static CLightDlg* CreateLightDlg(CWnd* pParent);
-	void Initialize(CWnd* pParent);
-	void LightDlgCleanup();
+	virtual void Cleanup();
 	
-	void SetDocking(CWnd* pParent);
 	void SetDlgFloat(UINT uId, float data);
 
 	void SetEditBox(Light* pLight);

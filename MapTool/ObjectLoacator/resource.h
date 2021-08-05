@@ -3,19 +3,25 @@
 // ObjectLoacator.rc에서 사용되고 있습니다.
 //
 #define IDM_ABOUTBOX                    0x0010
+#define OBJECT_FIELD					20000
+#define COLLIDER_FIELD					21000
+#define LIGHT_FIELD						22000
+#define WAVE_FIELD						23000
+
 #define IDD_HELP_DLG                    100
 #define IDS_ABOUTBOX                    101
 #define IDD_OBJECTLOACATOR_DIALOG       102
-#define IDD_LIGHTDLG                    107
-#define IDR_MAINFRAME                   128
+#define IDD_LIGHT_DLG                   107
 #define IDD_VIEW_DLG                    136
+#define IDD_WAVE_DLG                    164
 #define IDD_MAIN_DLG                    140
+
+#define IDR_MAINFRAME                   128
 #define IDD_GRIDCON                     141
 #define IDR_MAIN_MENU                   142
 #define IDD_CMD                         143
 #define IDD_CHAR_SETTING                152
 #define IDD_COLLIDER_CONTROLLER         154
-#define IDD_WAVE_DLG                    164
 #define IDC_BTN_SAVE                    1002
 #define IDC_OBJLIST                     1003
 #define IDC_LOGBOX                      1003
