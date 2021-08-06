@@ -238,6 +238,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="MaterialManager.h" />
+    <ClInclude Include="HGMessage.h" />
     <ClInclude Include="ObjectLoacator.h" />
     <ClInclude Include="CObjectDlg.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

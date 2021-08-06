@@ -12,11 +12,13 @@
 #include "CObjectDlg.h"
 #include "Center.h"
 
+#include "WMDefine.h"
+#include "HGMessage.h"
+
 #include "framework.h"
 #include "resource.h"
 #include "afxdialogex.h"
 #include "MapUtil.h"
-#include "WMDefine.h"
 #include "CCallbackTimer.h"
 
 #include "ToolDefine.h"
@@ -1419,7 +1421,6 @@ void CObjectDlg::OnBnClickedBtnObjcreate()
 	object* pObj = new object;
 	ZeroMemory(pObj, sizeof(object));
 
-
 	//리젠 콜라이더박스 인덱스 셋팅.
 	SetRegenIndexFromComboBox(pObj);
 
@@ -1453,17 +1454,35 @@ void CObjectDlg::OnBnClickedBtnObjcreate()
 	SetDefaultName(pObj);
 	wsprintfW(pObj->matName, matName.GetBuffer());
 
+
+	//clear temp string buffer
+	modelName.Empty();
+	matName.Empty();
+	modelName.ReleaseBuffer();
+	matName.ReleaseBuffer();
+
+	
 	//생성
-	g_pCenter->CreateObj(pObj);
+	//메세지 생성 함수화?
+	HGMessage* pMsgCreateObj = new HGMessage;
+	pMsgCreateObj->msg = WM_OBJECT_CREATE;
+	pMsgCreateObj->objType = eObjectType::eObject;
+	pMsgCreateObj->numOfInstance = 1;
+	pMsgCreateObj->instanceType = eInstanceType::eCpuInstance;
+
+	MsgObjectArray* pMsgObjArray = new MsgObjectArray;
+	pMsgObjArray->count = 1;
+	pMsgObjArray->objectType = eObjectType::eObject;
+	pMsgObjArray->pArray = (void*)pObj;
+
+	::SendMessageW(g_hCenter, WM_OBJECT_CREATE, (WPARAM)pMsgCreateObj, (LPARAM)pMsgObjArray);
+
+	//g_pCenter->CreateObj(pObj);
 	SetObjBoxIndex(pObj);
 	
 	//리스트 업데이트
 	g_pCenter->UpdateObjList();		//오브젝트 리스트를 Center에서 갖고 있어서 업데이트 주체가 센터가 된었다.
 
-	modelName.Empty();
-	matName.Empty();
-	modelName.ReleaseBuffer();
-	matName.ReleaseBuffer();
 }
 
 void CObjectDlg::OnSelchangeObjlist()

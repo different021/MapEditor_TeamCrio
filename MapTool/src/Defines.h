@@ -45,7 +45,7 @@ enum eShaderType
 	eSHADER_MAX,
 };
 
-
+#pragma pack(push, 1)
 struct object
 {
 	eOBJECT_TYPE type;				//오브젝트 타입
@@ -83,7 +83,7 @@ public:
 	DirectX::XMFLOAT4X4	GetTmByQuaternion();
 	//void GetTm(DirectX::XMFLOAT4X4* pOut);
 };
-
+#pragma pack(pop)
 
 enum eCOLLIDER_TYPE						//ver3 추가
 {
