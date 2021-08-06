@@ -3,6 +3,13 @@
 //사용자 지정 윈도우 메세지를 저장하고 잇는 헤더
 //******************************************************//
 
+enum eMsgReturn
+{
+	eMsgSuccess = 0,
+	eMsgFail,
+	eMsgMax,
+};
+
 #define WM_OBJECT						10000
 #define WM_COLLIDER						11000
 #define WM_LIGHT						12000
@@ -12,7 +19,7 @@
 #define WM_UTIL							21000
 
 
-//object
+//WM_OBJECT
 #define WM_OBJECT_CREATE                WM_OBJECT + 1
 #define WM_OBJECT_DELETE                WM_OBJECT + 2
 #define WM_OBJECT_EDIT					WM_OBJECT + 3

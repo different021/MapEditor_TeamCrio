@@ -247,6 +247,8 @@ public:
 	
 	afx_msg void OnLightWindow();
 	afx_msg void OnClose();
+protected:
+	afx_msg LRESULT OnObjectCreate(WPARAM wParam, LPARAM lParam);
 };
 
 extern HWND g_hCenter;

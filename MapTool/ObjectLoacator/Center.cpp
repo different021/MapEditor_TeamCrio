@@ -28,7 +28,7 @@
 #include "CWaveManager.h"
 
 #include "WMDefine.h"		//윈도우 메세지 정의 헤더
-
+#include "HGMessage.h"		//오브젝트 관련 메세지 구조체 정의
 
 
 /*
@@ -1348,7 +1348,9 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_PICKING_COLLIDER, &Center::OnPickingCollider)
 	ON_COMMAND(ID_COLLIDER_WINDOW, &Center::OnColliderWindow)
 	ON_COMMAND(ID_LIGHT_WINDOW, &Center::OnLightWindow)
+	ON_MESSAGE(WM_OBJECT_CREATE, &Center::OnObjectCreate)
 	ON_WM_CLOSE()
+	
 END_MESSAGE_MAP()
 
 
@@ -1725,4 +1727,43 @@ void Center::OnClose()
 	CleanUp();
 
 	CDialogEx::OnClose();
+}
+
+
+/*
+* first eidt for based on message
+* 
+*/
+afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
+{
+	eMsgReturn result = eMsgReturn::eMsgSuccess;
+	HGMessage* pMsg = (HGMessage*)wParam;
+	unsigned int numOfObj = pMsg->numOfInstance;
+	
+	//wParam 확인
+	if (pMsg->msg != WM_OBJECT_CREATE)
+		return eMsgReturn::eMsgFail;
+	
+	if (pMsg->objType != eObjectType::eObject)
+		return eMsgReturn::eMsgFail;
+	
+	//lParam 확인 및 처리
+	MsgObjectArray* pMsgArray = (MsgObjectArray*)lParam;
+	if(pMsgArray->objectType != eObjectType::eObject)
+		return eMsgReturn::eMsgFail;
+
+	int cnt = pMsgArray->count;
+	object* pObjArray = (object*)pMsgArray->pArray;
+	for (int i = 0; i < cnt; i++)
+	{
+		CreateObj(&pObjArray[i]);
+	}
+
+	delete pMsg;
+	pMsg = nullptr;
+
+	delete pMsgArray;
+	pMsgArray = nullptr;
+
+	return result;
 }
