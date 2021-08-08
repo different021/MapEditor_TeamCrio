@@ -79,14 +79,6 @@ void CGrid::UpdateEditBox()
 	GetDlgItem(IDC_EDIT_MAP_OFFSET)->UpdateWindow();
 }
 
-//void CGrid::Move(int x, int y)
-//{
-//	CRect rc;
-//	GetWindowRect(rc);
-//
-//	MoveWindow(x, y, rc.Width(), rc.Height(), 1);
-//}
-
 int CGrid::GetMapWidth()
 {
 	return m_iWidth;

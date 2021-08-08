@@ -24,7 +24,6 @@ public:
 	void SetDlgItemInt(int iD, int iValue);
 	void UpdateEditBox();						//editBOx값 셋팅	
 
-	//void Move(int x, int y);
 public:
 	int GetMapWidth();
 	int GetMapHeight();

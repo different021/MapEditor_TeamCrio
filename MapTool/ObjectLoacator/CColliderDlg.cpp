@@ -53,14 +53,6 @@ CColliderDlg::~CColliderDlg()
 {
 }
 
-//void CColliderDlg::Move(int x, int y)
-//{
-//	CRect rc;
-//	GetClientRect(rc);
-//
-//	MoveWindow(x, y, rc.Width() + 10, rc.Height() + 25);
-//}
-
 void CColliderDlg::AddColliderToListBox(collider* pCollider)
 {
 	if (pCollider == NULL) return;
