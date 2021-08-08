@@ -265,50 +265,7 @@ void DrawInsManager::DeleteInDeleteList(std::vector<object*>* pObjList)
 	m_DeleteList.clear();
 }
 
-//void DrawInsManager::DeleteObject(DRAW_INSTANCE* pIns)
-//{
-//	object* pObj			 = pIns->first;
-//	HInstanceData* pGraphics = pIns->second;
-//
-//	if (pObj != NULL)
-//	{
-//		delete pObj;
-//		pIns->first = NULL;
-//	}
-//
-//	if (pGraphics != NULL)
-//	{
-//		pGraphics->Delete();
-//		pIns->second = NULL;
-//	}
-//	
-//}
-
-//bool DrawInsManager::DeleteObject(object* pObj)
-//{
-//	bool bResult = false;
-//	if (pObj == NULL) return bResult;
-//	
-//	std::vector<DRAW_INSTANCE*>::iterator delete_it;
-//	for (delete_it = m_DeleteList.begin(); delete_it != m_DeleteList.end(); delete_it++)
-//	{
-//		if (delete_it->first == pObj)
-//		{
-//			delete delete_it->first;			//collider
-//			//delete_it->first = NULL;
-//
-//			delete_it->second->Delete();		//Graphic Box instance
-//
-//			m_List.erase(delete_it);
-//			bResult = true;
-//			break;
-//		}
-//	}
-//
-//	return bResult;
-//}
-
-void DrawInsManager::CreateObj(object* pObj, HInstanceData* pGraphicsData)
+void DrawInsManager::MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData)
 {
 	//std::make_pair<object*, HInstanceData*>(pObj, pGraphicsData);
 	DRAW_INSTANCE* pIns = new DRAW_INSTANCE(pObj, pGraphicsData);
@@ -322,7 +279,7 @@ object* DrawInsManager::AddSelected_public(HInstanceData* pHIns)
 	if (!m_bEnableSelect) return NULL;
 	HInstanceData* pIns = pHIns;
 	object* pResult = NULL;
-
+	
 	if (m_eSelectedMode == eSELECT_ONE)
 	{
 		pResult = AddSelected_OnlyOne(pIns);
@@ -337,7 +294,8 @@ object* DrawInsManager::AddSelected_public(HInstanceData* pHIns)
 
 object* DrawInsManager::AddSelected(HInstanceData* pHIns)
 {
-	if (!m_bEnableSelect) return NULL;
+	if (!m_bEnableSelect) return nullptr;
+	if (pHIns == nullptr) return nullptr;
 
 	HInstanceData* pIns = pHIns;
 	std::vector<DRAW_INSTANCE*>::iterator it;
@@ -363,7 +321,9 @@ object* DrawInsManager::AddSelected(HInstanceData* pHIns)
 		{
 			m_SelectedList.push_back( *it );
 			pResult = pObj;
-			pGraphic->SetShaderFlag(ShaderType::WIREFRAME);
+			
+			///와이어 프레임 문제. ->...
+			//pGraphic->SetShaderFlag(ShaderType::WIREFRAME);
 			
 			break;
 		}
@@ -407,9 +367,10 @@ object* DrawInsManager::AddSelected_DeleteAlreadySelected(HInstanceData* pHIns)
 
 object* DrawInsManager::AddSelected_OnlyOne(HInstanceData* pHIns)
 {
-	if (!m_bEnableSelect) return NULL;
-
 	ClearSelectedListAll();
+	if (!m_bEnableSelect) return nullptr;
+	if (pHIns == nullptr) return nullptr;
+	
 	return AddSelected(pHIns);
 }
 
@@ -560,7 +521,7 @@ size_t DrawInsManager::GetSizeOfSelected()
 
 
 
-void DrawInsManager::SetSelectedPrvRot()
+void DrawInsManager::SetSelectedPrvQuaternion()
 {
 	size_t size = m_SelectedList.size();
 	if (size <= 0) return;
@@ -827,6 +788,7 @@ void DrawInsManager::RotateSelected(DirectX::XMFLOAT4& quaternion)
 
 void DrawInsManager::EditRegenIndexDefault(int regenColliderIndex)
 {
+	//콜라이이더가 삭제될 경우. 해당 콜라이더의 인덱스를 참조하고 있는 객체들의 인덱스를 -1로 변경 시켜준다.
 	std::vector<DRAW_INSTANCE*>::iterator it;
 	for (it = m_List.begin(); it != m_List.end(); it++)
 	{

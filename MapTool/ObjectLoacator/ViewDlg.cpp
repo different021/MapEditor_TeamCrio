@@ -43,7 +43,7 @@ END_MESSAGE_MAP()
 
 DirectX::XMFLOAT3 g_StartingCamPos = DirectX::XMFLOAT3(0.f, 100.f, 0.f);
 
-void Viewer::InitEngine(int iWidth, int iHeight)
+void Viewer::InitailzeGraphics(int iWidth, int iHeight)
 {
 	g_hWndViewer = m_hWnd;
 
@@ -72,6 +72,37 @@ void Viewer::InitEngine(int iWidth, int iHeight)
 	m_iScreenHeight = rc.Height();
 }
 
+BOOL Viewer::InitGraphicEngin()
+{
+	HWND hwnd = GetSafeHwnd();
+	RECT rc;
+	GetClientRect(&rc);
+
+	LONG width = rc.right - rc.left;
+	LONG height = rc.bottom - rc.top;
+	m_pEngine = HEngine_DX12_3D::GetInstance();
+	m_pEngine->InitEngine(hwnd, width, height);
+	m_pEngine->StartSetting();
+	m_pEngine->LoadSkyBox(L"Media/Skybox/skybox.dds");
+	m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");
+	m_pEngine->FinishSetting();
+	return TRUE;
+}
+
+void Viewer::InitManagers()
+{
+	//마테리얼 매니저
+	m_pInsManager = DrawInsManager::GetInstance();
+	m_pMatManager = MaterialManager::GetInstance();
+	m_pMatManager->SetGraphicEngine(m_pEngine);
+
+	//모델 메니저
+	m_pModelManager = ModelManager::GetModelManager();
+	m_pColManager = CColliderManager::GetInstance();
+	m_pLightManager = CLightManager::GetInstance();
+	m_pWaveManager = CWaveManager::GetInstance();
+}
+
 
 Viewer::Viewer(CWnd* pParent)
 {
@@ -93,7 +124,7 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 	int width = iWidth + (iFrameX << 2);
 	int height = iHeight + (iFrameY << 2) + iCaptionY;
 
-	InitEngine(width, height);
+	InitailzeGraphics(width, height);
 
 }
 
@@ -261,37 +292,6 @@ void Viewer::SendMatList(HWND hWnd)
 {
 	::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(m_pMatManager->GetMatList()), 0);
 	//::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(&g_MaterialList), 0);
-}
-
-BOOL Viewer::InitGraphicEngin()
-{
-	HWND hwnd = GetSafeHwnd();
-	RECT rc;
-	GetClientRect(&rc);
-
-	LONG width = rc.right - rc.left;
-	LONG height = rc.bottom - rc.top;
-	m_pEngine = HEngine_DX12_3D::GetInstance();
-	m_pEngine->InitEngine(hwnd, width, height);
-	m_pEngine->StartSetting();
-	m_pEngine->LoadSkyBox(L"Media/Skybox/skybox.dds");
-	m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");
-	m_pEngine->FinishSetting();
-	return TRUE;
-}
-
-void Viewer::InitManagers()
-{
-	//마테리얼 매니저
-	m_pInsManager = DrawInsManager::GetInstance();
-	m_pMatManager = MaterialManager::GetInstance();
-	m_pMatManager->SetGraphicEngine(m_pEngine);
-
-	//모델 메니저
-	m_pModelManager = ModelManager::GetModelManager();
-	m_pColManager = CColliderManager::GetInstance();
-	m_pLightManager = CLightManager::GetInstance();
-	m_pWaveManager = CWaveManager::GetInstance();
 }
 
 void Viewer::MoveSelectedOffset(CPoint& cur, CPoint& last)
@@ -1245,9 +1245,9 @@ void Viewer::GetKeyUp(WPARAM wParam)
 void Viewer::UpdateObjectEditBox()
 {
 	object* pResult = m_pInsManager->GetLastSelected();
-	g_pCenter->SelectObj(pResult);
+	g_pCenter->UpdateEditBoxByObj(pResult);
 
-	g_pCenter->UpdateSelectedLight();	//라이트 업데이트
+	//g_pCenter->UpdateSelectedLight();	//라이트 업데이트 <- 왜 라이트 업데이트?
 }
 
 void Viewer::UpdateColliderEditBox()
@@ -1262,20 +1262,6 @@ void Viewer::UpdateWaveEditBox()
 	g_pCenter->UpdateWaveEditControl(pWave);
 }
 
-//선택한 그래픽 인스턴스들을 어떻게 처리 할 것인가?
-void Viewer::SelectGraphicInstance(unsigned int x, unsigned int y)
-{
-	HInstanceData* hGraphicIns = m_pEngine->Picking(x, y);
-	if (hGraphicIns == NULL)
-	{
-		int x = 3;
-	}
-	m_pInsManager->AddSelected_public(hGraphicIns);
-
-	UpdateObjectEditBox();
-
-	m_pInsManager->SetSelectedPrvRot();
-}
 
 void Viewer::SelectColliderInstance(CPoint& clickPoint)
 {
@@ -1369,32 +1355,35 @@ void Viewer::OnLButtonDown(UINT nFlags, CPoint point)
 	m_DragPoint[0].x = x;
 	m_DragPoint[0].y = y;
 
-	m_bGizmoTime = m_Gizmo.CheckSelectedIndex(x, y, m_iScreenWidth, m_iScreenHeight);		//엑시스 
-	m_bGizmoCubeTime = m_Gizmo.IsPickCube(x, y);
+	m_bGizmoTime = m_Gizmo.CheckSelectedIndex(x, y, m_iScreenWidth, m_iScreenHeight);		//기르모를 클릭했는가? 
+	m_bGizmoCubeTime = m_Gizmo.IsPickCube(x, y);											//큐브를 클릭했는가
+	
 
 	if ((m_bGizmoTime == FALSE) && (m_bGizmoCubeTime == FALSE))
 	{
-		SelectGraphicInstance(x, y);
-		SelectColliderInstance(point);
-		SelectLightInstance(point);
-		SelectWaveInstance(point);
+		::SendMessageW(g_hCenter, WM_VIEWER_LBUTTONDOWN, (WPARAM)point.x, (LPARAM)point.y);
+		//SelectColliderInstance(point);
+		//SelectLightInstance(point);
+		//SelectWaveInstance(point);
 	}
-
-
+	
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
 
 void Viewer::OnLButtonUp(UINT nFlags, CPoint point)
 {
+	//디버그 테스트용
+	//OutputDebugStringW(L"Viewer::LButtonDown()\n");
+	 
 	//축
 	m_Gizmo.ReleaseAxis();
 	m_bLbuttonDown = false;
-
+	
 	//기지모 큐브
 	m_Gizmo.ReleaseCube();
 	m_bGizmoCubeTime = FALSE;
 
-	m_pInsManager->SetSelectedPrvRot();
+	m_pInsManager->SetSelectedPrvQuaternion();
 	m_pColManager->SetSelectedPrvRot();
 	m_pWaveManager->SetSelectedPrvRot();
 

@@ -46,7 +46,7 @@ class Center : public CDialogEx
 	STAGE_HEADER m_MapHeader;			//헤터
 
 	//Dialogs
-	CObjectDlg		m_ObjLocator;		//오브젝트
+	CObjectDlg		m_ObjectDlg;		//오브젝트
 	CColliderDlg	m_ColliderDlg;	//콜라이더
 	Viewer*		 m_Viewer;					//뷰어
 	CGrid		 m_GridController;			//그리드 조절
@@ -183,7 +183,7 @@ public:
 	void ChangeGrid(int width, int height, int offset);
 
 	
-	void SelectObj(object* pObj);
+	void UpdateEditBoxByObj(object* pObj);
 	void SelectCollider(collider* pCollider);
 	void SetGizmo(collider* pCol);
 	void SetGizmo(object* pObj);
@@ -249,6 +249,7 @@ public:
 	afx_msg void OnClose();
 protected:
 	afx_msg LRESULT OnObjectCreate(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnViewerLbuttondown(WPARAM wParam, LPARAM lParam);
 };
 
 extern HWND g_hCenter;

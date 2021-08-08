@@ -74,7 +74,9 @@ private:
     CamController* m_pCamController;        //카메라 조작용.
 
 private:
-    void InitEngine(int iWidth, int iHeight);
+    void InitailzeGraphics(int iWidth, int iHeight);
+    BOOL InitGraphicEngin();
+    void InitManagers();
 
 public:
     Viewer(CWnd* pParent = nullptr);
@@ -91,9 +93,6 @@ public:
     void SendModelList(HWND hWnd);
     void SendMatList(HWND hWnd);
     
-    BOOL InitGraphicEngin();
-    void InitManagers();                
-
     //Move
     void MoveSelectedOffset(CPoint& curPoint, CPoint& lastPoint);
     void MoveSelected(CPoint& cur, CPoint& last);
@@ -151,11 +150,12 @@ private:
     float GetNDC_Y(CPoint& inPoint);
     void GetKeyUp(WPARAM wParam);
 
+    //Dlg 업데이트 관련 -> 삭제 대상
     void UpdateObjectEditBox();
     void UpdateColliderEditBox();
     void UpdateWaveEditBox();
 
-    void SelectGraphicInstance(unsigned int x, unsigned int y);
+    //왼 클릭시 발생하는 일들. -> 삭제
     void SelectColliderInstance(CPoint& clickPoint);
     void SelectLightInstance(CPoint& clickPoint);
     void SelectWaveInstance(CPoint& clickPoint);

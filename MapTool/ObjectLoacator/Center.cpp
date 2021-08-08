@@ -71,7 +71,7 @@ void Center::InitializeDlgs(CWnd* pParent)
 	m_Viewer = new Viewer;
 	m_Viewer->Initialize(pParent, IDD_VIEW_DLG, 800, 600);
 	
-	m_ObjLocator.Initialize(pParent, IDD_OBJECTLOACATOR_DIALOG);
+	m_ObjectDlg.Initialize(pParent, IDD_OBJECTLOACATOR_DIALOG);
 	m_GridController.Initialize(pParent, IDD_GRIDCON);
 	m_ColliderDlg.Initialize(pParent, IDD_COLLIDER_CONTROLLER);
 	m_pLightDlg.Initialize(pParent, IDD_LIGHT_DLG);
@@ -157,7 +157,7 @@ void Center::UpdateLightList()
 void Center::UpdateRegenColliderList()
 {
 	const std::vector<COLLIDER>* pList = m_pColliderManager->GetList();
-	m_ObjLocator.UpdateRegenColiderList(pList);
+	m_ObjectDlg.UpdateRegenColiderList(pList);
 }
 
 void Center::UpdateWaveLlist()
@@ -240,7 +240,7 @@ void Center::DeleteInDeleteList()
 {
 	std::vector<object*> deletedObjList;
 	m_pDrawInsManager->DeleteInDeleteList(&deletedObjList);
-	m_ObjLocator.DeleteObjInListBox(&deletedObjList);
+	m_ObjectDlg.DeleteObjInListBox(&deletedObjList);
 
 	std::vector<Light*> deleteLightList;
 	m_pLightManager->DelteInDelList(&deleteLightList);
@@ -272,7 +272,7 @@ void Center::CreateObj(object* pObj)
 		return;
 	}
 	
-	m_pDrawInsManager->CreateObj(pObj, hIns);
+	m_pDrawInsManager->MakeDrawInstance(pObj, hIns);
 }
 
 void Center::RescaleSelected(float ratio)
@@ -409,7 +409,7 @@ void Center::DuplicateObjectInSelectedList()
 void Center::UpdateRegenColliderListInObjLocator()
 {
 	const std::vector<COLLIDER>* pColList = m_pColliderManager->GetList();
-	m_ObjLocator.UpdateRegenColiderList(pColList);
+	m_ObjectDlg.UpdateRegenColiderList(pColList);
 }
 
 int Center::SetModelIndexByName(object* pObj)
@@ -534,7 +534,7 @@ void Center::CreateWaveFromList(int numOfWave, waveData* pWaveList)
 void Center::UpdateModelList()
 {
 	WPARAM wModelList = (WPARAM)m_pModelManager->GetModelList();
-	::SendMessageW(m_ObjLocator, WM_UPDATE_MODEL_LIST, wModelList, NULL);
+	::SendMessageW(m_ObjectDlg, WM_UPDATE_MODEL_LIST, wModelList, NULL);
 	//::SendMessageW(m_CharSetting, WM_UPDATE_MODEL_LIST, wModelList, NULL);
 }
 
@@ -669,10 +669,10 @@ void Center::LoadTextureFiles()
 	}
 
 	WPARAM wMaterialList = (WPARAM)m_pMatManager->GetMatList();
-	BOOL bRespond = ::PostMessageW(m_ObjLocator, WM_UPDATE_MATERIAL_LIST, wMaterialList, NULL);
+	BOOL bRespond = ::PostMessageW(m_ObjectDlg, WM_UPDATE_MATERIAL_LIST, wMaterialList, NULL);
 	while (!bRespond)
 	{
-		::PostMessageW(m_ObjLocator, WM_UPDATE_MATERIAL_LIST, wMaterialList, NULL);
+		::PostMessageW(m_ObjectDlg, WM_UPDATE_MATERIAL_LIST, wMaterialList, NULL);
 	}
 		
 }
@@ -730,7 +730,7 @@ void Center::LoadFbx()
 	t1.join();
 
 	WPARAM wModelList = (WPARAM)m_pModelManager->GetModelList();
-	::SendMessageW(m_ObjLocator, WM_UPDATE_MODEL_LIST, wModelList, NULL);
+	::SendMessageW(m_ObjectDlg, WM_UPDATE_MODEL_LIST, wModelList, NULL);
 }
 
 void Center::LoadTextureSet()
@@ -742,9 +742,9 @@ void Center::LoadTextureSet()
 
 void Center::BoardCast(MSG* pMsg)
 {
-	if (m_ObjLocator)
+	if (m_ObjectDlg)
 	{
-		::SendMessage(m_ObjLocator, pMsg->message, pMsg->wParam, pMsg->lParam);
+		::SendMessage(m_ObjectDlg, pMsg->message, pMsg->wParam, pMsg->lParam);
 	}
 	if (m_Viewer->m_hWnd != NULL)
 	{
@@ -865,7 +865,7 @@ collider* Center::PickingCollider(int screenX, int screenY)
 
 void Center::UpdateObjEditControl(object* pObj)
 {
-	m_ObjLocator.SetObjectEditBoxes(pObj);
+	m_ObjectDlg.UpdateEditBoxesByObject(pObj);
 }
 
 void Center::UpdateColliderEditControl(collider* pCollider)
@@ -916,8 +916,7 @@ Light* Center::PickingLight(int screenX, int screenY)
 	}
 
 	//Update Dialog
-	//m_pLightDlg->SetSelIndexInListBox(pLight);
-	m_pLightDlg.SetSelIndexInListBox(pLight);
+	m_pLightDlg.UpdateEditBoxByLight(pLight);
 
 	return pLight;
 }
@@ -940,9 +939,9 @@ void Center::ChangeGrid(int width, int height, int offset)
 
 
 
-void Center::SelectObj(object* pObj)
+void Center::UpdateEditBoxByObj(object* pObj)
 {
-	m_ObjLocator.SetObjectEditBoxes(pObj);
+	m_ObjectDlg.UpdateEditBoxesByObject(pObj);
 }
 
 void Center::SelectCollider(collider* pCollider)
@@ -1034,10 +1033,11 @@ void Center::UpdateListBox()
 	UpdateWaveLlist();
 }
 
-void Center::UpdateObjList()
+//삭제 예정. 
+void Center::UpdateObjList()	
 {
 	DrawInsList* pList = m_pDrawInsManager->GetDrawInsList();
-	m_ObjLocator.UpdateObjListBox(pList);
+	m_ObjectDlg.UpdateObjListBox(pList);
 }
 
 
@@ -1069,29 +1069,26 @@ BOOL Center::OnInitDialog()
 	Init_MainMenu();
 	InitializeDlgs(this);
 	
-	CRect rcMain;
-	GetClientRect(rcMain);
-
+	//dlg 위치 조정
 	CRect rcViewer;
-	m_Viewer->GetClientRect(&rcViewer);
-	CRect rcLoc;
-	m_ObjLocator.GetClientRect(&rcLoc);
-
-	m_ObjLocator.MoveWindow(rcViewer.Width() + 25, 0, rcLoc.Width() + 20, rcLoc.Height() + 45);
+	m_Viewer->GetWindowRect(&rcViewer);
 	
+	m_ObjectDlg.Move(rcViewer.right, 0);
+
+	CRect rcLoc;
+	m_ObjectDlg.GetWindowRect(&rcLoc);
+	
+	m_ColliderDlg.Move(rcLoc.right, 0);
+
 	CRect rcCol;
-	m_ColliderDlg.GetClientRect(rcCol);
-
-	CRect newCol	= rcCol;
-	newCol.left		= rcViewer.Width() + 25;
-	newCol.right	= newCol.left + rcCol.Width() + 20;
-	newCol.top		= rcLoc.bottom + 50;
-	newCol.bottom	= newCol.top + 280;
-	m_ColliderDlg.MoveWindow(newCol);
-
-	m_GridController.Move(rcViewer.Width() + 25, newCol.bottom + 5);
+	m_ColliderDlg.GetWindowRect(rcCol);
+	m_GridController.Move(rcLoc.right, rcCol.bottom);
 
 	UpdateModelList();
+	
+	//일단 불필요해서.
+	m_pWaveDlg->ShowWindow(SW_HIDE);
+	m_pLightDlg.ShowWindow(SW_HIDE);
 
 	return 0;
 }
@@ -1315,8 +1312,8 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 		break;
 	}
 
-	return 0;
-	//return CDialog::PreTranslateMessage(pMsg);
+	//return 0;
+	return CDialog::PreTranslateMessage(pMsg);
 }
 
 
@@ -1351,6 +1348,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_OBJECT_CREATE, &Center::OnObjectCreate)
 	ON_WM_CLOSE()
 	
+	ON_MESSAGE(WM_VIEWER_LBUTTONDOWN, &Center::OnViewerLbuttondown)
 END_MESSAGE_MAP()
 
 
@@ -1360,12 +1358,12 @@ void Center::OnShowWindowObjlocator()
 	if (m_MainMenu.GetMenuState(ID_MAIN_OBJLOCATOR, MF_BYCOMMAND) != MF_CHECKED)
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_OBJLOCATOR, MF_CHECKED);
-		m_ObjLocator.ShowWindow(SW_SHOW);
+		m_ObjectDlg.ShowWindow(SW_SHOW);
 	}
 	else
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_OBJLOCATOR, MF_UNCHECKED);
-		m_ObjLocator.ShowWindow(SW_HIDE);
+		m_ObjectDlg.ShowWindow(SW_HIDE);
 	}
 
 }
@@ -1447,7 +1445,7 @@ afx_msg LRESULT Center::OnHideWindow(WPARAM wParam, LPARAM lParam)
 	if (lParam == eObjLocator)
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_OBJLOCATOR, MF_UNCHECKED);
-		m_ObjLocator.ShowWindow(SW_HIDE);
+		m_ObjectDlg.ShowWindow(SW_HIDE);
 	}
 	else if (lParam == eViewer)
 	{
@@ -1553,7 +1551,7 @@ afx_msg LRESULT Center::OnDeleteObj(WPARAM wParam, LPARAM lParam)
 afx_msg LRESULT Center::OnUpdateModelList(WPARAM wParam, LPARAM lParam)
 {
 	WPARAM wp = wParam;
-	::SendMessageW(m_ObjLocator, WM_UPDATE_MODEL_LIST, wp, NULL);
+	::SendMessageW(m_ObjectDlg, WM_UPDATE_MODEL_LIST, wp, NULL);
 	//::SendMessageW(m_CharSetting, WM_UPDATE_MODEL_LIST, wp, NULL);
 
 	return 0;
@@ -1563,7 +1561,7 @@ afx_msg LRESULT Center::OnUpdateModelList(WPARAM wParam, LPARAM lParam)
 afx_msg LRESULT Center::OnUpdateMatList(WPARAM wParam, LPARAM lParam)
 {
 	WPARAM wp = wParam;
-	::SendMessageW(m_ObjLocator, WM_UPDATE_MATERIAL_LIST, wp, NULL);
+	::SendMessageW(m_ObjectDlg, WM_UPDATE_MATERIAL_LIST, wp, NULL);
 	//::SendMessageW(m_CharSetting, WM_UPDATE_MATERIAL_LIST, wp, NULL);
 
 	return 0;
@@ -1588,7 +1586,7 @@ afx_msg LRESULT Center::OnLoadMap(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT Center::OnListBoxNone(WPARAM wParam, LPARAM lParam)
 {
-	::SendMessageW(m_ObjLocator, WM_LIST_BOX_NONE, NULL, NULL);
+	::SendMessageW(m_ObjectDlg, WM_LIST_BOX_NONE, NULL, NULL);
 
 	return 0;
 }
@@ -1736,21 +1734,21 @@ void Center::OnClose()
 */
 afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 {
-	eMsgReturn result = eMsgReturn::eMsgSuccess;
+	eMsgResult result = eMsgResult::eMsgSuccess;
 	HGMessage* pMsg = (HGMessage*)wParam;
 	unsigned int numOfObj = pMsg->numOfInstance;
 	
 	//wParam 확인
 	if (pMsg->msg != WM_OBJECT_CREATE)
-		return eMsgReturn::eMsgFail;
+		return eMsgResult::eMsgFail;
 	
 	if (pMsg->objType != eObjectType::eObject)
-		return eMsgReturn::eMsgFail;
+		return eMsgResult::eMsgFail;
 	
 	//lParam 확인 및 처리
 	MsgObjectArray* pMsgArray = (MsgObjectArray*)lParam;
 	if(pMsgArray->objectType != eObjectType::eObject)
-		return eMsgReturn::eMsgFail;
+		return eMsgResult::eMsgFail;
 
 	int cnt = pMsgArray->count;
 	object* pObjArray = (object*)pMsgArray->pArray;
@@ -1766,4 +1764,33 @@ afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 	pMsgArray = nullptr;
 
 	return result;
+}
+
+
+afx_msg LRESULT Center::OnViewerLbuttondown(WPARAM wParam, LPARAM lParam)
+{
+	unsigned int x = (unsigned int)wParam;
+	unsigned int y = (unsigned int)lParam;
+
+	//그래픽인스턴스는 엔진에서 받아온다.
+	HInstanceData* hGraphicIns = m_pEngine->Picking(x, y);
+	if (hGraphicIns != NULL)
+	{
+		//문제 부분 : 와이어 프레임으로 변경시 노트북에서만 커널 에러
+		m_pDrawInsManager->AddSelected_public(hGraphicIns);
+		m_pDrawInsManager->SetSelectedPrvQuaternion();
+	}
+	
+	//dlg업데이트
+	object* pObj = m_pDrawInsManager->GetLastSelected();
+	m_ObjectDlg.UpdateEditBoxesByObject(pObj);
+
+	PickingCollider(x, y);	//dlg 업데이트 포함됨.
+	m_pColliderManager->SetSelectedPrvRot();
+
+	PickingLight(x, y);	//dlg업데이트 포함
+	
+	DeleteSelectedListAll();	//wave는 아직 피킹이 없다.
+
+	return 0;
 }

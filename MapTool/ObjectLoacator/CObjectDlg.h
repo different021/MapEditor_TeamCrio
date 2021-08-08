@@ -148,7 +148,7 @@ public:
 	void SetObjRegenIndexByComboBox(object* pDest);
 
 public:
-	void SetObjectEditBoxes(object* pObj);
+	void UpdateEditBoxesByObject(object* pObj);
 
 private:
 	void SetIndex(int index);
@@ -175,6 +175,9 @@ public:
 	void AddLogTest(LPCWSTR pStr, ...);
 	void OutCurDirAfterStr(wchar_t* strLog);
 	void UpdateLogBox();
+
+private:	
+	void addObjectInCombobox(object* pObj);		//콤보 박스에 오브젝트를 추가. -> 그래픽 인스턴스 생성 성공시에만.
 
 public:
 	afx_msg void OnBnClickedBtnObjedit();				// 수정 버튼

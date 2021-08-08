@@ -20,6 +20,7 @@ CEditorDlg::CEditorDlg()
 void CEditorDlg::Initialize(CWnd* pParent, UINT id)
 {
 	Create(id);
+	//SetDocking(nullptr);
 	SetDocking(pParent);
 	ShowWindow(SW_SHOW);
 }
@@ -37,4 +38,12 @@ void CEditorDlg::SetDocking(CWnd* pParent)
 	}
 
 	SetParent(pCWndParent);
+}
+
+void CEditorDlg::Move(int x, int y)
+{
+	CRect rc;
+	GetWindowRect(rc);
+
+	MoveWindow(x, y, rc.Width(), rc.Height());
 }

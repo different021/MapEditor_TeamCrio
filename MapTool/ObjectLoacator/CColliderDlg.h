@@ -25,7 +25,7 @@ public:
 	CColliderDlg(CWnd* pParent = nullptr);   // 표준 생성자입니다.
 	virtual ~CColliderDlg();
 	
-	void Move(int x, int y);
+	//void Move(int x, int y);
 	void AddColliderToListBox(collider* pCollider);
 	void SetEditBoxByCollider(collider* pCollider);
 	void SetEditBoxZero();

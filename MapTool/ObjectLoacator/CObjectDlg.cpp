@@ -586,6 +586,7 @@ DirectX::XMFLOAT4X4 CObjectDlg::ConvertQuaternionToMatrix(DirectX::XMFLOAT4& qua
 	return result;
 }
 
+//삭제 예정. -> 단일 오브젝트에 대한 함수로 만들고 생성 객체 마다 함수 호출로 변경 할 것.
 void CObjectDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)
 {
 	m_objListBox.ResetContent();
@@ -1102,7 +1103,7 @@ void CObjectDlg::SetObjRegenIndexByComboBox(object* pDest)
 		pDest->regenIndex = pCollider->index;
 }
 
-void CObjectDlg::SetObjectEditBoxes(object* pObj)
+void CObjectDlg::UpdateEditBoxesByObject(object* pObj)
 {
 	if (pObj == NULL)
 	{
@@ -1364,6 +1365,17 @@ void CObjectDlg::UpdateLogBox()
 	ClearLogBuffer();
 }
 
+//Graphic instance가 있는 오브젝트에 대해서만 추가 할 것.
+void CObjectDlg::addObjectInCombobox(object* pObj)
+{
+	if (pObj == nullptr) return;
+
+	int idx = m_objListBox.AddString(pObj->objectName);
+	m_objListBox.SetItemDataPtr(idx, (void*)pObj);
+
+	m_objListBox.UpdateWindow();
+}
+
 
 //선택된 오브젝트 값 수정
 void CObjectDlg::OnBnClickedBtnObjedit()
@@ -1475,13 +1487,25 @@ void CObjectDlg::OnBnClickedBtnObjcreate()
 	pMsgObjArray->objectType = eObjectType::eObject;
 	pMsgObjArray->pArray = (void*)pObj;
 
-	::SendMessageW(g_hCenter, WM_OBJECT_CREATE, (WPARAM)pMsgCreateObj, (LPARAM)pMsgObjArray);
+	eMsgResult msgResult = (eMsgResult)::SendMessageW(g_hCenter, WM_OBJECT_CREATE, (WPARAM)pMsgCreateObj, (LPARAM)pMsgObjArray);
 
-	//g_pCenter->CreateObj(pObj);
-	SetObjBoxIndex(pObj);
+
+	if (msgResult == eMsgResult::eMsgSuccess)
+	{
+		SetObjBoxIndex(pObj);
+		addObjectInCombobox(pObj);
+	}
+	else
+	{
+		delete pObj;
+		pObj = nullptr;
+		OutputDebugStringW(L"[FAIL]ObjectDlg::OnBnClickedBtnObjcreate(), Fail to Create Object\n");
+		assert(false);
+	}
+
 	
 	//리스트 업데이트
-	g_pCenter->UpdateObjList();		//오브젝트 리스트를 Center에서 갖고 있어서 업데이트 주체가 센터가 된었다.
+	//g_pCenter->UpdateObjList();		//오브젝트 리스트를 Center에서 갖고 있어서 업데이트 주체가 센터가 된었다.
 
 }
 
@@ -1489,7 +1513,7 @@ void CObjectDlg::OnSelchangeObjlist()
 {
 	//리스트 박스에 오브젝트를 선택했을 경우
 	object* pTemp = GetSelectedObj();
-	SetObjectEditBoxes(pTemp);
+	UpdateEditBoxesByObject(pTemp);
 	
 	if (pTemp != NULL)
 	{
@@ -1676,7 +1700,7 @@ afx_msg LRESULT CObjectDlg::OnUpdateMatList(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CObjectDlg::OnListBoxNone(WPARAM wParam, LPARAM lParam)
 {
-	SetObjectEditBoxes(NULL);
+	UpdateEditBoxesByObject(NULL);
 
 	m_objListBox.SetCurSel(-1);
 	m_MatListBox.SetCurSel(-1);

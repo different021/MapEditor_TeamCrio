@@ -257,7 +257,7 @@ int CLightDlg::AddLightToListBox(Light* pLight)
 	return idx;
 }
 
-int CLightDlg::SetSelIndexInListBox(Light* pLight)
+int CLightDlg::UpdateEditBoxByLight(Light* pLight)
 {
 	CListBox* pListBox = (CListBox*)GetDlgItem(IDC_LIST_LIGHT);
 	int iResult = 0;

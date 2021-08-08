@@ -37,7 +37,7 @@ public:
 	void SpotInputOFF();
 
 	int  AddLightToListBox(Light* pLight);
-	int  SetSelIndexInListBox(Light* pLight);
+	int  UpdateEditBoxByLight(Light* pLight);
 
 	void UpdateLightList();
 	void ClearLightList();

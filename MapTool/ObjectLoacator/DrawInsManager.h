@@ -46,11 +46,9 @@ public:
 
 	//삭제
 	void DeleteInDeleteList(std::vector<object*>* objList = NULL);
-	//void DeleteObject(DRAW_INSTANCE* pIns);		//악의 근원.?
-	//bool DeleteObject(object* pObj);	
 	
 	//생성
-	void CreateObj(object* pObj, HInstanceData* pGraphicsData);
+	void MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData);
 
 	//Selected List 
 	object* AddSelected_public(HInstanceData* pHIns);					//현재 셀렉트 모드에 따라 추가
@@ -71,7 +69,7 @@ public:
 	bool ClerarSelectedListByObject(object* pTarget);
 
 	size_t GetSizeOfSelected();
-	void   SetSelectedPrvRot();
+	void   SetSelectedPrvQuaternion();
 	
 	
 	void ChangeMaterialSelected(MATERIAL* pMat);
@@ -83,7 +81,9 @@ public:
 	HInstanceData* GetInsByObject(__in object* pObj, __out DRAW_INSTANCE* pOut = NULL);
 
 	void MoveSelected(__in float dx, __in float dy, __in float dz);
-	void ReScaleSelected(__in float dx, __in float dy, __in float dz);
+	
+	//스케일 변경
+	void ReScaleSelected(float dx, float dy, float dz);
 	void ReScaleSelectedByRatio(float ratio);
 	void ReScaleSelectedByRatioX(float ratio);
 	void ReScaleSelectedByRatioY(float ratio);
@@ -93,7 +93,7 @@ public:
 
 	void EditRegenIndexDefault(int regenColliderIndex);
 
-	//List
+	//GetList -> 삭제대상
 	std::vector<DRAW_INSTANCE*>* GetDrawInsList();
 	std::vector<DRAW_INSTANCE*>* GetSelectedList();
 };

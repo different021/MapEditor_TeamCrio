@@ -3,7 +3,7 @@
 //사용자 지정 윈도우 메세지를 저장하고 잇는 헤더
 //******************************************************//
 
-enum eMsgReturn
+enum eMsgResult
 {
 	eMsgSuccess = 0,
 	eMsgFail,
@@ -18,6 +18,7 @@ enum eMsgReturn
 #define WM_RESOURCE						20000
 #define WM_UTIL							21000
 
+#define WM_VIEWER						22000
 
 //WM_OBJECT
 #define WM_OBJECT_CREATE                WM_OBJECT + 1
@@ -61,4 +62,5 @@ enum eMsgReturn
 #define WM_PICKING_COLLIDER				WM_COLLIDER + 6		//Collider picking
 #define WM_CHANGE_SELECTED				WM_COLLIDER + 7		//Collider picking
 
-
+//viwer Dlg
+#define WM_VIEWER_LBUTTONDOWN			WM_VIEWER +1
