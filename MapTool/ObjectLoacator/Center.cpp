@@ -1534,6 +1534,7 @@ afx_msg LRESULT Center::OnEditObj(WPARAM wParam, LPARAM lParam)
 	// |  void*  |  void*  |  void*  |  void*  |
 	//
 	//일단 하나만 수정.
+	bool bResult = true;
 	HGMessage* pMsg = (HGMessage*)wParam;
 	MsgObjectArray* pArr = (MsgObjectArray*)lParam;
 	int numOfObj = 0;
@@ -1557,13 +1558,8 @@ afx_msg LRESULT Center::OnEditObj(WPARAM wParam, LPARAM lParam)
 		m_pDrawInsManager->EditObject(pDest, pSrc);
 
 	}
-
-	//	pDest = (object*)pMsg->pObj0;
-	//	pSrc = (object*)pMsg->pObj1;
-
-	//	m_pDrawInsManager->EditObject(pDest, pSrc);
-
-	//
+	bResult = true;
+	
 	//Msg memory Release .
 lb_release:
 
@@ -1585,7 +1581,7 @@ lb_release:
 		pMsg = nullptr;
 	}
 	
-	return true;
+	return bResult;
 }
 
 

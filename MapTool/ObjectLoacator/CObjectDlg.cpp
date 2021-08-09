@@ -1396,15 +1396,12 @@ void CObjectDlg::OnBnClickedBtnObjedit()
 		pMsg->pObj0 = (void*)(pObj);
 		pMsg->pObj1 = (void*)(pTemp);
 
-		::SendMessageW(g_hCenter, WM_OBJECT_EDIT, (WPARAM)pMsg, NULL);
-
-		//해당 오브젝트 객체를 수정 하면 업데이트에서 그래픽인스턴스를 업데이트한다.
-		//->SendMessage가 필요없다.
-		//관리하는 곳을 한 곳으로 바꾸고 싶다.
-		//object Edit은 함수 하나로.
-		//::SendMessageW(g_hCenter, WM_OBJECT_EDIT, NULL, NULL);
-		//RequestCenter(WM_OBJECT_EDIT, (WPARAM)(pObj), NULL);
-
+		bool bRespond = ::SendMessageW(g_hCenter, WM_OBJECT_EDIT, (WPARAM)pMsg, NULL);
+		if (bRespond == true)
+		{
+			UpdateEditBoxesByObject(pObj);
+		}
+		
 	}
 	else
 	{
@@ -1511,6 +1508,7 @@ void CObjectDlg::OnBnClickedBtnObjcreate()
 	{
 		SetObjBoxIndex(pObj);
 		addObjectInCombobox(pObj);
+		UpdateEditBoxesByObject(pObj);
 	}
 	else
 	{
@@ -1519,10 +1517,6 @@ void CObjectDlg::OnBnClickedBtnObjcreate()
 		OutputDebugStringW(L"[FAIL]ObjectDlg::OnBnClickedBtnObjcreate(), Fail to Create Object\n");
 		assert(false);
 	}
-
-	
-	//리스트 업데이트
-	//g_pCenter->UpdateObjList();		//오브젝트 리스트를 Center에서 갖고 있어서 업데이트 주체가 센터가 된었다.
 
 }
 
