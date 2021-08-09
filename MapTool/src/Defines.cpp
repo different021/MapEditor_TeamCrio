@@ -88,22 +88,21 @@ void object::GetTm(DirectX::XMFLOAT4X4& out) const
 
 object::object()
 {
-	type		= eOBJECT_FIELD_COLLISION_YES;				//오브젝트 타입
-	eShaderType = eSHADER_DEFAULT;		//쉐이더 타입.
-	regenIndex	= -1;		//콜리전 체크를 할 것인지 말 것인지에 대하여.
+	type		= eOBJECT_FIELD_COLLISION_YES;	//오브젝트 타입
+	eShaderType = eSHADER_DEFAULT;				//쉐이더 타입.
+	regenIndex	= -1;							//콜리전 체크를 할 것인지 말 것인지에 대하여.
+	modelIndex	= -1;
+	matIndex	= -1;
 
 	pos			= {};
 	oiler		= {};
 	quaternion	= {};
 	prevRot		= {};
-	scale		= {};
+	scale		= { 1.f, 1.f, 1.f };
 
 	wmemset(objectName, 0, MAX_LENGTH);
 	wmemset(modelName, 0, MAX_LENGTH);
 	wmemset(matName, 0, MAX_LENGTH);
-
-	modelIndex = -1;
-	matIndex = -1;	
 }
 
 object::~object()

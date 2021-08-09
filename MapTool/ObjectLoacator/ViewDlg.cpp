@@ -166,6 +166,50 @@ void Viewer::Draw()
 	m_pEngine->Loop();
 }
 
+//그래픽 인스턴스를 만드는 책임만 있다. -> 그래픽 엔진에 의존적인 작업.
+//관리는 매니저 클래스에서.
+//virtual로 할 것.
+HInstanceData* Viewer::CreateGraphicInstance(object* pSrc)
+{
+	HInstanceData* hResult = NULL;
+	object* pObj = pSrc;
+
+	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
+	pObj->GetTm(mTm);
+
+	int modelIndex = pObj->modelIndex;
+	if (modelIndex < 0)
+	{
+		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+		modelIndex = 0;
+	}
+
+	int matIndex = pObj->matIndex;
+	if (matIndex < 0)
+	{
+		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+		matIndex = 0;
+	}
+
+	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
+
+	HMaterialData* pMat = NULL;
+	if (matIndex == 0)
+	{
+		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
+		hResult->worldTM = mTm;
+	}
+	else
+	{
+		hResult = pModel->AddInstance(ShaderType::DEFAULT);
+		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
+		hResult->SetMaterial(pMat, 0);
+		hResult->worldTM = mTm;
+	}
+
+	return hResult;
+}
+
 void Viewer::DrawEditMode(int x, int y)
 {
 	float col = 0.1f;

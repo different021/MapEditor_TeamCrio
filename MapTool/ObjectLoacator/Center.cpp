@@ -222,7 +222,8 @@ void Center::UpdateModel(DRAW_INSTANCE* pDrawIns)
 
 	pInsData->Delete();
 	pDrawIns->second = NULL;
-	CreateGraphicInstance(pObj);
+
+	m_Viewer->CreateGraphicInstance(pObj);
 }
 
 void Center::UpdateModel(object* pObj)
@@ -259,20 +260,28 @@ void Center::DeleteAllDrawInsList()
 	m_pDrawInsManager->AddToDeleteListAll();
 }
 
-
-void Center::CreateObj(object* pObj)
+//성공 체크 필요.
+bool Center::CreateObj(object* pSrc)
 {
+	object* pObj = pSrc;
+	bool bResult = false;
 	if (pObj == NULL) return;
 	
-	HInstanceData* hIns = CreateGraphicInstance(pObj);
+	HInstanceData* hIns = m_Viewer->CreateGraphicInstance(pObj);
 	
 	if (hIns == NULL)
 	{
 		delete pObj;
-		return;
+		pObj = nullptr;
+	}
+	else
+	{
+		//그래픽 인스턴스 생성 성공시
+		m_pDrawInsManager->MakeDrawInstance(pObj, hIns);
+		bResult = true;
 	}
 	
-	m_pDrawInsManager->MakeDrawInstance(pObj, hIns);
+	return bResult;
 }
 
 void Center::RescaleSelected(float ratio)
@@ -280,46 +289,6 @@ void Center::RescaleSelected(float ratio)
 	m_pDrawInsManager->ReScaleSelectedByRatio(ratio);
 	m_pColliderManager->ReScaleSelectedByRatio(ratio);
 	m_pWaveManager->ReScaleSelectedByRatio(ratio);
-}
-
-HInstanceData* Center::CreateGraphicInstance(object* pObj)
-{
-	HInstanceData* hResult = NULL;
-
-	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
-	pObj->GetTm(mTm);
-
-	int modelIndex = pObj->modelIndex;
-	if (modelIndex < 0)
-	{
-		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-		modelIndex = 0;
-	}
-
-	int matIndex = pObj->matIndex;
-	if (matIndex < 0)
-	{
-		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-		matIndex = 0;
-	}
-	
-	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
-
-	HMaterialData* pMat = NULL;
-	if (matIndex == 0)
-	{
-		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
-		hResult->worldTM = mTm;
-	}
-	else
-	{
-		hResult = pModel->AddInstance(ShaderType::DEFAULT);
-		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
-		hResult->SetMaterial(pMat, 0);
-		hResult->worldTM = mTm;
-	}
-
-	return hResult;
 }
 
 void Center::EidtGraphicInstance(object* pObj)
@@ -1782,22 +1751,20 @@ void Center::OnClose()
 */
 afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 {
-	eMsgResult result = eMsgResult::eMsgSuccess;
+	eMsgResult result = eMsgResult::eMsgFail;
 	HGMessage* pMsg = (HGMessage*)wParam;
-	unsigned int numOfObj = pMsg->numOfInstance;
+	MsgObjectArray* pMsgArray = (MsgObjectArray*)lParam;
 	
+	//유효성 확인이 실패하더라도 받은 메시지의 메모리를 해제해야 한다.
 	//wParam 확인
-	if (pMsg->msg != WM_OBJECT_CREATE)
-		return eMsgResult::eMsgFail;
-	
-	if (pMsg->objType != eObjectType::eObject)
-		return eMsgResult::eMsgFail;
+	if (pMsg == nullptr) goto lb_release;
+	if (pMsg->msg != WM_OBJECT_CREATE) goto lb_release;
+	if (pMsg->objType != eObjectType::eObject) goto lb_release;
 	
 	//lParam 확인 및 처리
-	MsgObjectArray* pMsgArray = (MsgObjectArray*)lParam;
-	if(pMsgArray->objectType != eObjectType::eObject)
-		return eMsgResult::eMsgFail;
-
+	if (pMsgArray == nullptr) goto lb_release;
+	if(pMsgArray->objectType != eObjectType::eObject) goto lb_release;
+	
 	int cnt = pMsgArray->count;
 	object* pObjArray = (object*)pMsgArray->pArray;
 	for (int i = 0; i < cnt; i++)
@@ -1805,12 +1772,22 @@ afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 		CreateObj(&pObjArray[i]);
 	}
 
-	delete pMsg;
-	pMsg = nullptr;
+	result = eMsgResult::eMsgSuccess;
 
-	delete pMsgArray;
-	pMsgArray = nullptr;
+	//Release msg Memory
+lb_release:
+	if (pMsgArray != nullptr)
+	{
+		delete pMsgArray;
+		pMsgArray = nullptr;
+	}
 
+	if (pMsg != nullptr)
+	{
+		delete pMsg;
+		pMsg = nullptr;
+	}
+	
 	return result;
 }
 

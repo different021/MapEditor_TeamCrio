@@ -80,12 +80,17 @@ private:
 
 public:
     Viewer(CWnd* pParent = nullptr);
+    
+    //virtual field
     virtual ~Viewer();
     virtual void Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight);
     virtual void CleanUp();
-    
-    void Update();
-    void Draw();
+
+    virtual void Update();                                      
+    virtual void Draw();                                        
+    virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적.
+    //virtual field end;
+
     void DrawEditMode(int x, int y);
     void DrawObjectSelectMode(int x, int y);
     void DrawColliderSelectMode(int x, int y);

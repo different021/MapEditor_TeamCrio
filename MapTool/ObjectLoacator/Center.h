@@ -109,11 +109,10 @@ public:
 	//오브젝트 생성/삭제/수정	//Object 관련	
 	object* GetLastSelectedObject();						//선택된 오브젝트 중 마지막
 	void	DeleteAllDrawInsList();							//오브젝트 전부 삭제.
-	void	CreateObj(object* pObj);						//오브젝트 생성.
+	bool	CreateObj(object* pObj);						//오브젝트 생성.
 	void	RescaleSelected(float ratio);				//선택한 모두의 스케일 조절
 
 	//그래픽 인스턴스
-	HInstanceData* CreateGraphicInstance(object* pObj);		//그래픽 인스턴스 생성.
 	void	EidtGraphicInstance(object* pObj);				//그래픽 인스턴스 수정.
 	bool	DeleteGraphicInstance(object* pObj);			//그래픽 인스턴스 삭제.
 
