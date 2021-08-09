@@ -87,7 +87,9 @@ public:
     virtual void CleanUp();
 
     virtual void Update();                                      
-    virtual void Draw();                                        
+    virtual void Draw();   
+
+    //Graphic Instance 관련
     virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적.
     //virtual field end;
 

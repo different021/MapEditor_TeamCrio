@@ -113,8 +113,7 @@ public:
 	void	RescaleSelected(float ratio);				//선택한 모두의 스케일 조절
 
 	//그래픽 인스턴스
-	void	EidtGraphicInstance(object* pObj);				//그래픽 인스턴스 수정.
-	bool	DeleteGraphicInstance(object* pObj);			//그래픽 인스턴스 삭제.
+	//bool	DeleteGraphicInstance(object* pObj);			//그래픽 인스턴스 삭제.
 
 	size_t	GetNumberOfSelectedObj();		
 	void	DeleteSelectedObject();						//선택된 오브젝트 삭제. 	

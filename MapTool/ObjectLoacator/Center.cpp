@@ -265,7 +265,7 @@ bool Center::CreateObj(object* pSrc)
 {
 	object* pObj = pSrc;
 	bool bResult = false;
-	if (pObj == NULL) return;
+	if (pObj == NULL) return bResult;
 	
 	HInstanceData* hIns = m_Viewer->CreateGraphicInstance(pObj);
 	
@@ -291,46 +291,26 @@ void Center::RescaleSelected(float ratio)
 	m_pWaveManager->ReScaleSelectedByRatio(ratio);
 }
 
-void Center::EidtGraphicInstance(object* pObj)
-{
-	if (pObj == NULL)
-	{
-		::OutputDebugStringW(L"[VIEWER]EditGraphicInstanceHandel() : Invaildate Parameter\n");
-		return;
-	}
-	else
-	{
-		HInstanceData* hTarget = m_pDrawInsManager->GetInsByObject(pObj);
-		if (hTarget != NULL)
-		{			
-			DirectX::XMFLOAT4X4 worldTM = MapUtil::Identity4x4();
-			pObj->GetTm(worldTM);
-
-			hTarget->worldTM = worldTM;
-		}
-	}
-}
-
-bool Center::DeleteGraphicInstance(object* pObj)
-{
-	bool bResult = false;
-	if (pObj == NULL)
-	{
-		::OutputDebugStringW(L"[VIEWER]DeleteGraphiceInstance() : Invaildate Parameter\n");
-		return bResult;
-	}
-	else
-	{
-		HInstanceData* hTarget = m_pDrawInsManager->GetInsByObject(pObj, NULL);
-		if (hTarget != NULL)
-		{
-			m_pDrawInsManager->AddDeleteList(pObj);
-			bResult = true;
-		}
-	}
-
-	return bResult;
-}
+//bool Center::DeleteGraphicInstance(object* pObj)
+//{
+//	bool bResult = false;
+//	if (pObj == NULL)
+//	{
+//		::OutputDebugStringW(L"[VIEWER]DeleteGraphiceInstance() : Invaildate Parameter\n");
+//		return bResult;
+//	}
+//	else
+//	{
+//		HInstanceData* hTarget = m_pDrawInsManager->GetInsByObject(pObj, NULL);
+//		if (hTarget != NULL)
+//		{
+//			m_pDrawInsManager->AddDeleteList(pObj);
+//			bResult = true;
+//		}
+//	}
+//
+//	return bResult;
+//}
 
 size_t Center::GetNumberOfSelectedObj()
 {
@@ -1557,8 +1537,14 @@ lb_release:
 afx_msg LRESULT Center::OnDeleteObj(WPARAM wParam, LPARAM lParam)
 {
 	object* pObj = (object*)wParam;
-	
-	DeleteGraphicInstance(pObj);
+	if (pObj != nullptr)
+	{
+		m_pDrawInsManager->AddDeleteList(pObj);
+	}
+	else
+	{
+		::OutputDebugStringW(L"[VIEWER]DeleteGraphiceInstance() : Invaildate Parameter\n");
+	}
 
 	return 0;
 }

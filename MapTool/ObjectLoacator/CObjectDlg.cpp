@@ -1416,8 +1416,7 @@ void CObjectDlg::OnBnClickedBtnObjedit()
 void CObjectDlg::OnBnClickedBtnObjdel()
 {
 	object* pTemp = GetSelectedObj();
-	if (pTemp == NULL)
-		return;
+	if (pTemp == NULL) return;
 	
 	DeleteGraphicInstance(pTemp);
 
