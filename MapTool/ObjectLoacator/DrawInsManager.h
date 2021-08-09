@@ -50,6 +50,9 @@ public:
 	//생성
 	void MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData);
 
+	//수정
+	void EditObject(object* pDest, object* pSrc);
+
 	//Selected List 
 	object* AddSelected_public(HInstanceData* pHIns);					//현재 셀렉트 모드에 따라 추가
 	object* AddSelected(HInstanceData* pHIns);							//아무 고려 없이 추가

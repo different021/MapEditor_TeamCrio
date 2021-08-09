@@ -1442,7 +1442,7 @@ void Center::OnColliderWindow()
 
 afx_msg LRESULT Center::OnHideWindow(WPARAM wParam, LPARAM lParam)
 {
-	if (lParam == eObjLocator)
+	if (lParam == eObjDlg)
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_OBJLOCATOR, MF_UNCHECKED);
 		m_ObjectDlg.ShowWindow(SW_HIDE);
@@ -1452,16 +1452,16 @@ afx_msg LRESULT Center::OnHideWindow(WPARAM wParam, LPARAM lParam)
 		m_MainMenu.CheckMenuItem(ID_MAIN_VIEWER, MF_UNCHECKED);
 		m_Viewer->ShowWindow(SW_HIDE);
 	}
-	else if (lParam == eGridCon)
+	else if (lParam == eGridDlg)
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_GRIDCON, MF_UNCHECKED);
 		m_GridController.ShowWindow(SW_HIDE);
 	}
-	else if (lParam == eCmd)
+	else if (lParam == eCmdDlg)
 	{
 
 	}
-	else if (lParam == eCharSetting)
+	else if (lParam == eCharacterDlg)
 	{
 		m_MainMenu.CheckMenuItem(ID_MAIN_CHAR_EIDT, MF_UNCHECKED);
 		//m_CharSetting.ShowWindow(SW_HIDE);
@@ -1529,11 +1529,63 @@ void Center::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 afx_msg LRESULT Center::OnEditObj(WPARAM wParam, LPARAM lParam)
 {
-	object* pObj = (object*)wParam;
-	
-	//EidtGraphicInstance(pObj);
+	// ! <- start Point
+	// | object0 | object1 | object2 | object3 |
+	// |  void*  |  void*  |  void*  |  void*  |
+	//
+	//일단 하나만 수정.
+	HGMessage* pMsg = (HGMessage*)wParam;
+	MsgObjectArray* pArr = (MsgObjectArray*)lParam;
+	int numOfObj = 0;
+	object* pDest = nullptr;
+	object* pSrc = nullptr;
 
-	return 0;
+	if (pMsg == nullptr) return false;
+	if (pMsg->msg != WM_OBJECT_EDIT) goto lb_release;
+	if (pMsg->numOfInstance < 1) goto lb_release;
+
+	numOfObj = pMsg->numOfInstance;
+	if (numOfObj < 3)
+	{
+		for (int i = 0; i < numOfObj; i++)
+		{
+			object** pStart = (object**)(&pMsg->pObj0);
+			pDest = *pStart + (i * 2);
+			pSrc = *(pStart + 1);
+		}
+		
+		m_pDrawInsManager->EditObject(pDest, pSrc);
+
+	}
+
+	//	pDest = (object*)pMsg->pObj0;
+	//	pSrc = (object*)pMsg->pObj1;
+
+	//	m_pDrawInsManager->EditObject(pDest, pSrc);
+
+	//
+	//Msg memory Release .
+lb_release:
+
+	if (pSrc != nullptr)
+	{
+		delete pSrc;
+		pSrc = nullptr;
+	}
+
+	if (pArr != nullptr)
+	{
+		delete pArr;
+		pArr = nullptr;
+	}
+
+	if (pMsg != nullptr)
+	{
+		delete pMsg;
+		pMsg = nullptr;
+	}
+	
+	return true;
 }
 
 

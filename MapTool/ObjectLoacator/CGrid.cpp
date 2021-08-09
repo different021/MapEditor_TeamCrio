@@ -195,7 +195,7 @@ void CGrid::OnSysCommand(UINT nID, LPARAM lParam)
 	else if (nID == SC_CLOSE)
 	{
 		//ShowWindow(SW_HIDE);
-		::SendMessageW(g_hCenter, WM_HIDE_WINDOW, WPARAM(this), eDlgs::eGridCon);
+		::SendMessageW(g_hCenter, WM_HIDE_WINDOW, WPARAM(this), eDlgs::eGridDlg);
 	}
 	else
 	{

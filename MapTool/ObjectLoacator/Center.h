@@ -29,15 +29,20 @@ void RequestCenter(UINT msg, WPARAM from, LPARAM para);
 // MainDlg 대화 상자
 enum eDlgs
 {
-	eObjLocator = 0,
+	eObjDlg = 0,
+	eColliderDlg,
+	eLightDlg,
+	eWaveDlg,
 	eViewer,
-	eGridCon,
-	eCmd,
-	eCharSetting,
+	eGridDlg,
+	eCmdDlg,
+	eCharacterDlg,
 	eDlgs_MAX,
 };
 
 //이름 변경 Center -> 클래스 추가 데이터 Manager
+//SendMessage로 통신하는 체계 구축.
+//message를 확인/유효성 검사 후 필요한 조치
 class Center : public CDialogEx
 {
 	DECLARE_DYNAMIC(Center)

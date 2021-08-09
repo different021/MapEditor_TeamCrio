@@ -163,7 +163,7 @@ private:
 	void RequestMatList();
 
 public:
-	void EditObject(object* pObj);
+	void GetObjectDataFromEditBox(object* pDest);
 
 
 	void HideAndShow();					//창 컨트롤

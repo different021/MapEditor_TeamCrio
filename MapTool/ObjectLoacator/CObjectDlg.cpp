@@ -215,7 +215,7 @@ void CObjectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	else if (nID == SC_CLOSE)
 	{
 		//ShowWindow(SW_HIDE);
-		::SendMessageW(g_hCenter, WM_HIDE_WINDOW, WPARAM(this), eDlgs::eObjLocator);
+		::SendMessageW(g_hCenter, WM_HIDE_WINDOW, WPARAM(this), eDlgs::eObjDlg);
 	}
 	else
 	{
@@ -685,7 +685,11 @@ void CObjectDlg::DeleteObjInListBox(std::vector<object*>* pList)
 	}
 }
 
-
+//종속적인 함수가 아니라 utill등으로 이동. 요망.
+//IDC_ editbox의 id 가 연속적이여야 한다.
+//ex)	IDC_POS_X 10001
+//		IDC_POS_Y IDC_POS_X + 1
+//		IDC+POS_Z IDC_POS_X + 2
 void CObjectDlg::GetVector(UINT id, DirectX::XMFLOAT3& dest)
 {
 	dest.x = GetValueFromDlg(id, 0.f);;
@@ -1234,15 +1238,16 @@ void CObjectDlg::RequestMatList()
 }
 
 
-void CObjectDlg::EditObject(object* pObj)
+void CObjectDlg::GetObjectDataFromEditBox(object* pDest)
 {
+	object* pObj = pDest;
 	if (pObj != NULL)
 	{
-		XMFLOAT3 pos = { 0.f, 0.f, 0.f };
-		XMFLOAT3 oiler = { 0.f, 0.f, 0.f };
-		XMFLOAT3 scale = { 1.f, 1.f, 1.f };
+		XMFLOAT3 pos = {  };
+		XMFLOAT3 oiler = {  };
+		XMFLOAT3 scale = {  };
 
-		GetVector(IDC_POS_X, pos);
+		GetVector(IDC_POS_X, pos);		
 		GetVector(IDC_ROT_X, oiler);
 		GetVector(IDC_SCALE_X, scale);
 
@@ -1250,10 +1255,6 @@ void CObjectDlg::EditObject(object* pObj)
 		pObj->SetOiler(oiler);
 		pObj->SetScale(scale);
 
-		//SetObjPos(pObj, pos);
-		//SetObjRot(pObj, rot);
-		//SetObjScale(pObj, scale);
-		//SetObjIsCollision(pObj);
 		SetObjTypeFromComboBox(pObj);
 		SetObjRegenIndexByComboBox(pObj);
 
@@ -1271,6 +1272,7 @@ void CObjectDlg::EditObject(object* pObj)
 			pObj->modelIndex = curModelIndex;
 			pObj->SetMatIndex(curMatIndex);
 
+			//위치 변경.
 			g_pCenter->UpdateMaterial(pObj);
 
 		}
@@ -1381,12 +1383,27 @@ void CObjectDlg::addObjectInCombobox(object* pObj)
 void CObjectDlg::OnBnClickedBtnObjedit()
 {
 	object* pObj = GetSelectedObj();
-	
+	object* pTemp = new object;
 	size_t size = g_pCenter->GetNumberOfSelectedObj();
 	if (size == 1)
 	{
-		EditObject(pObj);
-		RequestCenter(WM_OBJECT_EDIT, (WPARAM)(pObj), NULL);
+		GetObjectDataFromEditBox(pTemp);
+		HGMessage* pMsg = new HGMessage;
+		pMsg->msg = WM_OBJECT_EDIT;
+		pMsg->objType = eObjectType::eObject;
+		pMsg->instanceType = eInstanceType::eCpuInstance;
+		pMsg->numOfInstance = 1;							//2개 이상일 경우 LPARAM을 쓰는 것을 원칙으로 하자.
+		pMsg->pObj0 = (void*)(pObj);
+		pMsg->pObj1 = (void*)(pTemp);
+
+		::SendMessageW(g_hCenter, WM_OBJECT_EDIT, (WPARAM)pMsg, NULL);
+
+		//해당 오브젝트 객체를 수정 하면 업데이트에서 그래픽인스턴스를 업데이트한다.
+		//->SendMessage가 필요없다.
+		//관리하는 곳을 한 곳으로 바꾸고 싶다.
+		//object Edit은 함수 하나로.
+		//::SendMessageW(g_hCenter, WM_OBJECT_EDIT, NULL, NULL);
+		//RequestCenter(WM_OBJECT_EDIT, (WPARAM)(pObj), NULL);
 
 	}
 	else
@@ -1603,7 +1620,7 @@ void CObjectDlg::OnKillfocusScaleZ()
 	if (index < 0)
 		return;
 	object* pObj = GetObjectByIndex(index);
-	EditObject(pObj);
+	GetObjectDataFromEditBox(pObj);
 }
 
 void CObjectDlg::OnKillfocusMoveOffset()

@@ -273,6 +273,11 @@ void DrawInsManager::MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData
 	m_List.push_back(pIns);
 }
 
+void DrawInsManager::EditObject(object* pDest, object* pSrc)
+{
+	pSrc->CopyObject(pDest);
+}
+
 
 object* DrawInsManager::AddSelected_public(HInstanceData* pHIns)
 {
