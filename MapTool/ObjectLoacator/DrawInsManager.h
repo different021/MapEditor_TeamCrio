@@ -44,13 +44,13 @@ public:
 	void AddDeleteList(DRAW_INSTANCE* pIns);
 	void AddDeleteList(object* pObj);		//해당 하나만
 
-	//삭제
-	void DeleteInDeleteList(std::vector<object*>* objList = NULL);
+	//Delete Instance (both of cpu, gpu instance)
+	void DeleteInDeleteList(std::vector<object*>* pOut = NULL);
 	
-	//생성
+	//makePair (object*, HInstanceData) -> (CPUdata, GPUdata)
 	void MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData);
 
-	//수정
+	//overwrite pDest by pSrc)
 	void EditObject(object* pDest, object* pSrc);
 
 	//Selected List 

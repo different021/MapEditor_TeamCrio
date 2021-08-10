@@ -220,8 +220,9 @@ void DrawInsManager::AddDeleteList(object* pObj)
 	}
 }
 
-void DrawInsManager::DeleteInDeleteList(std::vector<object*>* pObjList)
+void DrawInsManager::DeleteInDeleteList(std::vector<object*>* pOut)
 {
+	std::vector<object*>* pObjList = pOut;
 	ClearSelectedListByDeleteList();
 	int count = 0;
 	std::vector<DRAW_INSTANCE*>::iterator delete_it;
