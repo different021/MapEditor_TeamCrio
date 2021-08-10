@@ -553,7 +553,10 @@ MATERIAL* CObjectDlg::GetMaterialListBox(int index)
 	return pMat;
 }
 
-//해당 오브젝트에 해당하는 그래픽 인스턴스를 삭제한다.
+// 함수를 콜한 순간 삭제하지 않는다.
+// Center에서는 삭제할 인스턴스를 삭제리스트에 넣는다.
+// 삭제리스트의 인스턴스들은 업데이트 이전에 일괄 삭제 처리한다. 
+// -> dx12의 커맨드 큐에 의해서 삭제한 인스턴스를 참조하는 문제가 발생할 수 있다.
 void CObjectDlg::DeleteGraphicInstance(object* pObj)
 {
 	if (pObj == NULL)

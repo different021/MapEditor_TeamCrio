@@ -1536,6 +1536,7 @@ lb_release:
 
 afx_msg LRESULT Center::OnDeleteObj(WPARAM wParam, LPARAM lParam)
 {
+	//다수의 오브젝트를 동시에 삭제하도록.(다수 처리) 
 	object* pObj = (object*)wParam;
 	if (pObj != nullptr)
 	{

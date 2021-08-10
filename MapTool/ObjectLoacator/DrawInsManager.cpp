@@ -182,16 +182,20 @@ void DrawInsManager::AddToDeleteListAll()
 	}
 }
 
+
+//함수 이름 변경. DeleteSelectedObject() <- public 함수.
+//사용자 입장에서는 어떻게 지워지는지는 중요하지 않다.
 void DrawInsManager::AddDeleteListInSelectedList()
 {
-	std::vector<DRAW_INSTANCE*>::iterator it;
-	for (it = m_SelectedList.begin(); it != m_SelectedList.end();)
+	//벡터의 마지막부터 지운다.
+	std::vector<DRAW_INSTANCE*>::iterator it = m_SelectedList.end();
+	while ( it > m_SelectedList.begin() )
 	{
+		it--;
 		DRAW_INSTANCE* pIns = *it;
 		AddDeleteList(pIns);			//삭제 리스트에 추가
-		it = m_SelectedList.erase(it);	
+		it = m_SelectedList.erase(it);
 	}
-	m_SelectedList.clear();
 }
 
 void DrawInsManager::AddDeleteList(DRAW_INSTANCE* pIns)
