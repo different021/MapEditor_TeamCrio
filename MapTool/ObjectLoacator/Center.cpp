@@ -63,10 +63,10 @@ Center::Center(CWnd* pParent /*=nullptr*/)
 
 Center::~Center()
 {
-	CleanUp();	//-> OnClose()로 이동
+	cleanUp();	//-> OnClose()로 이동
 }
 
-void Center::InitializeDlgs(CWnd* pParent)
+void Center::initializeDlgs(CWnd* pParent)
 {
 	m_Viewer = new Viewer;
 	m_Viewer->Initialize(pParent, IDD_VIEW_DLG, 800, 600);
@@ -83,20 +83,20 @@ void Center::InitializeDlgs(CWnd* pParent)
 	m_HelpDlg.ShowWindow(SW_HIDE);
 }
 
-void Center::Init_MainMenu()
+void Center::initMainMenu()
 {
 	m_MainMenu.LoadMenuW(IDR_MAIN_MENU);
 	SetMenu(&m_MainMenu);
 }
 
 
-void Center::CleanUp()
+void Center::cleanUp()
 {
-	CleanupManager();
-	CleanupDlg();
+	cleanupManager();
+	cleanupDlg();
 }
 
-void Center::CleanupDlg()
+void Center::cleanupDlg()
 {
 	if (m_pWaveDlg != NULL)
 	{
@@ -112,7 +112,7 @@ void Center::CleanupDlg()
 	}
 }
 
-void Center::CleanupManager()
+void Center::cleanupManager()
 {
 	m_pSaver->DeleteInstance();
 	m_pSaver = NULL;
@@ -134,6 +134,32 @@ void Center::CleanupManager()
 
 	m_pWaveManager->Release();
 	m_pWaveManager = NULL;
+}
+
+//MangerManger로 보낼 것.
+void Center::rotateObject(DirectX::XMFLOAT4* pQuaternion)
+{
+	DirectX::XMFLOAT4* rot = pQuaternion;
+	if (rot == nullptr) return;
+
+	//Center에서 검사 할것.
+	size_t SizeOfSelectedObj = m_pDrawInsManager->GetSelectedList()->size();
+	size_t SizeOfSelectedCollider = m_pColliderManager->GetSizeOfSelected();;
+	size_t SizeOfSelectdWave = m_pWaveManager->GetNumberOfSelected();
+
+	if (SizeOfSelectedObj <= 0 && SizeOfSelectedCollider <= 0 && SizeOfSelectdWave <= 0) return;
+
+	//object
+	m_pDrawInsManager->RotateSelected(*rot);
+
+	//Collider
+	m_pColliderManager->RotateSelected(*rot);
+
+	//Light
+	//m_pLightVector->RotateSelected(rot);
+
+	//Wave
+	m_pWaveManager->RotateSelected(*rot);
 }
 
 void Center::UpdateColliderList()
@@ -1012,8 +1038,8 @@ BOOL Center::OnInitDialog()
 	m_pWaveManager		= CWaveManager::GetInstance();
 	m_pWaveManager->Initialize();	//엔진이 초기화 된 이후 얻을 것.
 
-	Init_MainMenu();
-	InitializeDlgs(this);
+	initMainMenu();
+	initializeDlgs(this);
 	
 	//dlg 위치 조정
 	CRect rcViewer;
@@ -1295,6 +1321,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_WM_CLOSE()
 	
 	ON_MESSAGE(WM_VIEWER_LBUTTONDOWN, &Center::OnViewerLbuttondown)
+	ON_MESSAGE(WM_OBJECT_ROTATION, &Center::OnObjectRotation)
 END_MESSAGE_MAP()
 
 
@@ -1798,6 +1825,18 @@ afx_msg LRESULT Center::OnViewerLbuttondown(WPARAM wParam, LPARAM lParam)
 	PickingLight(x, y);	//dlg업데이트 포함
 	
 	DeleteSelectedListAll();	//wave는 아직 피킹이 없다.
+
+	return 0;
+}
+
+
+afx_msg LRESULT Center::OnObjectRotation(WPARAM wParam, LPARAM lParam)
+{
+	DirectX::XMFLOAT4* pRot = (DirectX::XMFLOAT4*)wParam;
+	if (pRot == nullptr) return 0;
+
+	//m_ManagerManager->RotateObject(pRot);
+	rotateObject(pRot);
 
 	return 0;
 }

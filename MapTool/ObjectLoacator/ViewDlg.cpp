@@ -159,10 +159,11 @@ void Viewer::Draw()
 
 	Update();
 
-	DrawEditMode(1650, 10);
-	DrawObjectSelectMode(1650, 30);
-	DrawColliderSelectMode(1650, 50);
-	DrawLightSelectMode(1650, 70);
+	int _iDrawPos = m_iScreenWidth - 250;
+	DrawEditMode(_iDrawPos, 10);
+	DrawObjectSelectMode(_iDrawPos, 30);
+	DrawColliderSelectMode(_iDrawPos, 50);
+	DrawLightSelectMode(_iDrawPos, 70);
 	m_pEngine->Loop();
 }
 
@@ -592,16 +593,14 @@ void Viewer::ReScaleAllAxis(int dist)
 
 void Viewer::RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoint)
 {
-	size_t SizeOfSelectedObj = m_pInsManager->GetSelectedList()->size();
-	size_t SizeOfSelectedCollider = m_pColManager->GetSizeOfSelected();;
-	size_t SizeOfSelectdWave = m_pWaveManager->GetNumberOfSelected();
-
-	if (SizeOfSelectedObj <= 0 && SizeOfSelectedCollider <= 0 && SizeOfSelectdWave <= 0) return;
-
+	//드래그한 거리를 바탕으로 회전 거리 계산. -> 일단 계산.
 	DirectX::XMFLOAT4 rot = CalculateRotationByMouseMovement(mouseDownPoint.x, mouseDownPoint.y, curPoint.x, curPoint.y);
-	RotationSelected(rot);
+
+	::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, (WPARAM)&rot, NULL);
+
 }
 
+//마우스 클릭 후 드래그한 거리를 바탕으로 회전량을 계산한다.
 DirectX::XMFLOAT4 Viewer::CalculateRotationByMouseMovement(int mouseDownPointX, int mouseDownPointY, int curPointX, int curPointY)
 {
 	DirectX::XMFLOAT4 result = {};
@@ -643,26 +642,26 @@ DirectX::XMFLOAT4 Viewer::CalculateRotationByMouseMovement(int mouseDownPointX, 
 	return result;
 }
 
-
-void Viewer::RotationSelected(DirectX::XMFLOAT4& rot)
-{
-	DirectX::XMFLOAT4 pRot = rot;
-
-	//수정중.
-	//::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, NULL, NULL);
-
-	//object
-	m_pInsManager->RotateSelected(pRot);
-
-	//Collider
-	m_pColManager->RotateSelected(pRot);
-
-	//Light
-	//m_pLightVector->RotateSelected(pRot);
-
-	//Wave
-	m_pWaveManager->RotateSelected(pRot);
-}
+//
+//void Viewer::RotationSelected(DirectX::XMFLOAT4& rot)
+//{
+//	DirectX::XMFLOAT4 pRot = rot;
+//
+//	//수정중.
+//	//::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, NULL, NULL);
+//
+//	//object
+//	m_pInsManager->RotateSelected(pRot);
+//
+//	//Collider
+//	m_pColManager->RotateSelected(pRot);
+//
+//	//Light
+//	//m_pLightVector->RotateSelected(pRot);
+//
+//	//Wave
+//	m_pWaveManager->RotateSelected(pRot);
+//}
 
 void Viewer::SetGridInfo(int iWidth, int iHeight, float offset)
 {

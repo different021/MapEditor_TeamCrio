@@ -86,14 +86,16 @@ public:
 #endif
 private:
 	//Dialog상자 초기화
-	void InitializeDlgs(CWnd* pParent);
-
-	void Init_MainMenu();		//상단 메뉴
+	void initializeDlgs(CWnd* pParent);		//DlgManger-> 이동.
+	void initMainMenu();		//상단 메뉴
 	
-	//삭제.
-	void CleanUp();
-	void CleanupDlg();
-	void CleanupManager();
+	//해제
+	void cleanUp();
+	void cleanupDlg();
+	void cleanupManager();
+
+	//instance manager로.
+	void rotateObject(DirectX::XMFLOAT4* pQuaternion);
 
 public:					
 	void	Update();
@@ -254,6 +256,7 @@ public:
 protected:
 	afx_msg LRESULT OnObjectCreate(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnViewerLbuttondown(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnObjectRotation(WPARAM wParam, LPARAM lParam);
 };
 
 extern HWND g_hCenter;
