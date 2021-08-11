@@ -123,7 +123,6 @@ public:
     DirectX::XMFLOAT3 CalculatScaleByMouseMove(int curX, int curY, int lastX, int lastY, DirectX::XMFLOAT3& vector);
     DirectX::XMFLOAT3 CalculatScaleByMouseMoveVertical(int curY, int lastY, DirectX::XMFLOAT3& vector);
     void ReScaleAllAxis(int dist);
-    void ReScaleSelected(DirectX::XMFLOAT3& vScale);
 
     //Rotation
     void RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoint);

@@ -24,11 +24,13 @@ enum eMsgResult
 #define WM_OBJECT_CREATE                WM_OBJECT + 1
 #define WM_OBJECT_DELETE                WM_OBJECT + 2
 #define WM_OBJECT_EDIT					WM_OBJECT + 3
+#define WM_OBJECT_ROTATION				WM_OBJECT + 4
 
 #define WM_MOVE_SELECTED				WM_OBJECT + 5		
 #define WM_SELECT_OBJ					WM_OBJECT + 6		
 #define WM_DELETE_GRAPHIC_INS			WM_OBJECT + 7		
 #define WM_LIST_BOX_NONE				WM_OBJECT + 8		//기능 확인
+
 
 //resource
 #define WM_LOAD_MODEL					WM_RESOURCE + 1

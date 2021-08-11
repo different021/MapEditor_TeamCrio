@@ -590,40 +590,6 @@ void Viewer::ReScaleAllAxis(int dist)
 
 }
 
-
-
-void Viewer::ReScaleSelected(DirectX::XMFLOAT3& vScale)
-{
-	DirectX::XMFLOAT3 scale = {};
-	scale.x = 0.f;
-	scale.y = 0.f;
-	scale.z = 0.f;
-
-	//	if (m_bGizmoCubeTime != TRUE)
-	{
-		if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_X))
-		{
-			scale.x = vScale.x;
-		}
-		if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Y))
-		{
-			scale.y = vScale.y;
-		}
-		if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Z))
-		{
-			scale.z = vScale.z;
-		}
-	}
-	//else
-	//{
-	//	scale = vScale;
-	//}
-
-
-	m_pInsManager->ReScaleSelected(scale.x, scale.y, scale.z);
-	
-}
-
 void Viewer::RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoint)
 {
 	size_t SizeOfSelectedObj = m_pInsManager->GetSelectedList()->size();
@@ -635,7 +601,6 @@ void Viewer::RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoi
 	DirectX::XMFLOAT4 rot = CalculateRotationByMouseMovement(mouseDownPoint.x, mouseDownPoint.y, curPoint.x, curPoint.y);
 	RotationSelected(rot);
 }
-
 
 DirectX::XMFLOAT4 Viewer::CalculateRotationByMouseMovement(int mouseDownPointX, int mouseDownPointY, int curPointX, int curPointY)
 {
@@ -682,6 +647,9 @@ DirectX::XMFLOAT4 Viewer::CalculateRotationByMouseMovement(int mouseDownPointX, 
 void Viewer::RotationSelected(DirectX::XMFLOAT4& rot)
 {
 	DirectX::XMFLOAT4 pRot = rot;
+
+	//¼öÁ¤Áß.
+	//::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, NULL, NULL);
 
 	//object
 	m_pInsManager->RotateSelected(pRot);

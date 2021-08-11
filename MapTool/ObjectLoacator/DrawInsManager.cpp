@@ -776,8 +776,6 @@ void DrawInsManager::RotateSelected(DirectX::XMFLOAT4& quaternion)
 		DirectX::XMVECTOR vQuaternion = DirectX::XMVectorSet(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
 		DirectX::XMVECTOR vResult = DirectX::XMQuaternionMultiply(vPrevRot, vQuaternion);
 		DirectX::XMStoreFloat4(&pObj->quaternion, vResult);
-
-		//UpdateTM(pObj);
 	}
 
 }

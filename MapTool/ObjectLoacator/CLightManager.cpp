@@ -208,11 +208,8 @@ void CLightManager::Release()
 
 	if (m_iInstanceCounter > 0)
 	{
-		//LightDlg가 Viewer보다 늦게 제거되어 생기는 문제. 
-		//Viwer는 포인트에 할당 변수지만
-		//LightDlg는 Center에 그냥 박혀있다.
-		//Center가 사라질때 Release가 콜.
-		//현재 사용중인 그래픽 엔진은 메모리 해제할때 내부 인스턴스를 알아서 제거한다. 
+		//GetInstance한 횟수 만큼 릴리즈할 필요가 있다.
+		//싱글톤 제거 고민중.
 		OutputDebugStringW(L"LightManager::Release() call smaller than create\n");
 	}
 }
