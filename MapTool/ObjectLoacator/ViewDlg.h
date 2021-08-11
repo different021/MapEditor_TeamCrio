@@ -127,7 +127,6 @@ public:
     //Rotation
     void RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoint);
     DirectX::XMFLOAT4 CalculateRotationByMouseMovement(int curX, int curY, int lastX, int lastY);
-    //void RotationSelected(DirectX::XMFLOAT4& rot);
 
     //Grid
     void SetGridInfo(int iWidth, int iHeight, float offset);

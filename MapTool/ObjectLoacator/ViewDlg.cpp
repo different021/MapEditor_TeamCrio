@@ -363,17 +363,7 @@ void Viewer::MoveSelectedOffset(CPoint& cur, CPoint& last)
 	DirectX::XMFLOAT3 move = {};
 	CalculateWorldMovementByMouseMove(cur.x, cur.y, last.x, last.y, move);
 
-	double integerX;
-	modf((move.x / m_fOffset), &integerX);
-
-	double integerY;
-	modf((move.x / m_fOffset), &integerY);
-
-	double integerZ;
-	modf((move.x / m_fOffset), &integerZ);
-
-	m_pInsManager->MoveSelected(integerX * m_fOffset, integerY * m_fOffset, integerZ * m_fOffset);
-	m_pColManager->MoveSelected(move.x, move.y, move.z);
+	::SendMessageW(g_hCenter, WM_OBJECT_MOVE, (WPARAM)&move, NULL);
 }
 
 
@@ -405,8 +395,9 @@ DirectX::XMFLOAT3 Viewer::CalculateWorldMovementByMouseMove(int curX, int curY, 
 	DirectX::XMMATRIX mUnView = DirectX::XMMatrixInverse(nullptr, mView);
 	DirectX::XMMATRIX mUnProj = DirectX::XMMatrixInverse(nullptr, mProj);
 
-	Vector3 temp;
-	m_pInsManager->GetCenterPos(&temp);
+	XMFLOAT3 temp;
+	//m_pInsManager->GetCenterPos(&temp);
+	m_Gizmo.GetPos(temp);
 
 	temp = Vector3::Transform(temp, mView);
 	temp = Vector3::Transform(temp, mProj);
@@ -462,22 +453,16 @@ void Viewer::MoveSelected(DirectX::XMFLOAT3& vector)
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_X))
 	{
 		move.x = vector.x;
-		m_fOffset;
 	}
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Y))
 	{
 		move.y = vector.y;
-		m_fOffset;
 	}
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Z))
 	{
 		move.z = vector.z;
 	}
-
-	m_pInsManager->MoveSelected(move.x, move.y, move.z);
-	m_pColManager->MoveSelected(move.x, move.y, move.z);
-	m_pLightManager->MoveSelected(move.x, move.y, move.z);
-	m_pWaveManager->MoveSelected(move.x, move.y, move.z);
+	::SendMessageW(g_hCenter, WM_OBJECT_MOVE ,(WPARAM)&move, NULL);
 }
 
 void Viewer::ReScaleSelectedXYZ(CPoint& cur, CPoint& last)
@@ -490,28 +475,25 @@ void Viewer::ReScaleSelected(CPoint& cur, CPoint& last)
 {
 	CPoint curPoint = cur;
 	CPoint lastPoint = last;
-	//DirectX::XMFLOAT3 vScale = {};
-	//CalculatScaleByMouseMove(curPoint.x, curPoint.y, lastPoint.x, lastPoint.y, vScale);
-	//ReScaleSelected(vScale);
 
 	int dist = -(cur.y - last.y);
 	float ratio = 1.f + static_cast<float>(dist) * 0.01;
+	DirectX::XMFLOAT4 scale = {};
+
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_X))
-	{
-		m_pInsManager->ReScaleSelectedByRatioX(ratio);
-		m_pColManager->RescaleSelectedByRatioX(ratio);		//COLLIDER X
+	{	
+		scale.x = ratio;
 	}
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Y))
 	{
-		m_pInsManager->ReScaleSelectedByRatioY(ratio);
-		m_pColManager->RescaleSelectedByRatioY(ratio);		//COLLIDER Y
+		scale.y = ratio;
 	}
 	if (m_Gizmo.CheckAxis(Gizmo::AXIS::AXIS_Z))
 	{
-		m_pInsManager->ReScaleSelectedByRatioZ(ratio);
-		m_pColManager->RescaleSelectedByRatioZ(ratio);		//COLLIDER Z
+		scale.z = ratio;
 	}
 	
+	::SendMessageW(g_hCenter, WM_OBJECT_SCALE ,(WPARAM)&scale, NULL);
 }
 
 int Viewer::CalculateScaleByDistance(int curY, int lastY)
@@ -596,6 +578,7 @@ void Viewer::RotationSelected(CPoint& const mouseDownPoint, CPoint& const curPoi
 	//드래그한 거리를 바탕으로 회전 거리 계산. -> 일단 계산.
 	DirectX::XMFLOAT4 rot = CalculateRotationByMouseMovement(mouseDownPoint.x, mouseDownPoint.y, curPoint.x, curPoint.y);
 
+	//메세지 변경 고려.
 	::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, (WPARAM)&rot, NULL);
 
 }
@@ -641,27 +624,6 @@ DirectX::XMFLOAT4 Viewer::CalculateRotationByMouseMovement(int mouseDownPointX, 
 
 	return result;
 }
-
-//
-//void Viewer::RotationSelected(DirectX::XMFLOAT4& rot)
-//{
-//	DirectX::XMFLOAT4 pRot = rot;
-//
-//	//수정중.
-//	//::SendMessageW(g_hCenter, WM_OBJECT_ROTATION, NULL, NULL);
-//
-//	//object
-//	m_pInsManager->RotateSelected(pRot);
-//
-//	//Collider
-//	m_pColManager->RotateSelected(pRot);
-//
-//	//Light
-//	//m_pLightVector->RotateSelected(pRot);
-//
-//	//Wave
-//	m_pWaveManager->RotateSelected(pRot);
-//}
 
 void Viewer::SetGridInfo(int iWidth, int iHeight, float offset)
 {
@@ -1091,8 +1053,10 @@ void Viewer::RequestCreateObj(object* pObj)
 }
 
 //포지션 셋팅/draw
+//->SetPos(DirectX::XMFLOAT3& centerPos); 변경할 것.
 void Viewer::ControlGizumo()
 {
+	//인스턴스관리자의 관리자를 만들면 모든 인스턴스의 중심좌표를 구하는 과정을 그것에 넣을 수 있다.
 	DirectX::XMFLOAT3  ObjPos = {};
 	m_pInsManager->GetCenterPos(&ObjPos);
 	size_t ObjSize = m_pInsManager->GetSizeOfSelected();

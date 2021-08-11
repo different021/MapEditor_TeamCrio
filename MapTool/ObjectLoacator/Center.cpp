@@ -1322,6 +1322,8 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	
 	ON_MESSAGE(WM_VIEWER_LBUTTONDOWN, &Center::OnViewerLbuttondown)
 	ON_MESSAGE(WM_OBJECT_ROTATION, &Center::OnObjectRotation)
+	ON_MESSAGE(WM_OBJECT_MOVE, &Center::OnObjectMove)
+	ON_MESSAGE(WM_OBJECT_SCALE, &Center::OnObjectScale)
 END_MESSAGE_MAP()
 
 
@@ -1837,6 +1839,57 @@ afx_msg LRESULT Center::OnObjectRotation(WPARAM wParam, LPARAM lParam)
 
 	//m_ManagerManager->RotateObject(pRot);
 	rotateObject(pRot);
+
+	return 0;
+}
+
+
+afx_msg LRESULT Center::OnObjectMove(WPARAM wParam, LPARAM lParam)
+{
+	DirectX::XMFLOAT4* pMove = (DirectX::XMFLOAT4*)wParam;
+	if (pMove == nullptr) return -1;
+
+	m_pDrawInsManager->MoveSelected(pMove->x, pMove->y, pMove->z);
+	m_pColliderManager->MoveSelected(pMove->x, pMove->y, pMove->z);
+	m_pLightManager->MoveSelected(pMove->x, pMove->y, pMove->z);
+	m_pWaveManager->MoveSelected(pMove->x, pMove->y, pMove->z);
+
+	//double integerX;
+	//modf((move.x / m_fOffset), &integerX);
+
+	//double integerY;
+	//modf((move.x / m_fOffset), &integerY);
+
+	//double integerZ;
+	//modf((move.x / m_fOffset), &integerZ);
+
+	//m_pInsManager->MoveSelected(integerX * m_fOffset, integerY * m_fOffset, integerZ * m_fOffset);
+
+	return 0;
+}
+
+
+afx_msg LRESULT Center::OnObjectScale(WPARAM wParam, LPARAM lParam)
+{
+	DirectX::XMFLOAT4* pScale = (DirectX::XMFLOAT4*)wParam;
+	if (pScale == nullptr) return -1;
+
+	if (pScale->x != 0.f)
+	{
+		m_pDrawInsManager->ReScaleSelectedByRatioX(pScale->x);
+		m_pColliderManager->RescaleSelectedByRatioX(pScale->x);
+	}
+	if (pScale->y != 0.f)
+	{
+		m_pDrawInsManager->ReScaleSelectedByRatioY(pScale->y);
+		m_pColliderManager->RescaleSelectedByRatioY(pScale->y);
+	}
+	if (pScale->z != 0.f)
+	{
+		m_pDrawInsManager->ReScaleSelectedByRatioZ(pScale->z);
+		m_pColliderManager->RescaleSelectedByRatioZ(pScale->z);
+	}
+
 
 	return 0;
 }

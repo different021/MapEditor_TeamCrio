@@ -590,7 +590,7 @@ bool DrawInsManager::GetCenterPos(DirectX::XMFLOAT3* pOut)
 		std::vector<DRAW_INSTANCE*>::iterator it;
 		for (int i = 0; i < size; i++)
 		{
-                                                                                                                                                                                                           			pos.x += m_SelectedList[i]->first->pos.x;
+			pos.x += m_SelectedList[i]->first->pos.x;
 			pos.y += m_SelectedList[i]->first->pos.y;
 			pos.z += m_SelectedList[i]->first->pos.z;
 		}
@@ -672,12 +672,8 @@ void DrawInsManager::MoveSelected(float dx, float dy, float dz)
 		pObj->pos.x += dx;
 		pObj->pos.y += dy;
 		pObj->pos.z += dz;
-
-		//::SendMessage(g_hCenter, WM_EDIT_OBJ, (WPARAM)m_SelectedList[i].first, 0);				//수정. -> 삭제. (업데이트 추가.)
-		
 	}
 
-	//RequestCenter(WM_UPDATE_LAST_SELECTED, (WPARAM)( m_SelectedList.at(Default_Collider_Size-1).first ), NULL);
 }
 
 void DrawInsManager::ReScaleSelected(float dx, float dy, float dz)
