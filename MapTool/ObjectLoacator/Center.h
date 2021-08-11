@@ -50,14 +50,20 @@ class Center : public CDialogEx
 	HEngine_DX12_3D* m_pEngine;		//그래픽 엔진
 	STAGE_HEADER m_MapHeader;			//헤터
 
+	//instance	Manager
+	DrawInsManager* m_pDrawInsManager;		//오브젝트 관리
+	CColliderManager* m_pColliderManager;	//콜라이더 매니저
+	CLightManager*	m_pLightManager;		//빛 매니저
+	CWaveManager*	m_pWaveManager;			//물.
+
 	//Dialogs
-	CObjectDlg		m_ObjectDlg;		//오브젝트
-	CColliderDlg	m_ColliderDlg;	//콜라이더
-	Viewer*		 m_Viewer;					//뷰어
-	CGrid		 m_GridController;			//그리드 조절
-	CHelpDlg	 m_HelpDlg;					//도움말
-	CLightDlg	 m_pLightDlg;				//라이트 
-	CWaveDlg*	 m_pWaveDlg;
+	CObjectDlg		m_ObjectDlg;			//오브젝트
+	CColliderDlg	m_ColliderDlg;			//콜라이더
+	Viewer*			m_Viewer;				//뷰어
+	CGrid			m_GridController;		//그리드 조절
+	CHelpDlg		m_HelpDlg;				//도움말
+	CLightDlg		m_pLightDlg;			//라이트 
+	CWaveDlg*		m_pWaveDlg;
 	//CCmd		 m_Cmd;						//MFC
 	
 	CMenu m_MainMenu;
@@ -69,11 +75,6 @@ class Center : public CDialogEx
 	MaterialManager* m_pMatManager;			//메테리얼
 	ModelManager*	 m_pModelManager;		//모델
 
-	//instance
-	DrawInsManager*		m_pDrawInsManager;	//오브젝트 관리
-	CColliderManager*	m_pColliderManager;	//콜라이더 매니저
-	CLightManager*		m_pLightManager;	//빛 매니저
-	CWaveManager*		m_pWaveManager;		//물.
 
 public:
 	Center(CWnd* pParent = nullptr);   // 표준 생성자입니다.

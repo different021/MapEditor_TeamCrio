@@ -10,13 +10,13 @@ class HProceduralGeometry_line;
 class HEngine_DX12_3D;
 class CLightManager;
 
-
+//수정 필요 ->그래픽 엔진에 의존적 
 struct Light
 {
 	lightData					m_LightData;				//저장용 인스턴스
-	HLightData*					m_pGraphicData;				//그래픽 인스턴스
-	HSimplePrimitive*			m_pPositionBox;				//포지션 표시용 라인
-	HProceduralGeometry_line*	m_pDirectionLine;			//디렉션 표시용 라인
+	HLightData*					m_pGraphicData = nullptr;	//그래픽 인스턴스
+	HSimplePrimitive*			m_pPositionBox = nullptr;	//포지션 표시용 라인
+	HProceduralGeometry_line*	m_pDirectionLine = nullptr;	//디렉션 표시용 라인
 
 	~Light();
 	void DeleteGraphicInstance();	

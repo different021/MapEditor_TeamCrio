@@ -28,9 +28,6 @@ private:
 	bool m_bIsDocking	 = true;
 	bool m_bShiftKeyDown = false;
 
-	//카메라 관련
-	std::vector<Camera*> m_pCamList;
-
 	CListBox m_objListBox;			//오브젝트 리스트 박스
 	CListBox m_ModelListBox;		//모델 리스트 박스
 	CListBox m_MatListBox;			//마테리얼 리스트 박스

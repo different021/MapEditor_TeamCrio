@@ -410,6 +410,7 @@ BOOL CLightDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	//viwer보다 나중에 지워져서 문제.
 	m_pLightManager = CLightManager::GetInstance();
 
 	m_pLightType = (CComboBox*)GetDlgItem(IDC_COMBO_LIGHT_TYPE);

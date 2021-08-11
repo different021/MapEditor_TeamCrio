@@ -252,7 +252,8 @@ void Viewer::DrawObjectSelectMode(int x, int y)
 	dStr.pos.x = x;
 	dStr.pos.y = y;
 
-	if (m_pInsManager->IsEnableSelectObject())
+	//if (m_pInsManager->IsEnableSelectObject())
+	if(m_bObjectSelectMode)
 	{
 		dStr.color.x = 0.05f;
 		dStr.color.y = 0.05f;
@@ -280,7 +281,7 @@ void Viewer::DrawColliderSelectMode(int x, int y)
 	dStr.pos.x = x;
 	dStr.pos.y = y;
 
-	if (m_pColManager->IsEnableColliderSelect())
+	if(m_bColliderSelectMode)
 	{
 		dStr.color.x = 0.05f;
 		dStr.color.y = 0.05f;
@@ -308,7 +309,7 @@ void Viewer::DrawLightSelectMode(int x, int y)
 	dStr.pos.x = x;
 	dStr.pos.y = y;
 
-	if (m_pLightManager->IsEnableLightSelect())
+	if(m_bLightSelectMode)
 	{
 		dStr.color.x = 0.05f;
 		dStr.color.y = 0.05f;
@@ -326,17 +327,35 @@ void Viewer::DrawLightSelectMode(int x, int y)
 	m_pEngine->AddDebugString(dStr);
 }
 
+void Viewer::SetObjectSelectMode(bool bSelect)
+{
+	m_bObjectSelectMode = bSelect;
+}
+
+void Viewer::SetColliderSelectMode(bool bSelect)
+{
+	m_bColliderSelectMode = bSelect;
+}
+
+void Viewer::SetLightSelectMode(bool bSelect)
+{
+	m_bLightSelectMode = bSelect;
+}
+
+//수정 or 삭제.
 void Viewer::SendModelList(HWND hWnd)
 {
 	::SendMessage(hWnd, WM_LOAD_MODEL, (WPARAM)(m_pModelManager->GetModelList()), 0);
 	//::SendMessage(hWnd, WM_LOAD_MODEL, (WPARAM)(&g_hModelList), 0);
 }
 
+//수정 삭제 예정.
 void Viewer::SendMatList(HWND hWnd)
 {
 	::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(m_pMatManager->GetMatList()), 0);
 	//::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(&g_MaterialList), 0);
 }
+
 
 void Viewer::MoveSelectedOffset(CPoint& cur, CPoint& last)
 {
@@ -675,11 +694,6 @@ void Viewer::RotationSelected(DirectX::XMFLOAT4& rot)
 
 	//Wave
 	m_pWaveManager->RotateSelected(pRot);
-}
-
-void Viewer::ToggleOffsetMode()
-{
-	m_bOffsetMode = !m_bOffsetMode;
 }
 
 void Viewer::SetGridInfo(int iWidth, int iHeight, float offset)

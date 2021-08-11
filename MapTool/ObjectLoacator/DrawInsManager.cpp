@@ -155,20 +155,6 @@ bool DrawInsManager::IsEnableSelectObject()
 	return m_bEnableSelect;
 }
 
-//void DrawInsManager::EraseInObjList(object* pFind)
-//{
-//	std::vector<DRAW_INSTANCE>::iterator delete_it;
-//	for (delete_it = m_List.begin(); delete_it != m_List.end(); delete_it++)
-//	{
-//		object* pObj = delete_it->first;
-//		if (pObj == pFind)
-//		{
-//			m_List.erase(delete_it);
-//			break;
-//		}
-//	}
-//}
-
 void DrawInsManager::AddToDeleteListAll()
 {
 	ClearSelectedListByDeleteList();

@@ -35,30 +35,35 @@ class Viewer :
     public CEditorDlg
 {
 private:
-    HEngine_DX12_3D* m_pEngine;				    //그래픽 엔진
-    DirectX::BoundingFrustum    m_camFrustum;
+    HEngine_DX12_3D* m_pEngine;				    //그래픽 엔진    -> 컨테이너로...
+    DirectX::BoundingFrustum    m_camFrustum;   //
 
-    //삭제 예정
+    //삭제 예정? -> 왜인지 기억 안남?> 필요할 듯? -> 화면 정보에대한 클래스 필요? 
     int  m_iScreenWidth  = 0;
     int  m_iScreenHeight = 0;
     
+    Gizmo m_Gizmo;      //엔진 독립적 재설계 필요
+
+    //그리드로 묶을 것인가?      -> class 구성, 엔진 독립적 재설계
     int  m_iGridWidth    = 0;
     int  m_iGridHeight   = 0;
     float m_fOffset      = 10.f;
     float m_fStac        = 0.f;
-
-    Gizmo m_Gizmo;
-    
     std::vector<HProceduralGeometry_line*> m_hDebugLineList;      //그리드 그리기. 경우 에 따라 뽑는다.
    
-    CPoint m_DragPoint[2] = {};
-    CPoint m_RBtnDownPos = { 0, 0 };
+    CPoint m_DragPoint[2] = {};                 //마우스 관련 묶을 수 있을 듯.
+    CPoint m_RBtnDownPos = { 0, 0 };            //마우스
+
+    bool   m_bLbuttonDown   = false;            //마우스
+    bool   m_isCtrlDown     = false;            //키보드
     
-    bool   m_bOffsetMode    = false;
-    bool   m_bLbuttonDown   = false;
     BOOL   m_bGizmoTime     = FALSE;
     BOOL   m_bGizmoCubeTime = FALSE;
-    bool   m_isCtrlDown     = false;
+
+    //SelectMode(object, collider, Light, wave(아직))
+    bool   m_bObjectSelectMode   = true;  //오브젝트 선택 가능? -> 콜라이더만 선택할 필요가 있을 경우가 있다.
+    bool   m_bColliderSelectMode = true;
+    bool   m_bLightSelectMode    = true;
 
     float m_fCamVelo = 5.0f;
     float m_MouseSensitivty = 0.1f;
@@ -91,12 +96,17 @@ public:
 
     //Graphic Instance 관련
     virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적.
-    //virtual field end;
 
-    void DrawEditMode(int x, int y);
-    void DrawObjectSelectMode(int x, int y);
-    void DrawColliderSelectMode(int x, int y);
-    void DrawLightSelectMode(int x, int y);
+    //SelectMode (object, Collider, Light, wave(미구현) )  -> 엔진 종속적.
+    virtual void DrawEditMode(int x, int y);
+    virtual void DrawObjectSelectMode(int x, int y);
+    virtual void DrawColliderSelectMode(int x, int y);
+    virtual void DrawLightSelectMode(int x, int y);
+
+    void SetObjectSelectMode(bool bSelect);
+    void SetColliderSelectMode(bool bSelect);
+    void SetLightSelectMode(bool bSelect);
+
     void SendModelList(HWND hWnd);
     void SendMatList(HWND hWnd);
     
@@ -120,9 +130,6 @@ public:
     DirectX::XMFLOAT4 CalculateRotationByMouseMovement(int curX, int curY, int lastX, int lastY);
     void RotationSelected(DirectX::XMFLOAT4& rot);
 
-    //offset
-    void ToggleOffsetMode();        
-    
     //Grid
     void SetGridInfo(int iWidth, int iHeight, float offset);
     void DrawGrid(int iWidth, int iHeight, float offset);      //그리드 그리기

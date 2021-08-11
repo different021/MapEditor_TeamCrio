@@ -63,7 +63,7 @@ Center::Center(CWnd* pParent /*=nullptr*/)
 
 Center::~Center()
 {
-	//CleanUp();	//-> OnClose()로 이동
+	CleanUp();	//-> OnClose()로 이동
 }
 
 void Center::InitializeDlgs(CWnd* pParent)
@@ -92,18 +92,12 @@ void Center::Init_MainMenu()
 
 void Center::CleanUp()
 {
-	CleanupDlg();
 	CleanupManager();
+	CleanupDlg();
 }
 
 void Center::CleanupDlg()
 {
-	/*if (m_pLightDlg != NULL)
-	{
-		delete m_pLightDlg;
-		m_pLightDlg = NULL;
-	}*/
-
 	if (m_pWaveDlg != NULL)
 	{
 		delete m_pWaveDlg;
@@ -757,6 +751,7 @@ void Center::ToggleColliderSelect()
 	static bool bIsColliderSelect = true;
 	bIsColliderSelect = !bIsColliderSelect;
 	m_pColliderManager->EnableSelect(bIsColliderSelect);
+	m_Viewer->SetColliderSelectMode(bIsColliderSelect);
 }
 
 void Center::ToggleObjectSelect()
@@ -764,6 +759,7 @@ void Center::ToggleObjectSelect()
 	static bool bEnableSelect = true;
 	bEnableSelect = !bEnableSelect;
 	m_pDrawInsManager->EnableSelect(bEnableSelect);
+	m_Viewer->SetObjectSelectMode(bEnableSelect);
 }
 
 void Center::ToggleLightSelect()
@@ -771,6 +767,7 @@ void Center::ToggleLightSelect()
 	static bool bCanISelect = true;
 	bCanISelect = !bCanISelect;
 	m_pLightManager->SetSelectEnabled(bCanISelect);
+	m_Viewer->SetObjectSelectMode(bCanISelect);
 }
 
 //다이알로그 박스에서 오브젝트를 선택했을 경우.
@@ -1232,7 +1229,7 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 
 		case 'O':
 		{
-			m_Viewer->ToggleOffsetMode();
+			//m_Viewer->ToggleOffsetMode();
 			break;
 		}
 
@@ -1725,9 +1722,7 @@ void Center::OnLightWindow()
 
 void Center::OnClose()
 {
-	int a = 0;
-	CleanUp();
-
+	//CleanUp();
 	CDialogEx::OnClose();
 }
 
