@@ -1232,47 +1232,24 @@ void Viewer::GetKeyUp(WPARAM wParam)
 
 }
 
-
-
-void Viewer::UpdateObjectEditBox()
-{
-	//-> Center;
-	object* pResult = m_pInsManager->GetLastSelected();
-	g_pCenter->UpdateEditBoxByObj(pResult);
-
-	//g_pCenter->UpdateSelectedLight();	//라이트 업데이트 <- 왜 라이트 업데이트?
-}
-
-void Viewer::UpdateColliderEditBox()
-{
-	collider* pCol = m_pColManager->GetLastSelected();
-	g_pCenter->UpdateColliderEditControl(pCol);
-}
-
-void Viewer::UpdateWaveEditBox()
-{
-	WAVE* pWave = m_pWaveManager->GetLastSelected();
-	g_pCenter->UpdateWaveEditControl(pWave);
-}
-
-
-void Viewer::SelectColliderInstance(CPoint& clickPoint)
-{
-	collider* pCol = g_pCenter->PickingCollider(clickPoint.x, clickPoint.y);
-
-	m_pColManager->SetSelectedPrvRot();
-}
-
-void Viewer::SelectLightInstance(CPoint& clickPoint)
-{
-	Light* pLight = g_pCenter->PickingLight(clickPoint.x, clickPoint.y);
-
-}
-
-void Viewer::SelectWaveInstance(CPoint& clickPoint)
-{
-	g_pCenter->DeleteSelectedListAll();
-}
+//
+//void Viewer::SelectColliderInstance(CPoint& clickPoint)
+//{
+//	collider* pCol = g_pCenter->PickingCollider(clickPoint.x, clickPoint.y);
+//
+//	m_pColManager->SetSelectedPrvRot();
+//}
+//
+//void Viewer::SelectLightInstance(CPoint& clickPoint)
+//{
+//	Light* pLight = g_pCenter->PickingLight(clickPoint.x, clickPoint.y);
+//
+//}
+//
+//void Viewer::SelectWaveInstance(CPoint& clickPoint)
+//{
+//	g_pCenter->DeleteSelectedListAll();
+//}
 
 
 

@@ -162,15 +162,10 @@ private:
     float GetNDC_Y(CPoint& inPoint);
     void GetKeyUp(WPARAM wParam);
 
-    //Dlg 업데이트 관련 -> 삭제 대상
-    void UpdateObjectEditBox();
-    void UpdateColliderEditBox();
-    void UpdateWaveEditBox();
-
     //왼 클릭시 발생하는 일들. -> 삭제
-    void SelectColliderInstance(CPoint& clickPoint);
+    /*void SelectColliderInstance(CPoint& clickPoint);
     void SelectLightInstance(CPoint& clickPoint);
-    void SelectWaveInstance(CPoint& clickPoint);
+    void SelectWaveInstance(CPoint& clickPoint);*/
 
 public:
     DECLARE_MESSAGE_MAP()
