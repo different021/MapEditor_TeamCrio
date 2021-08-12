@@ -1105,67 +1105,70 @@ lb_return:
 //drag
 void Viewer::GetObjInRect()
 {
-	bool bResult = false;
-	DrawInsList* pList = (DrawInsList*)m_pInsManager->GetDrawInsList();
-
-	if (pList == NULL) return;
-	if (pList->size() <= 0) return;
-
+	float point2[4] = {};
+	
 	float ndc_x = GetNDC_X(m_DragPoint[0]);
 	float ndc_y = GetNDC_Y(m_DragPoint[0]);
 	float ndc_lx = GetNDC_X(m_DragPoint[1]);
 	float ndc_ly = GetNDC_Y(m_DragPoint[1]);
 
-	float xMax = max(ndc_x, ndc_lx);
-	float xMin = min(ndc_x, ndc_lx);
-	float yMax = max(ndc_y, ndc_ly);
-	float yMin = min(ndc_y, ndc_ly);
+	point2[0] = max(ndc_x, ndc_lx);		//maxX
+	point2[1] = min(ndc_x, ndc_lx);		//minX
+	point2[2] = max(ndc_y, ndc_ly);		//maxY
+	point2[3] = min(ndc_y, ndc_ly);		//minY
 
-	DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
-	DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
+	::SendMessageW(g_hCenter, WM_OBJECT_SELECT_IN_RECT, (WPARAM)point2, NULL);
 
-	//object에 관한 검사.
-	DrawInsList::iterator it;
-	for (it = pList->begin(); it != pList->end(); it++)
-	{
-		DRAW_INSTANCE* pDrawIns = *it;
-		DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
+	//DrawInsList* pList = (DrawInsList*)m_pInsManager->GetDrawInsList();
 
-		DirectX::XMFLOAT4X4 TM;
-		pDrawIns->first->GetTm(TM);
+	//if (pList == NULL) return;
+	//if (pList->size() <= 0) return;
 
-		DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
+	//DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
+	//DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
 
-		matrix = mTM * mView * mProj;
+	////object에 관한 검사.
+	//DrawInsList::iterator it;
+	//for (it = pList->begin(); it != pList->end(); it++)
+	//{
+	//	DRAW_INSTANCE* pDrawIns = *it;
+	//	DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
 
-		int modelIndex = pDrawIns->first->modelIndex;
-		MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
-		if (pMODEL == nullptr)
-		{
-			int a = 0;
-			return;
-		}
-		DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
-		DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
+	//	DirectX::XMFLOAT4X4 TM;
+	//	pDrawIns->first->GetTm(TM);
 
-		DirectX::XMFLOAT3 screenPos;
-		DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
-		DirectX::XMStoreFloat3(&screenPos, pos);
+	//	DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
 
-		bool isInRect = MapUtil::AABB(xMin, xMax, yMin, yMax, screenPos.x, screenPos.y);
-		if (isInRect == true)
-		{
-			m_pInsManager->AddSelected(pDrawIns->second);
-		}
-		else
-		{
-			object* pObj = pDrawIns->first;
-			if (m_pInsManager->IsSelected(pObj) == true)
-			{
-				m_pInsManager->AddSelected(pObj);
-			}
-		}
-	}
+	//	matrix = mTM * mView * mProj;
+
+	//	int modelIndex = pDrawIns->first->modelIndex;
+	//	MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
+	//	if (pMODEL == nullptr)
+	//	{
+	//		int a = 0;
+	//		return;
+	//	}
+	//	DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
+	//	DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
+
+	//	DirectX::XMFLOAT3 screenPos;
+	//	DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
+	//	DirectX::XMStoreFloat3(&screenPos, pos);
+
+	//	bool isInRect = MapUtil::AABB(xMin, xMax, yMin, yMax, screenPos.x, screenPos.y);
+	//	if (isInRect == true)
+	//	{
+	//		m_pInsManager->AddSelected(pDrawIns->second);
+	//	}
+	//	else
+	//	{
+	//		object* pObj = pDrawIns->first;
+	//		if (m_pInsManager->IsSelected(pObj) == true)
+	//		{
+	//			m_pInsManager->AddSelected(pObj);
+	//		}
+	//	}
+	//}
 }
 
 float Viewer::GetNDC_X(CPoint& inPoint)

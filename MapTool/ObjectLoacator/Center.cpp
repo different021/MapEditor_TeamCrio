@@ -6,6 +6,7 @@
 #include <string.h>
 #include <wchar.h>
 #include <future>
+#include <limits>
 
 #include "MapUtil.h"
 
@@ -1324,6 +1325,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_OBJECT_ROTATION, &Center::OnObjectRotation)
 	ON_MESSAGE(WM_OBJECT_MOVE, &Center::OnObjectMove)
 	ON_MESSAGE(WM_OBJECT_SCALE, &Center::OnObjectScale)
+	ON_MESSAGE(WM_OBJECT_SELECT_IN_RECT, &Center::OnObjectSelectInRect)
 END_MESSAGE_MAP()
 
 
@@ -1891,5 +1893,83 @@ afx_msg LRESULT Center::OnObjectScale(WPARAM wParam, LPARAM lParam)
 	}
 
 
+	return 0;
+}
+
+
+afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
+{
+	//이미 크기 비교해서 왔지만 다시 하는 중...
+	float* pNdcPoint = (float*)wParam;
+	float maxX = FLT_MIN;
+	float minX = FLT_MAX;
+	float maxY = FLT_MIN;
+	float minY = FLT_MAX;
+
+	if (pNdcPoint == nullptr) return - 1;
+
+	/*
+	maxX = max(pNdcPoint[0], pNdcPoint[1]);
+	minX = min(pNdcPoint[0], pNdcPoint[1]);
+	maxY = max(pNdcPoint[2], pNdcPoint[3]);
+	minY = min(pNdcPoint[2], pNdcPoint[3]);
+	*/
+
+	maxX = pNdcPoint[0];
+	minX = pNdcPoint[1];
+	maxY = pNdcPoint[2];
+	minY = pNdcPoint[3];
+
+	DrawInsList* pList = (DrawInsList*)m_pDrawInsManager->GetDrawInsList();
+
+	if (pList == NULL) return -2;
+	if (pList->size() <= 0) return -3;
+
+	DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
+	DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
+
+	//object에 관한 검사.
+	DrawInsList::iterator it;
+	for (it = pList->begin(); it != pList->end(); it++)
+	{
+		DRAW_INSTANCE* pDrawIns = *it;
+		DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
+
+		DirectX::XMFLOAT4X4 TM;
+		pDrawIns->first->GetTm(TM);
+
+		DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
+
+		matrix = mTM * mView * mProj;
+
+		int modelIndex = pDrawIns->first->modelIndex;
+		MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
+		if (pMODEL == nullptr)
+		{
+			OutputDebugStringW(L"[FAIL]Can not found Index of model");
+			assert(false);
+			return - 4;
+		}
+		DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
+		DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
+
+		DirectX::XMFLOAT3 screenPos;
+		DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
+		DirectX::XMStoreFloat3(&screenPos, pos);
+
+		bool isInRect = MapUtil::AABB(minX, maxX, minY, maxY, screenPos.x, screenPos.y);
+		if (isInRect == true)
+		{
+			m_pDrawInsManager->AddSelected(pDrawIns->second);
+		}
+		else
+		{
+			object* pObj = pDrawIns->first;
+			if (m_pDrawInsManager->IsSelected(pObj) == true)
+			{
+				m_pDrawInsManager->AddSelected(pObj);
+			}
+		}
+	}
 	return 0;
 }

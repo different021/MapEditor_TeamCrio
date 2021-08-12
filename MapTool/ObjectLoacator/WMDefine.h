@@ -27,10 +27,11 @@ enum eMsgResult
 #define WM_OBJECT_ROTATION				WM_OBJECT + 4
 #define WM_OBJECT_MOVE					WM_OBJECT + 5
 #define WM_OBJECT_SCALE					WM_OBJECT + 6
+#define WM_OBJECT_SELECT_IN_RECT		WM_OBJECT + 7
 
-#define WM_SELECT_OBJ					WM_OBJECT + 7		
-#define WM_DELETE_GRAPHIC_INS			WM_OBJECT + 8		
-#define WM_LIST_BOX_NONE				WM_OBJECT + 9		//기능 확인
+#define WM_SELECT_OBJ					WM_OBJECT + 8		
+#define WM_DELETE_GRAPHIC_INS			WM_OBJECT + 9		
+#define WM_LIST_BOX_NONE				WM_OBJECT + 10		//기능 확인
 
 
 //resource
