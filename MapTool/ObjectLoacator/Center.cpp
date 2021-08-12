@@ -1326,6 +1326,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_OBJECT_MOVE, &Center::OnObjectMove)
 	ON_MESSAGE(WM_OBJECT_SCALE, &Center::OnObjectScale)
 	ON_MESSAGE(WM_OBJECT_SELECT_IN_RECT, &Center::OnObjectSelectInRect)
+	ON_MESSAGE(WM_VIEWER_LBUTTONUP, &Center::OnViewerLbuttonup)
 END_MESSAGE_MAP()
 
 
@@ -1833,6 +1834,29 @@ afx_msg LRESULT Center::OnViewerLbuttondown(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+afx_msg LRESULT Center::OnViewerLbuttonup(WPARAM wParam, LPARAM lParam)
+{
+	/*
+	* 뷰어에서 마우스를 땟을 경우.
+	 1. 쿼터니언 이전 상태 저장.
+	 2. Dlg창 EditBox 최신화.  
+	*/
+
+	m_pDrawInsManager->SetSelectedPrvQuaternion();
+	m_pColliderManager->SetSelectedPrvRot();
+	m_pWaveManager->SetSelectedPrvRot();
+
+	object* pResult = m_pDrawInsManager->GetLastSelected();
+	UpdateEditBoxByObj(pResult);
+
+	collider* pCol = m_pColliderManager->GetLastSelected();
+	UpdateColliderEditControl(pCol);
+	
+	WAVE* pWave = m_pWaveManager->GetLastSelected();
+	g_pCenter->UpdateWaveEditControl(pWave);
+
+	return 0;
+}
 
 afx_msg LRESULT Center::OnObjectRotation(WPARAM wParam, LPARAM lParam)
 {
@@ -1973,3 +1997,5 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
+

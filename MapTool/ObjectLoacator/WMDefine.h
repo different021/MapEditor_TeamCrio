@@ -67,4 +67,5 @@ enum eMsgResult
 #define WM_CHANGE_SELECTED				WM_COLLIDER + 7		//Collider picking
 
 //viwer Dlg
-#define WM_VIEWER_LBUTTONDOWN			WM_VIEWER +1
+#define WM_VIEWER_LBUTTONDOWN			WM_VIEWER + 1
+#define WM_VIEWER_LBUTTONUP				WM_VIEWER + 2

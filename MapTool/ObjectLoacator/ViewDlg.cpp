@@ -1236,6 +1236,7 @@ void Viewer::GetKeyUp(WPARAM wParam)
 
 void Viewer::UpdateObjectEditBox()
 {
+	//-> Center;
 	object* pResult = m_pInsManager->GetLastSelected();
 	g_pCenter->UpdateEditBoxByObj(pResult);
 
@@ -1323,8 +1324,7 @@ void Viewer::OnRButtonDown(UINT nFlags, CPoint point)
 	//m_bIsRButtonClick = TRUE;
 	m_pCamController->MovementAvailable(true);
 	m_RBtnDownPos = point;
-	//OutputDebugString(L"Mouse Down\n");
-	//CDialogEx::OnRButtonDown(nFlags, point);
+	CDialogEx::OnRButtonDown(nFlags, point);
 }
 
 void Viewer::OnRButtonUp(UINT nFlags, CPoint point)
@@ -1333,8 +1333,7 @@ void Viewer::OnRButtonUp(UINT nFlags, CPoint point)
 	m_pCamController->MovementAvailable(false);
 	m_RBtnDownPos.x = 0;
 	m_RBtnDownPos.y = 0;
-	//OutputDebugString(L"Mouse Up\n");
-	//CDialogEx::OnRButtonUp(nFlags, point);
+	CDialogEx::OnRButtonUp(nFlags, point);
 }
 
 void Viewer::OnLButtonDown(UINT nFlags, CPoint point)
@@ -1354,9 +1353,6 @@ void Viewer::OnLButtonDown(UINT nFlags, CPoint point)
 	if ((m_bGizmoTime == FALSE) && (m_bGizmoCubeTime == FALSE))
 	{
 		::SendMessageW(g_hCenter, WM_VIEWER_LBUTTONDOWN, (WPARAM)point.x, (LPARAM)point.y);
-		//SelectColliderInstance(point);
-		//SelectLightInstance(point);
-		//SelectWaveInstance(point);
 	}
 	
 	CDialogEx::OnLButtonDown(nFlags, point);
@@ -1364,7 +1360,6 @@ void Viewer::OnLButtonDown(UINT nFlags, CPoint point)
 
 void Viewer::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	//디버그 테스트용
 	//OutputDebugStringW(L"Viewer::LButtonDown()\n");
 	 
 	//축
@@ -1375,14 +1370,9 @@ void Viewer::OnLButtonUp(UINT nFlags, CPoint point)
 	m_Gizmo.ReleaseCube();
 	m_bGizmoCubeTime = FALSE;
 
-	m_pInsManager->SetSelectedPrvQuaternion();
-	m_pColManager->SetSelectedPrvRot();
-	m_pWaveManager->SetSelectedPrvRot();
-
-	UpdateObjectEditBox();
-	UpdateColliderEditBox();
-	UpdateWaveEditBox();
-
+	//Viewer에서 마우스 왼번튼을 떼었을 때.
+	::SendMessageW(g_hCenter, WM_VIEWER_LBUTTONUP, NULL, NULL);
+	
 	CDialogEx::OnLButtonUp(nFlags, point);
 }
 

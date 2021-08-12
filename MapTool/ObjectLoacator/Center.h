@@ -256,6 +256,7 @@ public:
 protected:
 	afx_msg LRESULT OnObjectCreate(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnViewerLbuttondown(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnViewerLbuttonup(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectRotation(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectScale(WPARAM wParam, LPARAM lParam);
