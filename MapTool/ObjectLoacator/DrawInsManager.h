@@ -78,7 +78,8 @@ public:
 	void ChangeMaterialSelected(MATERIAL* pMat);
 
 	DRAW_INSTANCE* GetDrawIns(object* pObj);
-	bool GetCenterPos(DirectX::XMFLOAT3* pOut);
+	DirectX::XMFLOAT3 GetCenterPosition();
+	DirectX::XMFLOAT3 GetSumSelectedPosition();
 
 	object* GetObjectByIns(__in HInstanceData* hIns, __out DRAW_INSTANCE* pOut);
 	HInstanceData* GetInsByObject(__in object* pObj, __out DRAW_INSTANCE* pOut = NULL);

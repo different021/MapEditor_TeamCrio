@@ -467,26 +467,38 @@ collider* CColliderManager::GetLastSelected()
 	return m_SelectedList.back().first;
 }
 
-DirectX::XMFLOAT3 CColliderManager::GetSelectedPos()
+DirectX::XMFLOAT3 CColliderManager::GetSelectedCenterPosition()
 {
-	DirectX::XMFLOAT3 pos = {};
+	DirectX::XMFLOAT3 pos = GetSumSelectedPosition();
+	int size = static_cast<int>(m_SelectedList.size());
 	
-	int size = m_SelectedList.size();
 	if (size == 0) goto lb_return;
 	
-	for (int i = 0; i < size; i++)
-	{
-		pos.x += m_SelectedList.at(i).first->pos.x;
-		pos.y += m_SelectedList.at(i).first->pos.y;
-		pos.z += m_SelectedList.at(i).first->pos.z;
-	}
-
-	pos.x = pos.x / static_cast<float>(size);
-	pos.y = pos.y / static_cast<float>(size);
-	pos.z = pos.z / static_cast<float>(size);
+	pos.x = pos.x / size;
+	pos.y = pos.y / size;
+	pos.z = pos.z / size;
 
 lb_return:
 	return pos;
+}
+
+DirectX::XMFLOAT3 CColliderManager::GetSumSelectedPosition()
+{
+	DirectX::XMFLOAT3 totalPos = {};
+	int size = static_cast<int>(m_SelectedList.size());
+	if (size != 0)
+	{
+		std::vector<COLLIDER>::iterator it;
+		for (it = m_SelectedList.begin(); it != m_SelectedList.end(); it++)
+		{
+			COLLIDER& pIns = *it;
+			totalPos.x += pIns.first->pos.x;
+			totalPos.y += pIns.first->pos.y;
+			totalPos.z += pIns.first->pos.z;
+		}
+	}
+
+	return 	totalPos;
 }
 
 void CColliderManager::GetColliderInRect(float ndcX1, float ndcY1, float ndcX2, float ndcY2)

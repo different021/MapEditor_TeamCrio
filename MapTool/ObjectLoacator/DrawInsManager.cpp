@@ -556,7 +556,6 @@ void DrawInsManager::ChangeMaterialSelected(MATERIAL* pMat)
 				pData->SetMaterial(pMat->hMat, 0);
 				swprintf_s(pObj->matName, CString(pMat->matName.GetBuffer()) );
 			}
-			
 		}
 	}
 }
@@ -579,40 +578,38 @@ DRAW_INSTANCE* DrawInsManager::GetDrawIns(object* pObj)
 	return pResult;
 }
 
-bool DrawInsManager::GetCenterPos(DirectX::XMFLOAT3* pOut)
+DirectX::XMFLOAT3 DrawInsManager::GetCenterPosition()
 {
-	bool bResult = true;
-	DirectX::XMFLOAT3 pos = {  };
-	int size = static_cast<int>(m_SelectedList.size());
+	DirectX::XMFLOAT3 pos =	GetSumSelectedPosition();
 
+	int size = static_cast<int>(m_SelectedList.size());
 	if (size != 0)
 	{
-		std::vector<DRAW_INSTANCE*>::iterator it;
-		for (int i = 0; i < size; i++)
-		{
-			pos.x += m_SelectedList[i]->first->pos.x;
-			pos.y += m_SelectedList[i]->first->pos.y;
-			pos.z += m_SelectedList[i]->first->pos.z;
-		}
-
 		pos.x = pos.x / size;
 		pos.y = pos.y / size;
 		pos.z = pos.z / size;
 	}
 
+	return pos;
+}
 
-	if (pOut != NULL)
+DirectX::XMFLOAT3 DrawInsManager::GetSumSelectedPosition()
+{
+	DirectX::XMFLOAT3 totalPos = {};
+	int size = static_cast<int>(m_SelectedList.size());
+	if (size != 0)
 	{
-		pOut->x = pos.x;
-		pOut->y = pos.y;
-		pOut->z = pos.z;
-	}
-	else
-	{
-		bResult = false;
+		std::vector<DRAW_INSTANCE*>::iterator it;
+		for (it = m_SelectedList.begin(); it != m_SelectedList.end(); it++)
+		{
+			DRAW_INSTANCE* pIns = *it;
+			totalPos.x += pIns->first->pos.x;
+			totalPos.y += pIns->first->pos.y;
+			totalPos.z += pIns->first->pos.z;
+		}
 	}
 
-	return bResult;
+	return totalPos;
 }
 
 object* DrawInsManager::GetObjectByIns(__in HInstanceData* hIns, __out DRAW_INSTANCE* pOut)

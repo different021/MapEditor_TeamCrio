@@ -253,7 +253,13 @@ public:
 	
 	afx_msg void OnLightWindow();
 	afx_msg void OnClose();
+
 protected:
+	//Request for Center from Dlgs. -> it can need return.
+	afx_msg LRESULT OnRequestCenterPosition(WPARAM wParam, LPARAM lParam);
+	
+protected:
+	//user define message 
 	afx_msg LRESULT OnObjectCreate(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnViewerLbuttondown(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnViewerLbuttonup(WPARAM wParam, LPARAM lParam);
@@ -261,6 +267,7 @@ protected:
 	afx_msg LRESULT OnObjectMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectScale(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectSelectInRect(WPARAM wParam, LPARAM lParam);
+	
 };
 
 extern HWND g_hCenter;

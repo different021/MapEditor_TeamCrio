@@ -823,7 +823,7 @@ collider* Center::PickingCollider(int screenX, int screenY)
 	if (pCollider != NULL)
 	{
 		m_pColliderManager->AddSelected_public(pCollider);
-		DirectX::XMFLOAT3 pos = m_pColliderManager->GetSelectedPos();
+		DirectX::XMFLOAT3 pos = m_pColliderManager->GetSelectedCenterPosition();
 	}
 	else
 	{
@@ -1327,6 +1327,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_OBJECT_SCALE, &Center::OnObjectScale)
 	ON_MESSAGE(WM_OBJECT_SELECT_IN_RECT, &Center::OnObjectSelectInRect)
 	ON_MESSAGE(WM_VIEWER_LBUTTONUP, &Center::OnViewerLbuttonup)
+	ON_MESSAGE(WM_REQUEST_CENTER_POSITION, &Center::OnRequestCenterPosition)
 END_MESSAGE_MAP()
 
 
@@ -1675,7 +1676,7 @@ afx_msg LRESULT Center::OnPickingCollider(WPARAM wParam, LPARAM lParam)
 	if (pCollider != NULL)
 	{
 		m_pColliderManager->AddSelected_public(pCollider);
-		DirectX::XMFLOAT3 pos = m_pColliderManager->GetSelectedPos();
+		DirectX::XMFLOAT3 pos = m_pColliderManager->GetSelectedCenterPosition();
 		pCenterPos = new DirectX::XMFLOAT3();
 		pCenterPos->x = pos.x;
 		pCenterPos->y = pos.y;
@@ -1754,15 +1755,48 @@ void Center::OnLightWindow()
 
 void Center::OnClose()
 {
-	//CleanUp();
 	CDialogEx::OnClose();
 }
 
+afx_msg LRESULT Center::OnRequestCenterPosition(WPARAM wParam, LPARAM lParam)
+{
+	DirectX::XMFLOAT3* pResult = (DirectX::XMFLOAT3*)wParam;
+	if (pResult == nullptr) return -1;
 
-/*
-* first eidt for based on message
-* 
-*/
+	DirectX::XMFLOAT3  ObjPos = m_pDrawInsManager->GetSumSelectedPosition();
+	size_t ObjSize = m_pDrawInsManager->GetSizeOfSelected();
+
+	DirectX::XMFLOAT3 ColliderPos = m_pColliderManager->GetSumSelectedPosition();
+	size_t colSize = m_pColliderManager->GetSizeOfSelected();
+
+	DirectX::XMFLOAT3 LightPos = m_pLightManager->GetSelectedCenterPos();
+	size_t LightSize = m_pLightManager->GetNumberOfSelected();
+
+	DirectX::XMFLOAT3 WavePos = m_pWaveManager->GetSelectedCenterPos();
+	size_t WaveSize = m_pWaveManager->GetNumberOfSelected();
+
+	if (ObjSize == 0 && colSize == 0 && LightSize == 0 && WaveSize == 0)
+	{
+		goto lb_return;
+	}
+
+	LightPos.x = LightPos.x * LightSize;
+	LightPos.y = LightPos.y * LightSize;
+	LightPos.z = LightPos.z * LightSize;
+
+	WavePos.x = WavePos.x * WaveSize;
+	WavePos.y = WavePos.y * WaveSize;
+	WavePos.z = WavePos.z * WaveSize;
+
+	pResult->x = (ObjPos.x + ColliderPos.x + LightPos.x + WavePos.x) / (ObjSize + colSize + LightSize + WaveSize);
+	pResult->y = (ObjPos.y + ColliderPos.y + LightPos.y + WavePos.y) / (ObjSize + colSize + LightSize + WaveSize);
+	pResult->z = (ObjPos.z + ColliderPos.z + LightPos.z + WavePos.z) / (ObjSize + colSize + LightSize + WaveSize);
+
+lb_return:
+
+	return 0;
+}
+
 afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 {
 	eMsgResult result = eMsgResult::eMsgFail;
@@ -1997,5 +2031,7 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
+
 
 

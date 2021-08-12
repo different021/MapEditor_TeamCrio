@@ -162,11 +162,6 @@ private:
     float GetNDC_Y(CPoint& inPoint);
     void GetKeyUp(WPARAM wParam);
 
-    //왼 클릭시 발생하는 일들. -> 삭제
-    /*void SelectColliderInstance(CPoint& clickPoint);
-    void SelectLightInstance(CPoint& clickPoint);
-    void SelectWaveInstance(CPoint& clickPoint);*/
-
 public:
     DECLARE_MESSAGE_MAP()
 

@@ -66,7 +66,8 @@ public:
 	void   RescaleSelectedByRatioZ(float ratio);
 
 	collider* GetLastSelected();
-	DirectX::XMFLOAT3 GetSelectedPos();
+	DirectX::XMFLOAT3 GetSelectedCenterPosition();
+	DirectX::XMFLOAT3 GetSumSelectedPosition();
 
 
 

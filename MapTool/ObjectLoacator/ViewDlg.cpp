@@ -1057,49 +1057,10 @@ void Viewer::RequestCreateObj(object* pObj)
 void Viewer::ControlGizumo()
 {
 	//인스턴스관리자의 관리자를 만들면 모든 인스턴스의 중심좌표를 구하는 과정을 그것에 넣을 수 있다.
-	DirectX::XMFLOAT3  ObjPos = {};
-	m_pInsManager->GetCenterPos(&ObjPos);
-	size_t ObjSize = m_pInsManager->GetSizeOfSelected();
+	DirectX::XMFLOAT3 centerPos = {};
+	::SendMessageW(g_hCenter, WM_REQUEST_CENTER_POSITION, (WPARAM)&centerPos, NULL);
 
-	DirectX::XMFLOAT3 ColliderPos = m_pColManager->GetSelectedPos();
-	size_t colSize = m_pColManager->GetSizeOfSelected();
-
-	DirectX::XMFLOAT3 LightPos = m_pLightManager->GetSelectedCenterPos();
-	size_t LightSize = m_pLightManager->GetNumberOfSelected();
-
-	DirectX::XMFLOAT3 WavePos = m_pWaveManager->GetSelectedCenterPos();
-	size_t WaveSize = m_pWaveManager->GetNumberOfSelected();
-
-
-	DirectX::XMFLOAT3 result = {};
-
-	if (ObjSize == 0 && colSize == 0 && LightSize == 0 && WaveSize == 0)
-	{
-		goto lb_return;
-	}
-
-	ObjPos.x = ObjPos.x * ObjSize;
-	ObjPos.y = ObjPos.y * ObjSize;
-	ObjPos.z = ObjPos.z * ObjSize;
-
-	ColliderPos.x = ColliderPos.x * colSize;
-	ColliderPos.y = ColliderPos.y * colSize;
-	ColliderPos.z = ColliderPos.z * colSize;
-
-	LightPos.x = LightPos.x * LightSize;
-	LightPos.y = LightPos.y * LightSize;
-	LightPos.z = LightPos.z * LightSize;
-
-	WavePos.x = WavePos.x * WaveSize;
-	WavePos.y = WavePos.y * WaveSize;
-	WavePos.z = WavePos.z * WaveSize;
-
-	result.x = (ObjPos.x + ColliderPos.x + LightPos.x + WavePos.x) / (ObjSize + colSize + LightSize + WaveSize);
-	result.y = (ObjPos.y + ColliderPos.y + LightPos.y + WavePos.y) / (ObjSize + colSize + LightSize + WaveSize);
-	result.z = (ObjPos.z + ColliderPos.z + LightPos.z + WavePos.z) / (ObjSize + colSize + LightSize + WaveSize);
-
-lb_return:
-	m_Gizmo.SetPos(result);
+	m_Gizmo.SetPos(centerPos);
 }
 
 //drag
@@ -1231,28 +1192,6 @@ void Viewer::GetKeyUp(WPARAM wParam)
 	}
 
 }
-
-//
-//void Viewer::SelectColliderInstance(CPoint& clickPoint)
-//{
-//	collider* pCol = g_pCenter->PickingCollider(clickPoint.x, clickPoint.y);
-//
-//	m_pColManager->SetSelectedPrvRot();
-//}
-//
-//void Viewer::SelectLightInstance(CPoint& clickPoint)
-//{
-//	Light* pLight = g_pCenter->PickingLight(clickPoint.x, clickPoint.y);
-//
-//}
-//
-//void Viewer::SelectWaveInstance(CPoint& clickPoint)
-//{
-//	g_pCenter->DeleteSelectedListAll();
-//}
-
-
-
 
 //WM_KEYDOWN
 void Viewer::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)

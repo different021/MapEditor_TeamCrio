@@ -20,6 +20,8 @@ enum eMsgResult
 
 #define WM_VIEWER						22000
 
+#define WM_REQUEST						30000
+
 //WM_OBJECT
 #define WM_OBJECT_CREATE                WM_OBJECT + 1
 #define WM_OBJECT_DELETE                WM_OBJECT + 2
@@ -29,9 +31,9 @@ enum eMsgResult
 #define WM_OBJECT_SCALE					WM_OBJECT + 6
 #define WM_OBJECT_SELECT_IN_RECT		WM_OBJECT + 7
 
-#define WM_SELECT_OBJ					WM_OBJECT + 8		
-#define WM_DELETE_GRAPHIC_INS			WM_OBJECT + 9		
-#define WM_LIST_BOX_NONE				WM_OBJECT + 10		//기능 확인
+#define WM_SELECT_OBJ					WM_OBJECT + 9		
+#define WM_DELETE_GRAPHIC_INS			WM_OBJECT + 10		
+#define WM_LIST_BOX_NONE				WM_OBJECT + 11		//기능 확인
 
 
 //resource
@@ -69,3 +71,7 @@ enum eMsgResult
 //viwer Dlg
 #define WM_VIEWER_LBUTTONDOWN			WM_VIEWER + 1
 #define WM_VIEWER_LBUTTONUP				WM_VIEWER + 2
+
+
+//Request : Center에 요청
+#define WM_REQUEST_CENTER_POSITION		WM_REQUEST + 1
