@@ -163,6 +163,64 @@ void Center::rotateObject(DirectX::XMFLOAT4* pQuaternion)
 	m_pWaveManager->RotateSelected(*rot);
 }
 
+void Center::selectObjectByDrag(float maxX, float minX, float maxY, float minY)
+{
+	//모델의 중심좌표를 바탕으로 체크.
+	//모델 정보가 필요해서 DrawInstanceManager에서 처리하지 않는다.
+	//...
+	DrawInsList* pList = (DrawInsList*)m_pDrawInsManager->GetDrawInsList();
+
+	if (pList == NULL) return;
+	if (pList->size() <= 0) return;
+
+	DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
+	DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
+
+	//object에 관한 검사.
+	DrawInsList::iterator it;
+	for (it = pList->begin(); it != pList->end(); it++)
+	{
+		DRAW_INSTANCE* pDrawIns = *it;
+		DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
+
+		DirectX::XMFLOAT4X4 TM;
+		pDrawIns->first->GetTm(TM);
+
+		DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
+
+		matrix = mTM * mView * mProj;
+
+		int modelIndex = pDrawIns->first->modelIndex;
+		MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
+		if (pMODEL == nullptr)
+		{
+			OutputDebugStringW(L"[FAIL]Can not found Index of model");
+			assert(false);
+			return ;
+		}
+		DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
+		DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
+
+		DirectX::XMFLOAT3 screenPos;
+		DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
+		DirectX::XMStoreFloat3(&screenPos, pos);
+
+		bool isInRect = MapUtil::AABB(minX, maxX, minY, maxY, screenPos.x, screenPos.y);
+		if (isInRect == true)
+		{
+			m_pDrawInsManager->AddSelected(pDrawIns->second);
+		}
+		else
+		{
+			object* pObj = pDrawIns->first;
+			if (m_pDrawInsManager->IsSelected(pObj) == true)
+			{
+				m_pDrawInsManager->AddSelected(pObj);
+			}
+		}
+	}
+}
+
 void Center::UpdateColliderList()
 {
 	std::vector<COLLIDER>* pList = (std::vector<COLLIDER>*)m_pColliderManager->GetList();
@@ -894,10 +952,10 @@ Light* Center::PickingLight(int screenX, int screenY)
 	return pLight;
 }
 
-void Center::UpdateSelectedLight()
+void Center::UpdateEditBoxByLight(Light* pLight)
 {
-	//m_pLightDlg->UpdateSelectedLight();
-	m_pLightDlg.UpdateSelectedLight();
+	if (pLight == nullptr) return;
+	m_pLightDlg.UpdateSelectedLight(pLight);
 }
 
 void Center::DrawGrid(int width, int height, int offset)
@@ -1886,6 +1944,9 @@ afx_msg LRESULT Center::OnViewerLbuttonup(WPARAM wParam, LPARAM lParam)
 	collider* pCol = m_pColliderManager->GetLastSelected();
 	UpdateColliderEditControl(pCol);
 	
+	Light* pLight = m_pLightManager->GetLastSelected();
+	UpdateEditBoxByLight(pLight);
+
 	WAVE* pWave = m_pWaveManager->GetLastSelected();
 	g_pCenter->UpdateWaveEditControl(pWave);
 
@@ -1967,6 +2028,7 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 	if (pNdcPoint == nullptr) return - 1;
 
 	/*
+	//이미 최대 최소값을 계산해서 들왔다.
 	maxX = max(pNdcPoint[0], pNdcPoint[1]);
 	minX = min(pNdcPoint[0], pNdcPoint[1]);
 	maxY = max(pNdcPoint[2], pNdcPoint[3]);
@@ -1978,57 +2040,10 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 	maxY = pNdcPoint[2];
 	minY = pNdcPoint[3];
 
-	DrawInsList* pList = (DrawInsList*)m_pDrawInsManager->GetDrawInsList();
+	selectObjectByDrag(maxX, minX, maxY, minY);							//파라미터 순서가 다르니 주의 할것. -> 포인트 두개 받는 것. 고려.
+	m_pColliderManager->GetColliderInRect(maxX, maxY, minX, minY);		
+	m_pLightManager->GetLightInRect(maxX, maxY, minX, minY);
 
-	if (pList == NULL) return -2;
-	if (pList->size() <= 0) return -3;
-
-	DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
-	DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
-
-	//object에 관한 검사.
-	DrawInsList::iterator it;
-	for (it = pList->begin(); it != pList->end(); it++)
-	{
-		DRAW_INSTANCE* pDrawIns = *it;
-		DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
-
-		DirectX::XMFLOAT4X4 TM;
-		pDrawIns->first->GetTm(TM);
-
-		DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
-
-		matrix = mTM * mView * mProj;
-
-		int modelIndex = pDrawIns->first->modelIndex;
-		MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
-		if (pMODEL == nullptr)
-		{
-			OutputDebugStringW(L"[FAIL]Can not found Index of model");
-			assert(false);
-			return - 4;
-		}
-		DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
-		DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
-
-		DirectX::XMFLOAT3 screenPos;
-		DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
-		DirectX::XMStoreFloat3(&screenPos, pos);
-
-		bool isInRect = MapUtil::AABB(minX, maxX, minY, maxY, screenPos.x, screenPos.y);
-		if (isInRect == true)
-		{
-			m_pDrawInsManager->AddSelected(pDrawIns->second);
-		}
-		else
-		{
-			object* pObj = pDrawIns->first;
-			if (m_pDrawInsManager->IsSelected(pObj) == true)
-			{
-				m_pDrawInsManager->AddSelected(pObj);
-			}
-		}
-	}
 	return 0;
 }
 

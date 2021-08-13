@@ -69,10 +69,9 @@ private:
     float m_MouseSensitivty = 0.1f;
     OBJ_EDIT_MODE m_EditMode = EDIT_POS;
 
-    DrawInsManager*  m_pInsManager = NULL;  //이동 예정
     MaterialManager* m_pMatManager;         //이동 예정
     ModelManager*    m_pModelManager;       //이동 예정
-    CColliderManager* m_pColManager;        //
+    
     CLightManager*   m_pLightManager;
     CWaveManager*    m_pWaveManager;
 
@@ -156,7 +155,7 @@ private:
 
     void RequestCreateObj(object* pObj);
     void ControlGizumo();
-    void GetObjInRect();
+    void WhenDragMouse();
 
     float GetNDC_X(CPoint& inPoint);
     float GetNDC_Y(CPoint& inPoint);

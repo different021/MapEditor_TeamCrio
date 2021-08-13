@@ -92,13 +92,11 @@ BOOL Viewer::InitGraphicEngin()
 void Viewer::InitManagers()
 {
 	//마테리얼 매니저
-	m_pInsManager = DrawInsManager::GetInstance();
 	m_pMatManager = MaterialManager::GetInstance();
 	m_pMatManager->SetGraphicEngine(m_pEngine);
 
 	//모델 메니저
 	m_pModelManager = ModelManager::GetModelManager();
-	m_pColManager = CColliderManager::GetInstance();
 	m_pLightManager = CLightManager::GetInstance();
 	m_pWaveManager = CWaveManager::GetInstance();
 }
@@ -130,10 +128,8 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 
 void Viewer::CleanUp()
 {
-	m_pInsManager->Release();
 	m_pMatManager->DeleteInstance();
 	m_pModelManager->DeleteModelManager();
-	m_pColManager->DeleteInstance();
 	m_pLightManager->Release();
 	m_pWaveManager->Release();
 	DeleteGrid();						//그리드
@@ -1064,7 +1060,7 @@ void Viewer::ControlGizumo()
 }
 
 //drag
-void Viewer::GetObjInRect()
+void Viewer::WhenDragMouse()
 {
 	float point2[4] = {};
 	
@@ -1079,57 +1075,6 @@ void Viewer::GetObjInRect()
 	point2[3] = min(ndc_y, ndc_ly);		//minY
 
 	::SendMessageW(g_hCenter, WM_OBJECT_SELECT_IN_RECT, (WPARAM)point2, NULL);
-
-	//DrawInsList* pList = (DrawInsList*)m_pInsManager->GetDrawInsList();
-
-	//if (pList == NULL) return;
-	//if (pList->size() <= 0) return;
-
-	//DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
-	//DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
-
-	////object에 관한 검사.
-	//DrawInsList::iterator it;
-	//for (it = pList->begin(); it != pList->end(); it++)
-	//{
-	//	DRAW_INSTANCE* pDrawIns = *it;
-	//	DirectX::XMMATRIX matrix = DirectX::XMMatrixIdentity();
-
-	//	DirectX::XMFLOAT4X4 TM;
-	//	pDrawIns->first->GetTm(TM);
-
-	//	DirectX::XMMATRIX mTM = DirectX::XMLoadFloat4x4(&TM);
-
-	//	matrix = mTM * mView * mProj;
-
-	//	int modelIndex = pDrawIns->first->modelIndex;
-	//	MODEL* pMODEL = m_pModelManager->GetModel(modelIndex);
-	//	if (pMODEL == nullptr)
-	//	{
-	//		int a = 0;
-	//		return;
-	//	}
-	//	DirectX::XMFLOAT3 CenterPos = pMODEL->hModel->pRawData->boundingBox.Center;
-	//	DirectX::XMVECTOR vCenterPos = DirectX::XMLoadFloat3(&CenterPos);
-
-	//	DirectX::XMFLOAT3 screenPos;
-	//	DirectX::XMVECTOR pos = XMVector3TransformCoord(vCenterPos, matrix);
-	//	DirectX::XMStoreFloat3(&screenPos, pos);
-
-	//	bool isInRect = MapUtil::AABB(xMin, xMax, yMin, yMax, screenPos.x, screenPos.y);
-	//	if (isInRect == true)
-	//	{
-	//		m_pInsManager->AddSelected(pDrawIns->second);
-	//	}
-	//	else
-	//	{
-	//		object* pObj = pDrawIns->first;
-	//		if (m_pInsManager->IsSelected(pObj) == true)
-	//		{
-	//			m_pInsManager->AddSelected(pObj);
-	//		}
-	//	}
-	//}
 }
 
 float Viewer::GetNDC_X(CPoint& inPoint)
@@ -1332,13 +1277,10 @@ void Viewer::OnMouseMove(UINT nFlags, CPoint point)
 			float ndcX2 = GetNDC_X(m_DragPoint[1]);
 			float ndcY2 = GetNDC_Y(m_DragPoint[1]);
 
-			GetObjInRect();
-			m_pColManager->GetColliderInRect(ndcX1, ndcY1, ndcX2, ndcY2);
-			m_pLightManager->GetLightInRect(ndcX1, ndcY1, ndcX2, ndcY2);
-			g_pCenter->UpdateSelectedLight();	//Update Dialog
+			WhenDragMouse();	//드래그 범위 내위 내의 오브젝트를 선택한다.
+
 			
-			//Light* pLight = m_pLightManager->GetLastSelected();
-			//object* pLast = m_pInsManager->GetLastSelectedImg();
+			
 		}
 	}
 

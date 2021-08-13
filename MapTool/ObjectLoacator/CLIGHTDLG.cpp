@@ -304,9 +304,9 @@ void CLightDlg::ClearLightList()
 	pList->ResetContent();
 }
 
-void CLightDlg::UpdateSelectedLight()
+void CLightDlg::UpdateSelectedLight(Light* pLight)
 {
-	Light* pLight = m_pLightManager->GetLastSelected();
+	if (pLight == nullptr) return;
 	SetEditBox(pLight);
 }
 

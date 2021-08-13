@@ -96,6 +96,7 @@ private:
 
 	//instance manager로.
 	void rotateObject(DirectX::XMFLOAT4* pQuaternion);
+	void selectObjectByDrag(float maxX, float minX, float maxY, float minY);		//float4개 파라미터. 
 
 public:					
 	void	Update();
@@ -182,7 +183,7 @@ public:
 	void DuplicateLightSelectedList();						
 	void DeleteSelectedLight();					
 	Light* PickingLight(int screenX, int screenY);
-	void UpdateSelectedLight();
+	void UpdateEditBoxByLight(Light* pLight);
 
 	//그리드
 	void DrawGrid(int width, int height, int offset);

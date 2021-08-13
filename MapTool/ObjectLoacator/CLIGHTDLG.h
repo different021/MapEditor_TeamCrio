@@ -43,7 +43,7 @@ public:
 	void ClearLightList();
 
 	//에딧박스 업데이트
-	void UpdateSelectedLight();
+	void UpdateSelectedLight(Light* pLight);
 	void UpdateTypeByLight(lightData* pData);
 	void DeleteLightInListBox(std::vector<Light*>* pList);
 	
