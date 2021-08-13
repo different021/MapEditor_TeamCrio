@@ -72,9 +72,6 @@ private:
     MaterialManager* m_pMatManager;         //이동 예정
     ModelManager*    m_pModelManager;       //이동 예정
     
-    CLightManager*   m_pLightManager;
-    CWaveManager*    m_pWaveManager;
-
     CamController* m_pCamController;        //카메라 조작용.
 
 private:

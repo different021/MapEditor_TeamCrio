@@ -97,8 +97,6 @@ void Viewer::InitManagers()
 
 	//모델 메니저
 	m_pModelManager = ModelManager::GetModelManager();
-	m_pLightManager = CLightManager::GetInstance();
-	m_pWaveManager = CWaveManager::GetInstance();
 }
 
 
@@ -130,8 +128,6 @@ void Viewer::CleanUp()
 {
 	m_pMatManager->DeleteInstance();
 	m_pModelManager->DeleteModelManager();
-	m_pLightManager->Release();
-	m_pWaveManager->Release();
 	DeleteGrid();						//그리드
 
 	if (m_pCamController != NULL)
@@ -1059,7 +1055,7 @@ void Viewer::ControlGizumo()
 	m_Gizmo.SetPos(centerPos);
 }
 
-//drag
+//드래그 범위 내의 오브젝트들 검사. 
 void Viewer::WhenDragMouse()
 {
 	float point2[4] = {};
@@ -1278,8 +1274,6 @@ void Viewer::OnMouseMove(UINT nFlags, CPoint point)
 			float ndcY2 = GetNDC_Y(m_DragPoint[1]);
 
 			WhenDragMouse();	//드래그 범위 내위 내의 오브젝트를 선택한다.
-
-			
 			
 		}
 	}
