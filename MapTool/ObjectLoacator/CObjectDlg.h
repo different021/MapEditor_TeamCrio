@@ -154,12 +154,13 @@ private:
 	//콘트롤 초기화
 	void GetMapNameFromDlg(int id, CString& dest);
 	void CreateFolder(CStringW& folderName);
-
 	void OutputDebugCode(wchar_t* pStr);
+
+public:
+	//Request Rsource List  to Center
 	void RequestModelList();
 	void RequestMatList();
 
-public:
 	void GetObjectDataFromEditBox(object* pDest);
 
 

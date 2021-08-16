@@ -21,7 +21,7 @@ public:
 
     wchar_t* MakeFullPath(CString& dest, CString& path, CString& name, CString& tex, CString& extend);
 
-    //MODEL* LoadModelData(wchar_t* path, wchar_t* name, int texIndex);
+
     MODEL* LoadModel(std::string fileName, std::string fullPath);
     MODEL* LoadModelFromHModel(CString path, CString name, int texIndex);             //¸ðµ¨ ·Îµå
     MODEL* LoadModelFromHModel(CString fullPathName, CString name);

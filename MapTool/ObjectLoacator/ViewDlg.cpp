@@ -49,20 +49,12 @@ void Viewer::InitailzeGraphics(int iWidth, int iHeight)
 
 	MoveWindow(0, 0, iWidth, iHeight);
 	InitGraphicEngin();
-	InitManagers();
 
 	m_pCamController = new CamController;
-
-	//CreateGraphicResource();
-	//CreateGraphicResource_TEST();
-	//CreaetModelByText(NULL);
-	CreateModelByFolder();
-	CreateMaterialByText(NULL);
-	//CreateMaterialByFolder();
-
+	
 	SetMainView(g_vCamPos);
 
-	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);
+	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);	//그리드 관리자 분리 가능.
 
 	m_Gizmo.Setup(m_pEngine);
 
@@ -89,15 +81,16 @@ BOOL Viewer::InitGraphicEngin()
 	return TRUE;
 }
 
-void Viewer::InitManagers()
-{
-	//마테리얼 매니저
-	m_pMatManager = MaterialManager::GetInstance();
-	m_pMatManager->SetGraphicEngine(m_pEngine);
-
-	//모델 메니저
-	m_pModelManager = ModelManager::GetModelManager();
-}
+//void Viewer::InitResourceManagers()
+//{
+//	//ResourceManagers
+//	//마테리얼 매니저
+//	//m_pMatManager = MaterialManager::GetInstance();
+//	//m_pMatManager->SetGraphicEngine(m_pEngine);
+//
+//	//모델 메니저
+//	//m_pModelManager = ModelManager::GetModelManager();
+//}
 
 
 Viewer::Viewer(CWnd* pParent)
@@ -126,8 +119,8 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 
 void Viewer::CleanUp()
 {
-	m_pMatManager->DeleteInstance();
-	m_pModelManager->DeleteModelManager();
+	//m_pMatManager->DeleteInstance();
+	//m_pModelManager->DeleteModelManager();
 	DeleteGrid();						//그리드
 
 	if (m_pCamController != NULL)
@@ -162,46 +155,46 @@ void Viewer::Draw()
 //그래픽 인스턴스를 만드는 책임만 있다. -> 그래픽 엔진에 의존적인 작업.
 //관리는 매니저 클래스에서.
 //virtual로 할 것.
-HInstanceData* Viewer::CreateGraphicInstance(object* pSrc)
-{
-	HInstanceData* hResult = NULL;
-	object* pObj = pSrc;
-
-	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
-	pObj->GetTm(mTm);
-
-	int modelIndex = pObj->modelIndex;
-	if (modelIndex < 0)
-	{
-		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-		modelIndex = 0;
-	}
-
-	int matIndex = pObj->matIndex;
-	if (matIndex < 0)
-	{
-		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-		matIndex = 0;
-	}
-
-	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
-
-	HMaterialData* pMat = NULL;
-	if (matIndex == 0)
-	{
-		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
-		hResult->worldTM = mTm;
-	}
-	else
-	{
-		hResult = pModel->AddInstance(ShaderType::DEFAULT);
-		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
-		hResult->SetMaterial(pMat, 0);
-		hResult->worldTM = mTm;
-	}
-
-	return hResult;
-}
+//HInstanceData* Viewer::CreateGraphicInstance(object* pSrc)
+//{
+//	HInstanceData* hResult = NULL;
+//	object* pObj = pSrc;
+//
+//	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
+//	pObj->GetTm(mTm);
+//
+//	int modelIndex = pObj->modelIndex;
+//	if (modelIndex < 0)
+//	{
+//		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+//		modelIndex = 0;
+//	}
+//
+//	int matIndex = pObj->matIndex;
+//	if (matIndex < 0)
+//	{
+//		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+//		matIndex = 0;
+//	}
+//
+//	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
+//
+//	HMaterialData* pMat = NULL;
+//	if (matIndex == 0)
+//	{
+//		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
+//		hResult->worldTM = mTm;
+//	}
+//	else
+//	{
+//		hResult = pModel->AddInstance(ShaderType::DEFAULT);
+//		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
+//		hResult->SetMaterial(pMat, 0);
+//		hResult->worldTM = mTm;
+//	}
+//
+//	return hResult;
+//}
 
 void Viewer::DrawEditMode(int x, int y)
 {
@@ -333,20 +326,6 @@ void Viewer::SetColliderSelectMode(bool bSelect)
 void Viewer::SetLightSelectMode(bool bSelect)
 {
 	m_bLightSelectMode = bSelect;
-}
-
-//수정 or 삭제.
-void Viewer::SendModelList(HWND hWnd)
-{
-	::SendMessage(hWnd, WM_LOAD_MODEL, (WPARAM)(m_pModelManager->GetModelList()), 0);
-	//::SendMessage(hWnd, WM_LOAD_MODEL, (WPARAM)(&g_hModelList), 0);
-}
-
-//수정 삭제 예정.
-void Viewer::SendMatList(HWND hWnd)
-{
-	::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(m_pMatManager->GetMatList()), 0);
-	//::SendMessage(hWnd, WM_LOAD_MAT, (WPARAM)(&g_MaterialList), 0);
 }
 
 
@@ -791,156 +770,156 @@ void Viewer::RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp)
 }
 
 
+//
+//BOOL Viewer::CreaetModelByText(wchar_t* szFileName)
+//{
+//	m_pEngine->StartSetting();
+//
+//	std::vector<wchar_t*> fileList;
+//
+//	CTextReader* pTxtReader = new CTextReader;
+//	wchar_t* pFile = L"Media/Model/modelList.txt";
+//
+//	int iResult = HGUtility::IsFileExists(pFile);
+//	if (iResult == 1)
+//	{
+//		pTxtReader->OpenTxt(pFile);
+//	}
+//
+//	pTxtReader->ReadTxt(NULL);
+//	pTxtReader->GetFileList(fileList);
+//	pTxtReader->CloseTxt();
+//	delete pTxtReader;
+//
+//	CString pathOfModel = L"Media/Model/";
+//	//CString pathOfMaterial	= L"Media/Material/";
+//
+//	static int modelIndex = 0;
+//	std::vector<wchar_t*>::iterator it;
+//	for (it = fileList.begin(); it != fileList.end();)
+//	{
+//		wchar_t* pName = *it;
+//		CString temp = CString(pName);
+//		m_pModelManager->LoadModelFromHModel(pathOfModel, temp, modelIndex);
+//		temp.Empty();
+//
+//		delete[] pName;
+//		pName = NULL;
+//		it = fileList.erase(it);
+//	}
+//
+//	m_pEngine->FinishSetting();
+//
+//	return 0;
+//}
 
-BOOL Viewer::CreaetModelByText(wchar_t* szFileName)
-{
-	m_pEngine->StartSetting();
+//BOOL Viewer::CreateMaterialByText(wchar_t* szFileName)
+//{
+//	std::vector<wchar_t*> fileList;
+//
+//	CTextReader* pTxtReader = new CTextReader;
+//	wchar_t* pFile = L"Media/Material/materialList.txt";
+//
+//	int iResult = HGUtility::IsFileExists(pFile);
+//	if (iResult == 1)
+//	{
+//		pTxtReader->OpenTxt(pFile);
+//	}
+//
+//	pTxtReader->ReadTxt(NULL);
+//	pTxtReader->GetFileList(fileList);
+//	pTxtReader->CloseTxt();
+//	delete pTxtReader;
+//
+//	m_pEngine->StartSetting();
+//	int texIndex = -1;
+//	CString png = L".PNG";
+//	CString pathOfMaterial = L"Media/Material/";
+//
+//	//CString colorchip = L"ColorChip";
+//	//m_pMatManager->LoadTexture(pathOfMaterial, colorchip, png);
+//
+//	std::vector<wchar_t*>::iterator it;
+//	for (it = fileList.begin(); it != fileList.end();)
+//	{
+//		CString temp = CString(*it);
+//		texIndex = m_pMatManager->LoadTexture(pathOfMaterial, temp, png);
+//
+//		delete[] * it;
+//		*it = NULL;
+//		it = fileList.erase(it);
+//	}
+//
+//	//m_pEngine->LoadSkyBox(L"Media/Skybox/Skybox.dds");			//스카이박스
+//	//m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");	//폰트
+//
+//	m_pEngine->FinishSetting();
+//
+//	return 0;
+//}
 
-	std::vector<wchar_t*> fileList;
+//BOOL Viewer::CreateModelByFolder()
+//{
+//	m_pEngine->StartSetting();
+//	int index = -1;
+//	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Model"))
+//	{
+//		const auto& filePath = entry.path().string();
+//
+//		if (filePath.substr(filePath.length() - 7, 7) == ".hmodel")
+//		{
+//			std::size_t slash = filePath.rfind("\\");
+//			std::size_t formatName = filePath.rfind(".hmodel");
+//			std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
+//			index++;
+//			m_pModelManager->LoadModel(modelName, filePath);
+//		}
+//	}
+//	m_pEngine->FinishSetting();
+//	return 0;
+//}
 
-	CTextReader* pTxtReader = new CTextReader;
-	wchar_t* pFile = L"Media/Model/modelList.txt";
-
-	int iResult = HGUtility::IsFileExists(pFile);
-	if (iResult == 1)
-	{
-		pTxtReader->OpenTxt(pFile);
-	}
-
-	pTxtReader->ReadTxt(NULL);
-	pTxtReader->GetFileList(fileList);
-	pTxtReader->CloseTxt();
-	delete pTxtReader;
-
-	CString pathOfModel = L"Media/Model/";
-	//CString pathOfMaterial	= L"Media/Material/";
-
-	static int modelIndex = 0;
-	std::vector<wchar_t*>::iterator it;
-	for (it = fileList.begin(); it != fileList.end();)
-	{
-		wchar_t* pName = *it;
-		CString temp = CString(pName);
-		m_pModelManager->LoadModelFromHModel(pathOfModel, temp, modelIndex);
-		temp.Empty();
-
-		delete[] pName;
-		pName = NULL;
-		it = fileList.erase(it);
-	}
-
-	m_pEngine->FinishSetting();
-
-	return 0;
-}
-
-BOOL Viewer::CreateMaterialByText(wchar_t* szFileName)
-{
-	std::vector<wchar_t*> fileList;
-
-	CTextReader* pTxtReader = new CTextReader;
-	wchar_t* pFile = L"Media/Material/materialList.txt";
-
-	int iResult = HGUtility::IsFileExists(pFile);
-	if (iResult == 1)
-	{
-		pTxtReader->OpenTxt(pFile);
-	}
-
-	pTxtReader->ReadTxt(NULL);
-	pTxtReader->GetFileList(fileList);
-	pTxtReader->CloseTxt();
-	delete pTxtReader;
-
-	m_pEngine->StartSetting();
-	int texIndex = -1;
-	CString png = L".PNG";
-	CString pathOfMaterial = L"Media/Material/";
-
-	//CString colorchip = L"ColorChip";
-	//m_pMatManager->LoadTexture(pathOfMaterial, colorchip, png);
-
-	std::vector<wchar_t*>::iterator it;
-	for (it = fileList.begin(); it != fileList.end();)
-	{
-		CString temp = CString(*it);
-		texIndex = m_pMatManager->LoadTexture(pathOfMaterial, temp, png);
-
-		delete[] * it;
-		*it = NULL;
-		it = fileList.erase(it);
-	}
-
-	//m_pEngine->LoadSkyBox(L"Media/Skybox/Skybox.dds");			//스카이박스
-	//m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");	//폰트
-
-	m_pEngine->FinishSetting();
-
-	return 0;
-}
-
-BOOL Viewer::CreateModelByFolder()
-{
-	m_pEngine->StartSetting();
-	int index = -1;
-	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Model"))
-	{
-		const auto& filePath = entry.path().string();
-
-		if (filePath.substr(filePath.length() - 7, 7) == ".hmodel")
-		{
-			std::size_t slash = filePath.rfind("\\");
-			std::size_t formatName = filePath.rfind(".hmodel");
-			std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
-			index++;
-			m_pModelManager->LoadModel(modelName, filePath);
-		}
-	}
-	m_pEngine->FinishSetting();
-	return 0;
-}
-
-BOOL Viewer::CreateMaterialByFolder()
-{
-	m_pEngine->StartSetting();
-	int index = -1;
-	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Material"))
-	{
-		const auto& filePath = entry.path().string();
-
-		size_t slash = entry.path().string().rfind("\\");
-		size_t length = entry.path().string().size();
-		std::string materialName = filePath.substr(slash + 1, length);
-
-		TextureSet set;
-
-		for (const auto& matFolder : std::filesystem::recursive_directory_iterator(filePath.c_str()) )
-		{
-			std::string material = matFolder.path().string();
-
-			if (material.substr(material.length() - 4, 4) == ".png")
-			{
-				std::size_t slashPoint	= material.rfind("\\");
-				std::size_t underBar	= material.rfind("_");
-				std::size_t formatName	= material.rfind(".png");
-				std::string texKind		= material.substr(underBar, formatName - underBar - 1);
-
-				std::string matName = filePath.substr(slash + 1, formatName - slash - 1);
-			}
-			
-		}
-		//if (filePath.substr(filePath.length() - 3, 3) == ".png")
-		//{
-		//	std::size_t slash = filePath.rfind("\\");
-		//	std::size_t formatName = filePath.rfind(".hmodel");
-		//	std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
-		//	index++;
-		//	m_pModelManager->LoadModel(modelName, filePath);
-		//}
-	}
-	m_pEngine->FinishSetting();
-	return 0;
-}
+//BOOL Viewer::CreateMaterialByFolder()
+//{
+//	m_pEngine->StartSetting();
+//	int index = -1;
+//	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Material"))
+//	{
+//		const auto& filePath = entry.path().string();
+//
+//		size_t slash = entry.path().string().rfind("\\");
+//		size_t length = entry.path().string().size();
+//		std::string materialName = filePath.substr(slash + 1, length);
+//
+//		TextureSet set;
+//
+//		for (const auto& matFolder : std::filesystem::recursive_directory_iterator(filePath.c_str()) )
+//		{
+//			std::string material = matFolder.path().string();
+//
+//			if (material.substr(material.length() - 4, 4) == ".png")
+//			{
+//				std::size_t slashPoint	= material.rfind("\\");
+//				std::size_t underBar	= material.rfind("_");
+//				std::size_t formatName	= material.rfind(".png");
+//				std::string texKind		= material.substr(underBar, formatName - underBar - 1);
+//
+//				std::string matName = filePath.substr(slash + 1, formatName - slash - 1);
+//			}
+//			
+//		}
+//		//if (filePath.substr(filePath.length() - 3, 3) == ".png")
+//		//{
+//		//	std::size_t slash = filePath.rfind("\\");
+//		//	std::size_t formatName = filePath.rfind(".hmodel");
+//		//	std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
+//		//	index++;
+//		//	m_pModelManager->LoadModel(modelName, filePath);
+//		//}
+//	}
+//	m_pEngine->FinishSetting();
+//	return 0;
+//}
 
 //BOOL Viewer::CreateMaterialByFolder()
 //{
@@ -996,45 +975,45 @@ wchar_t* Viewer::MakeFullPath(CString& dest, CString& path, CString& name, CStri
 	return dest.GetBuffer();
 }
 
-
-HInstanceData* Viewer::AddGraphicInstance(object* pObj)
-{
-	HInstanceData* hIns = NULL;
-	HMaterialData* pMat = NULL;
-
-	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
-	pObj->GetTm(mTm);
-
-	int modelIndex = pObj->modelIndex;
-	if (modelIndex < 0)
-		modelIndex = 0;
-
-	int matIndex = pObj->matIndex;
-	if (matIndex < 0)
-		matIndex = 0;
-
-
-	//메테리얼 인덱스가 0일 경우 컬러칩으로 인식한다.
-	if (matIndex == 0)
-	{
-		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::COLORCHIP);
-	}
-	else
-	{
-		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::DEFAULT);
-		pMat = m_pMatManager->GetMatList()->at(0)->hMat;
-		hIns->SetMaterial(pMat, 0);
-	}
-
-	hIns->worldTM = mTm;
-
-	//예외 체크 필요하다. 리턴 값확인 필요.
-	if (hIns == NULL)
-		return NULL;
-	else
-		return hIns;
-
-}
+//
+//HInstanceData* Viewer::AddGraphicInstance(object* pObj)
+//{
+//	HInstanceData* hIns = NULL;
+//	HMaterialData* pMat = NULL;
+//
+//	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
+//	pObj->GetTm(mTm);
+//
+//	int modelIndex = pObj->modelIndex;
+//	if (modelIndex < 0)
+//		modelIndex = 0;
+//
+//	int matIndex = pObj->matIndex;
+//	if (matIndex < 0)
+//		matIndex = 0;
+//
+//
+//	//메테리얼 인덱스가 0일 경우 컬러칩으로 인식한다.
+//	if (matIndex == 0)
+//	{
+//		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::COLORCHIP);
+//	}
+//	else
+//	{
+//		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::DEFAULT);
+//		pMat = m_pMatManager->GetMatList()->at(0)->hMat;
+//		hIns->SetMaterial(pMat, 0);
+//	}
+//
+//	hIns->worldTM = mTm;
+//
+//	//예외 체크 필요하다. 리턴 값확인 필요.
+//	if (hIns == NULL)
+//		return NULL;
+//	else
+//		return hIns;
+//
+//}
 
 
 

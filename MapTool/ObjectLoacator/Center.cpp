@@ -2,6 +2,7 @@
 //
 #include "pch.h"
 #include "afxdialogex.h"
+#include <filesystem>
 #include <thread>
 #include <string.h>
 #include <wchar.h>
@@ -30,7 +31,7 @@
 
 #include "WMDefine.h"		//윈도우 메세지 정의 헤더
 #include "HGMessage.h"		//오브젝트 관련 메세지 구조체 정의
-
+#include "utility/HGUtility.h"
 
 /*
 * 대화상자와 매니저를 관리하는 곳을 분리할 수 있을 것 같다.
@@ -302,7 +303,8 @@ void Center::UpdateModel(DRAW_INSTANCE* pDrawIns)
 	pInsData->Delete();
 	pDrawIns->second = NULL;
 
-	m_Viewer->CreateGraphicInstance(pObj);
+	CreateGraphicInstance(pObj);
+	//m_Viewer->CreateGraphicInstance(pObj);
 }
 
 void Center::UpdateModel(object* pObj)
@@ -316,6 +318,72 @@ void Center::UpdateWaveList()
 	m_pWaveManager->Update();
 }
 
+void Center::LoadModel()
+{
+	m_pEngine->StartSetting();
+	int index = -1;
+	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Model"))
+	{
+		const auto& filePath = entry.path().string();
+
+		if (filePath.substr(filePath.length() - 7, 7) == ".hmodel")
+		{
+			std::size_t slash = filePath.rfind("\\");
+			std::size_t formatName = filePath.rfind(".hmodel");
+			std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
+			index++;
+			m_pModelManager->LoadModel(modelName, filePath);
+		}
+	}
+	m_pEngine->FinishSetting();
+	return;
+}
+
+void Center::LoadMaterial()
+{
+	std::vector<wchar_t*> fileList;
+
+	CTextReader* pTxtReader = new CTextReader;
+	wchar_t* pFile = L"Media/Material/materialList.txt";
+
+	int iResult = HGUtility::IsFileExists(pFile);
+	if (iResult == 1)
+	{
+		pTxtReader->OpenTxt(pFile);
+	}
+
+	pTxtReader->ReadTxt(NULL);
+	pTxtReader->GetFileList(fileList);
+	pTxtReader->CloseTxt();
+	delete pTxtReader;
+
+	m_pEngine->StartSetting();
+	int texIndex = -1;
+	CString png = L".PNG";
+	CString pathOfMaterial = L"Media/Material/";
+
+	//CString colorchip = L"ColorChip";
+	//m_pMatManager->LoadTexture(pathOfMaterial, colorchip, png);
+
+	std::vector<wchar_t*>::iterator it;
+	for (it = fileList.begin(); it != fileList.end();)
+	{
+		CString temp = CString(*it);
+		texIndex = m_pMatManager->LoadTexture(pathOfMaterial, temp, png);
+
+		delete[] * it;
+		*it = NULL;
+		it = fileList.erase(it);
+	}
+
+	//m_pEngine->LoadSkyBox(L"Media/Skybox/Skybox.dds");			//스카이박스
+	//m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");	//폰트
+
+	m_pEngine->FinishSetting();
+
+	return;
+}
+
 void Center::DeleteInDeleteList()
 {
 	std::vector<object*> deletedObjList;
@@ -327,6 +395,47 @@ void Center::DeleteInDeleteList()
 	//m_pLightDlg->DeleteLightInListBox(&deleteLightList);
 	m_pLightDlg.DeleteLightInListBox(&deleteLightList);
 	m_pWaveManager->DeleteWaveInDeleteList();
+}
+
+HInstanceData* Center::CreateGraphicInstance(object* pSrc)
+{
+	HInstanceData* hResult = NULL;
+	object* pObj = pSrc;
+
+	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
+	pObj->GetTm(mTm);
+
+	int modelIndex = pObj->modelIndex;
+	if (modelIndex < 0)
+	{
+		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+		modelIndex = 0;
+	}
+
+	int matIndex = pObj->matIndex;
+	if (matIndex < 0)
+	{
+		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
+		matIndex = 0;
+	}
+
+	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
+
+	HMaterialData* pMat = NULL;
+	if (matIndex == 0)
+	{
+		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
+		hResult->worldTM = mTm;
+	}
+	else
+	{
+		hResult = pModel->AddInstance(ShaderType::DEFAULT);
+		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
+		hResult->SetMaterial(pMat, 0);
+		hResult->worldTM = mTm;
+	}
+
+	return hResult;
 }
 
 object* Center::GetLastSelectedObject()
@@ -346,7 +455,8 @@ bool Center::CreateObj(object* pSrc)
 	bool bResult = false;
 	if (pObj == NULL) return bResult;
 	
-	HInstanceData* hIns = m_Viewer->CreateGraphicInstance(pObj);
+	//HInstanceData* hIns = m_Viewer->CreateGraphicInstance(pObj);
+	HInstanceData* hIns = CreateGraphicInstance(pObj);
 	
 	if (hIns == NULL)
 	{
@@ -561,6 +671,7 @@ void Center::CreateWaveFromList(int numOfWave, waveData* pWaveList)
 
 void Center::UpdateModelList()
 {
+	//수정할 것.
 	WPARAM wModelList = (WPARAM)m_pModelManager->GetModelList();
 	::SendMessageW(m_ObjectDlg, WM_UPDATE_MODEL_LIST, wModelList, NULL);
 	//::SendMessageW(m_CharSetting, WM_UPDATE_MODEL_LIST, wModelList, NULL);
@@ -1100,7 +1211,13 @@ BOOL Center::OnInitDialog()
 	initMainMenu();
 	initializeDlgs(this);
 	
-	//dlg 위치 조정
+	//Resource Load
+	LoadModel();
+	LoadMaterial();
+
+	m_ObjectDlg.RequestMatList();
+
+	//Set Dialog Position
 	CRect rcViewer;
 	m_Viewer->GetWindowRect(&rcViewer);
 	

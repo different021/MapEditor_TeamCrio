@@ -107,10 +107,15 @@ public:
 	
 	void	UpdateWaveList();								//그래픽인스턴스 데이터 최신화.
 
+	//Resource
+	void LoadModel();
+	void LoadMaterial();
+
 	//인스턴스 삭제
 	void DeleteInDeleteList();
 
 	//오브젝트 생성/삭제/수정	//Object 관련	
+	HInstanceData* CreateGraphicInstance(object* pSrc);		//리턴값 변경 -> 엔진 독립적으로 만들기 위해.
 	object* GetLastSelectedObject();						//선택된 오브젝트 중 마지막
 	void	DeleteAllDrawInsList();							//오브젝트 전부 삭제.
 	bool	CreateObj(object* pObj);						//오브젝트 생성.

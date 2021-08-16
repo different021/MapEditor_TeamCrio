@@ -1710,7 +1710,6 @@ afx_msg LRESULT CObjectDlg::OnUpdateMatList(WPARAM wParam, LPARAM lParam)
 }
 
 
-
 afx_msg LRESULT CObjectDlg::OnListBoxNone(WPARAM wParam, LPARAM lParam)
 {
 	UpdateEditBoxesByObject(NULL);

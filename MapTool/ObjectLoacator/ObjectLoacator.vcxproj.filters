@@ -15,15 +15,9 @@
     <Filter Include="utill">
       <UniqueIdentifier>{68ca73d1-3207-45b7-bcae-e9ea01fbc17b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager">
-      <UniqueIdentifier>{a8dcffcd-b9e9-4a03-bff4-891dc9661239}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dialog">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Gizumo">
-      <UniqueIdentifier>{0db10d63-96cc-4f70-9143-246ffb2fd94c}</UniqueIdentifier>
     </Filter>
     <Filter Include="SAVELOAD">
       <UniqueIdentifier>{9277b2cd-a520-4cb5-a530-56007f94c04f}</UniqueIdentifier>
@@ -33,6 +27,15 @@
     </Filter>
     <Filter Include="Container">
       <UniqueIdentifier>{6ac2c2fd-b689-45bb-bc98-d201171e24c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InstanceManager">
+      <UniqueIdentifier>{a8dcffcd-b9e9-4a03-bff4-891dc9661239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{d59ecfd6-b80e-437b-9a24-b4131d3451a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CamGizumo">
+      <UniqueIdentifier>{0db10d63-96cc-4f70-9143-246ffb2fd94c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,12 +75,6 @@
     <ClInclude Include="CGrid.h">
       <Filter>Dialog</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="CCmd.h">
       <Filter>Dialog</Filter>
     </ClInclude>
@@ -85,10 +82,10 @@
       <Filter>utill</Filter>
     </ClInclude>
     <ClInclude Include="DrawInsManager.h">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClInclude>
     <ClInclude Include="Gizmo.h">
-      <Filter>Gizumo</Filter>
+      <Filter>CamGizumo</Filter>
     </ClInclude>
     <ClInclude Include="Center.h">
       <Filter>Dialog</Filter>
@@ -97,7 +94,7 @@
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="CColliderManager.h">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClInclude>
     <ClInclude Include="CHelpDlg.h">
       <Filter>Dialog</Filter>
@@ -105,11 +102,8 @@
     <ClInclude Include="..\src\utility\HGUtility.h">
       <Filter>utill</Filter>
     </ClInclude>
-    <ClInclude Include="CamController.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
     <ClInclude Include="CLightManager.h">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClInclude>
     <ClInclude Include="CLightDlg.h">
       <Filter>Dialog</Filter>
@@ -133,7 +127,7 @@
       <Filter>Dialog</Filter>
     </ClInclude>
     <ClInclude Include="CWaveManager.h">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Defines.h">
       <Filter>SAVELOAD</Filter>
@@ -167,6 +161,15 @@
     </ClInclude>
     <ClInclude Include="HGMessage.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="CamController.h">
+      <Filter>CamGizumo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -207,20 +210,14 @@
     <ClCompile Include="ViewDlg.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="CCmd.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="DrawInsManager.cpp">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClCompile>
     <ClCompile Include="Gizmo.cpp">
-      <Filter>Gizumo</Filter>
+      <Filter>CamGizumo</Filter>
     </ClCompile>
     <ClCompile Include="Center.cpp">
       <Filter>Dialog</Filter>
@@ -229,7 +226,7 @@
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="CColliderManager.cpp">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClCompile>
     <ClCompile Include="CHelpDlg.cpp">
       <Filter>Dialog</Filter>
@@ -237,11 +234,8 @@
     <ClCompile Include="..\src\utility\HGUtility.cpp">
       <Filter>utill</Filter>
     </ClCompile>
-    <ClCompile Include="CamController.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
     <ClCompile Include="CLightManager.cpp">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClCompile>
     <ClCompile Include="CLightDlg.cpp">
       <Filter>Dialog</Filter>
@@ -262,7 +256,7 @@
       <Filter>Dialog</Filter>
     </ClCompile>
     <ClCompile Include="CWaveManager.cpp">
-      <Filter>Manager</Filter>
+      <Filter>InstanceManager</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Defines.cpp">
       <Filter>SAVELOAD</Filter>
@@ -293,6 +287,15 @@
     </ClCompile>
     <ClCompile Include="CEditorDlg.cpp">
       <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="CamController.cpp">
+      <Filter>CamGizumo</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

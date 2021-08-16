@@ -76,44 +76,6 @@ wchar_t* ModelManager::MakeFullPath(CString& dest, CString& path, CString& name,
 
 static int g_INDEX = 0;
 
-//MODEL* ModelManager::LoadModelData(wchar_t* path, wchar_t* name, int texIndex)
-//{
-//	if (texIndex < 0)
-//		__debugbreak();
-//
-//	//MODEL* pModel = NULL;
-//	//wchar_t fullPathW[MAX_PATH];
-//	//char fullPathA[MAX_PATH];
-//	//wmemset(fullPathW, L'\0', MAX_PATH);
-//	//memset(fullPathA, '\0', MAX_PATH);
-//
-//	//HGUtility::MakeFullPath(path, name, MAX_PATH, fullPathW);
-//	//HGUtility::ConvertWideCharToMultiByte(fullPathW, fullPathA, MAX_PATH - 1);
-//	//int a = 0;
-//
-//
-//	//std::vector<std::string> strList;
-//	//strList.push_back(std::string(fullPathW));		//ÀÌ°Ô ¹¼´Ï±î 
-//
-//	//BOOL bResult = FALSE;
-//	//HModelData* hModel = m_pEngine->CreateModel(strList.at(0));
-//	//if (hModel != NULL)
-//	//{
-//	//	pModel = new MODEL;
-//	//	pModel->fileName = name;
-//	//	pModel->index = g_INDEX;
-//	//	pModel->textureIndx = texIndex;
-//	//	pModel->hModel = hModel;
-//	//	g_INDEX++;
-//	//	m_ModelList.push_back(pModel);
-//
-//	//	bResult = TRUE;
-//	//}
-//
-//	return NULL;
-//
-//}
-
 MODEL* ModelManager::LoadModel(std::string fileName, std::string fullPath)
 {
 	MODEL* pModel = NULL;

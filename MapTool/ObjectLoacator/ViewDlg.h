@@ -69,15 +69,11 @@ private:
     float m_MouseSensitivty = 0.1f;
     OBJ_EDIT_MODE m_EditMode = EDIT_POS;
 
-    MaterialManager* m_pMatManager;         //이동 예정
-    ModelManager*    m_pModelManager;       //이동 예정
-    
     CamController* m_pCamController;        //카메라 조작용.
 
 private:
     void InitailzeGraphics(int iWidth, int iHeight);
     BOOL InitGraphicEngin();
-    void InitManagers();
 
 public:
     Viewer(CWnd* pParent = nullptr);
@@ -91,7 +87,7 @@ public:
     virtual void Draw();   
 
     //Graphic Instance 관련
-    virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적.
+   // virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적. 
 
     //SelectMode (object, Collider, Light, wave(미구현) )  -> 엔진 종속적.
     virtual void DrawEditMode(int x, int y);
@@ -103,9 +99,6 @@ public:
     void SetColliderSelectMode(bool bSelect);
     void SetLightSelectMode(bool bSelect);
 
-    void SendModelList(HWND hWnd);
-    void SendMatList(HWND hWnd);
-    
     //Move
     void MoveSelectedOffset(CPoint& curPoint, CPoint& lastPoint);
     void MoveSelected(CPoint& cur, CPoint& last);
@@ -139,15 +132,15 @@ public:
     void RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp);
 
 private:
-    //Init Resource
-    BOOL CreaetModelByText(wchar_t* szFileName = NULL);
-    BOOL CreateMaterialByText(wchar_t* szFileName = NULL);
-    BOOL CreateModelByFolder();
-    BOOL CreateMaterialByFolder();
+    //Init Resource  -> 이동 
+   // BOOL CreaetModelByText(wchar_t* szFileName = NULL);
+    //BOOL CreateMaterialByText(wchar_t* szFileName = NULL);
+    //BOOL CreateModelByFolder();
+    //BOOL CreateMaterialByFolder();
     //BOOL CreateMaterialByFolder();
 
     wchar_t* MakeFullPath(CString& dest, CString& path, CString& name, CString& tex ,CString& extend);
-    HInstanceData* AddGraphicInstance(object* pObj);
+    //HInstanceData* AddGraphicInstance(object* pObj);
 
 
     void RequestCreateObj(object* pObj);
