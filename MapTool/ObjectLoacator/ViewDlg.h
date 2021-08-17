@@ -71,10 +71,6 @@ private:
 
     CamController* m_pCamController;        //카메라 조작용.
 
-private:
-    void InitailzeGraphics(int iWidth, int iHeight);
-    BOOL InitGraphicEngin();
-
 public:
     Viewer(CWnd* pParent = nullptr);
     
@@ -84,9 +80,6 @@ public:
     virtual void CleanUp();
 
     virtual void Draw();   
-
-    //Graphic Instance 관련
-   // virtual HInstanceData* CreateGraphicInstance(object* pSrc); //return을 컨테이너로.. -> 그래픽 엔진 독립적. 
 
     //SelectMode (object, Collider, Light, wave(미구현) )  -> 엔진 종속적.
     virtual void DrawEditMode(int x, int y);
@@ -135,18 +128,8 @@ public:
     void RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp);
 
 private:
-    //Init Resource  -> 이동 
-   // BOOL CreaetModelByText(wchar_t* szFileName = NULL);
-    //BOOL CreateMaterialByText(wchar_t* szFileName = NULL);
-    //BOOL CreateModelByFolder();
-    //BOOL CreateMaterialByFolder();
-    //BOOL CreateMaterialByFolder();
-
     wchar_t* MakeFullPath(CString& dest, CString& path, CString& name, CString& tex ,CString& extend);
-    //HInstanceData* AddGraphicInstance(object* pObj); -> 별도의 엔진 인터페이스 구축 만들 것.
 
-
-    void RequestCreateObj(object* pObj);
     void ControlGizumo();
     void WhenDragMouse();
 

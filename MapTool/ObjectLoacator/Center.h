@@ -210,9 +210,7 @@ public:	//Wave
 	void  DeleteSelectedListAll();
 
 	//Load에 의한 다시 그리기
-	void ReDraw(STAGE_HEADER* pHeader, CSaver* pSaver);
-
-
+	void Load(STAGE_HEADER* pHeader, CSaver* pSaver);
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.

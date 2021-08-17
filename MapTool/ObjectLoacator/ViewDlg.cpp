@@ -43,44 +43,6 @@ END_MESSAGE_MAP()
 
 DirectX::XMFLOAT3 g_StartingCamPos = DirectX::XMFLOAT3(0.f, 100.f, 0.f);
 
-void Viewer::InitailzeGraphics(int iWidth, int iHeight)
-{
-	g_hWndViewer = m_hWnd;
-
-	MoveWindow(0, 0, iWidth, iHeight);
-	InitGraphicEngin();
-
-
-	m_pCamController = new CamController;
-	
-	SetMainView(g_vCamPos);
-
-	//DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);	//그리드 관리자 분리 가능.
-
-	m_Gizmo.Setup(m_pEngine);
-
-	CRect rc;
-	GetClientRect(rc);
-	m_iScreenWidth = rc.Width();
-	m_iScreenHeight = rc.Height();
-}
-
-BOOL Viewer::InitGraphicEngin()
-{
-	HWND hwnd = GetSafeHwnd();
-	RECT rc;
-	GetClientRect(&rc);
-
-	LONG width = rc.right - rc.left;
-	LONG height = rc.bottom - rc.top;
-	m_pEngine = HEngine_DX12_3D::GetInstance();
-	m_pEngine->InitEngine(hwnd, width, height);
-	m_pEngine->StartSetting();
-	m_pEngine->LoadSkyBox(L"Media/Skybox/skybox.dds");
-	m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");
-	m_pEngine->FinishSetting();
-	return TRUE;
-}
 
 Viewer::Viewer(CWnd* pParent)
 {
@@ -99,8 +61,6 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 	int iFrameY = GetSystemMetrics(SM_CYFRAME);
 	int iCaptionY = GetSystemMetrics(SM_CYCAPTION);
 
-	//MoveWindow(0, 0, iWidth, iHeight);
-
 	int width = iWidth + (iFrameX << 2);
 	int height = iHeight + (iFrameY << 2) + iCaptionY;
 
@@ -108,14 +68,11 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 
 	CRect rc;
 	GetClientRect(&rc);
-	//ClientToScreen(rc);
 	int cWdith = rc.Width();;
 	int cHeight = rc.Height();
 
 	m_iScreenWidth  = cWdith;
 	m_iScreenHeight = cHeight;
-
-	//InitailzeGraphics(width, height);
 }
 
 void Viewer::CleanUp()
@@ -140,63 +97,13 @@ void Viewer::Draw()
 	//Draw() 에서 다시 메세지를 전달한 꼴...
 	::SendMessageW(g_hCenter, WM_REQUEST_CENTER_DRAW, NULL, NULL);
 
-	//g_pCenter->DeleteInDeleteList();		//Center
-	//Update();								//Center
-	//m_pEngine->Loop();						//Center
-	//
-											//이동 가능.
+	//이동 -> GraphicEngine  
 	int _iDrawPos = m_iScreenWidth - 250;
 	DrawEditMode(_iDrawPos, 10);
 	DrawObjectSelectMode(_iDrawPos, 30);
 	DrawColliderSelectMode(_iDrawPos, 50);
 	DrawLightSelectMode(_iDrawPos, 70);
-
-	
 }
-
-//그래픽 인스턴스를 만드는 책임만 있다. -> 그래픽 엔진에 의존적인 작업.
-//관리는 매니저 클래스에서.
-//virtual로 할 것.
-//HInstanceData* Viewer::CreateGraphicInstance(object* pSrc)
-//{
-//	HInstanceData* hResult = NULL;
-//	object* pObj = pSrc;
-//
-//	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
-//	pObj->GetTm(mTm);
-//
-//	int modelIndex = pObj->modelIndex;
-//	if (modelIndex < 0)
-//	{
-//		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-//		modelIndex = 0;
-//	}
-//
-//	int matIndex = pObj->matIndex;
-//	if (matIndex < 0)
-//	{
-//		OutputDebugStringW(L"[CreateGraphicInstance] Wrong MODEL Index");
-//		matIndex = 0;
-//	}
-//
-//	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
-//
-//	HMaterialData* pMat = NULL;
-//	if (matIndex == 0)
-//	{
-//		hResult = pModel->AddInstance(ShaderType::COLORCHIP);
-//		hResult->worldTM = mTm;
-//	}
-//	else
-//	{
-//		hResult = pModel->AddInstance(ShaderType::DEFAULT);
-//		pMat = m_pMatManager->GetMatList()->at(matIndex)->hMat;
-//		hResult->SetMaterial(pMat, 0);
-//		hResult->worldTM = mTm;
-//	}
-//
-//	return hResult;
-//}
 
 void Viewer::DrawEditMode(int x, int y)
 {
@@ -801,185 +708,6 @@ void Viewer::RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp)
 	SetCam(pos, vFront, vUp);
 }
 
-
-//
-//BOOL Viewer::CreaetModelByText(wchar_t* szFileName)
-//{
-//	m_pEngine->StartSetting();
-//
-//	std::vector<wchar_t*> fileList;
-//
-//	CTextReader* pTxtReader = new CTextReader;
-//	wchar_t* pFile = L"Media/Model/modelList.txt";
-//
-//	int iResult = HGUtility::IsFileExists(pFile);
-//	if (iResult == 1)
-//	{
-//		pTxtReader->OpenTxt(pFile);
-//	}
-//
-//	pTxtReader->ReadTxt(NULL);
-//	pTxtReader->GetFileList(fileList);
-//	pTxtReader->CloseTxt();
-//	delete pTxtReader;
-//
-//	CString pathOfModel = L"Media/Model/";
-//	//CString pathOfMaterial	= L"Media/Material/";
-//
-//	static int modelIndex = 0;
-//	std::vector<wchar_t*>::iterator it;
-//	for (it = fileList.begin(); it != fileList.end();)
-//	{
-//		wchar_t* pName = *it;
-//		CString temp = CString(pName);
-//		m_pModelManager->LoadModelFromHModel(pathOfModel, temp, modelIndex);
-//		temp.Empty();
-//
-//		delete[] pName;
-//		pName = NULL;
-//		it = fileList.erase(it);
-//	}
-//
-//	m_pEngine->FinishSetting();
-//
-//	return 0;
-//}
-
-//BOOL Viewer::CreateMaterialByText(wchar_t* szFileName)
-//{
-//	std::vector<wchar_t*> fileList;
-//
-//	CTextReader* pTxtReader = new CTextReader;
-//	wchar_t* pFile = L"Media/Material/materialList.txt";
-//
-//	int iResult = HGUtility::IsFileExists(pFile);
-//	if (iResult == 1)
-//	{
-//		pTxtReader->OpenTxt(pFile);
-//	}
-//
-//	pTxtReader->ReadTxt(NULL);
-//	pTxtReader->GetFileList(fileList);
-//	pTxtReader->CloseTxt();
-//	delete pTxtReader;
-//
-//	m_pEngine->StartSetting();
-//	int texIndex = -1;
-//	CString png = L".PNG";
-//	CString pathOfMaterial = L"Media/Material/";
-//
-//	//CString colorchip = L"ColorChip";
-//	//m_pMatManager->LoadTexture(pathOfMaterial, colorchip, png);
-//
-//	std::vector<wchar_t*>::iterator it;
-//	for (it = fileList.begin(); it != fileList.end();)
-//	{
-//		CString temp = CString(*it);
-//		texIndex = m_pMatManager->LoadTexture(pathOfMaterial, temp, png);
-//
-//		delete[] * it;
-//		*it = NULL;
-//		it = fileList.erase(it);
-//	}
-//
-//	//m_pEngine->LoadSkyBox(L"Media/Skybox/Skybox.dds");			//스카이박스
-//	//m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");	//폰트
-//
-//	m_pEngine->FinishSetting();
-//
-//	return 0;
-//}
-
-//BOOL Viewer::CreateModelByFolder()
-//{
-//	m_pEngine->StartSetting();
-//	int index = -1;
-//	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Model"))
-//	{
-//		const auto& filePath = entry.path().string();
-//
-//		if (filePath.substr(filePath.length() - 7, 7) == ".hmodel")
-//		{
-//			std::size_t slash = filePath.rfind("\\");
-//			std::size_t formatName = filePath.rfind(".hmodel");
-//			std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
-//			index++;
-//			m_pModelManager->LoadModel(modelName, filePath);
-//		}
-//	}
-//	m_pEngine->FinishSetting();
-//	return 0;
-//}
-
-//BOOL Viewer::CreateMaterialByFolder()
-//{
-//	m_pEngine->StartSetting();
-//	int index = -1;
-//	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Material"))
-//	{
-//		const auto& filePath = entry.path().string();
-//
-//		size_t slash = entry.path().string().rfind("\\");
-//		size_t length = entry.path().string().size();
-//		std::string materialName = filePath.substr(slash + 1, length);
-//
-//		TextureSet set;
-//
-//		for (const auto& matFolder : std::filesystem::recursive_directory_iterator(filePath.c_str()) )
-//		{
-//			std::string material = matFolder.path().string();
-//
-//			if (material.substr(material.length() - 4, 4) == ".png")
-//			{
-//				std::size_t slashPoint	= material.rfind("\\");
-//				std::size_t underBar	= material.rfind("_");
-//				std::size_t formatName	= material.rfind(".png");
-//				std::string texKind		= material.substr(underBar, formatName - underBar - 1);
-//
-//				std::string matName = filePath.substr(slash + 1, formatName - slash - 1);
-//			}
-//			
-//		}
-//		//if (filePath.substr(filePath.length() - 3, 3) == ".png")
-//		//{
-//		//	std::size_t slash = filePath.rfind("\\");
-//		//	std::size_t formatName = filePath.rfind(".hmodel");
-//		//	std::string modelName = filePath.substr(slash + 1, formatName - slash - 1);
-//		//	index++;
-//		//	m_pModelManager->LoadModel(modelName, filePath);
-//		//}
-//	}
-//	m_pEngine->FinishSetting();
-//	return 0;
-//}
-
-//BOOL Viewer::CreateMaterialByFolder()
-//{
-//	m_pEngine->StartSetting();
-//	int index = -1;
-//	for (const auto& entry : std::filesystem::recursive_directory_iterator("Media/Material"))
-//	{
-//		const auto& filePath = entry.path().string();
-//
-//		if (filePath.substr(filePath.length() - 7, 7) == ".hmodel")
-//		{
-//			std::size_t slash = filePath.rfind("\\");
-//			std::size_t formatName = filePath.rfind(".hmodel");
-//			std::string matName = filePath.substr(slash + 1, formatName - slash - 1);
-//			index++;
-//			m_pMatManager->LoadTexture(matName, filePath);
-//			//m_pModelManager->LoadModel(matName, filePath);
-//		}
-//	}
-//	m_pEngine->FinishSetting();
-//	return 0;
-//}
-
-
-
-
-
-
 //*--------------------------------------------------*//
 //					target : 관촬대상				  //
 //					front  : 정면 방향				  //
@@ -995,7 +723,7 @@ void Viewer::SetCam(DirectX::XMFLOAT3& vTarget, DirectX::XMFLOAT3& vFront, Direc
 	newCamPos.y = vTarget.y - vFront.y * fAway;
 	newCamPos.z = vTarget.z - vFront.z * fAway;
 
-	m_pEngine->GetCamera()->LookAt(newCamPos, vTarget, vUp);
+	m_pEngine->GetCamera()->LookAt(newCamPos, vTarget, vUp);	//카메라 클래스 별도 관리 할 것.
 
 }
 
@@ -1005,54 +733,6 @@ wchar_t* Viewer::MakeFullPath(CString& dest, CString& path, CString& name, CStri
 {
 	dest = path + name + L"/" + name + tex + extend;
 	return dest.GetBuffer();
-}
-
-//
-//HInstanceData* Viewer::AddGraphicInstance(object* pObj)
-//{
-//	HInstanceData* hIns = NULL;
-//	HMaterialData* pMat = NULL;
-//
-//	DirectX::XMFLOAT4X4 mTm = MapUtil::Identity4x4();
-//	pObj->GetTm(mTm);
-//
-//	int modelIndex = pObj->modelIndex;
-//	if (modelIndex < 0)
-//		modelIndex = 0;
-//
-//	int matIndex = pObj->matIndex;
-//	if (matIndex < 0)
-//		matIndex = 0;
-//
-//
-//	//메테리얼 인덱스가 0일 경우 컬러칩으로 인식한다.
-//	if (matIndex == 0)
-//	{
-//		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::COLORCHIP);
-//	}
-//	else
-//	{
-//		hIns = m_pModelManager->GetModelList()->at(0)->hModel->AddInstance(ShaderType::DEFAULT);
-//		pMat = m_pMatManager->GetMatList()->at(0)->hMat;
-//		hIns->SetMaterial(pMat, 0);
-//	}
-//
-//	hIns->worldTM = mTm;
-//
-//	//예외 체크 필요하다. 리턴 값확인 필요.
-//	if (hIns == NULL)
-//		return NULL;
-//	else
-//		return hIns;
-//
-//}
-
-
-
-void Viewer::RequestCreateObj(object* pObj)
-{
-	g_pCenter->CreateObj(pObj);
-	//::SendMessageW(g_hCenter, WM_CREATE_OBJ, (WPARAM)(m_hWnd), (LPARAM)(pObj));
 }
 
 //포지션 셋팅/draw

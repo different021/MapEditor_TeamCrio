@@ -854,7 +854,7 @@ void Center::LoadMap()
 	if (iResult == 0)
 	{
 		//성공 -> 다시 그려라
-		g_pCenter->ReDraw(&m_pSaver->m_StageHeader, m_pSaver);
+		g_pCenter->Load(&m_pSaver->m_StageHeader, m_pSaver);
 		UpdateListBox();
 	}		
 	else if (iResult == 1)
@@ -1147,8 +1147,11 @@ void Center::DeleteSelectedListAll()
 	m_pWaveDlg->SetDataToEditCtrl(&pWave->info);
 }
 
-void Center::ReDraw(STAGE_HEADER* pHeader, CSaver* pSaver)
+void Center::Load(STAGE_HEADER* pHeader, CSaver* pSaver)
 {
+	if (pHeader == nullptr) return;
+	if (pSaver == nullptr) return;
+
 	object* pObjList				= pSaver->m_pObjList;
 	collider* pColliderList			= pSaver->m_pColliderList;
 	lightData* pLightDataList		= pSaver->m_pLightDataList;
@@ -1162,7 +1165,6 @@ void Center::ReDraw(STAGE_HEADER* pHeader, CSaver* pSaver)
 	CreateWaveFromList(waveCnt, pWaveDataList);
 
 	pSaver->CleanUp();
-
 }
 
 void Center::UpdateListBox()
@@ -1170,7 +1172,6 @@ void Center::UpdateListBox()
 	//오브젝트 리스트 박스 업데이트.
 	UpdateObjList();
 	UpdateColliderList();
-	//m_pLightDlg->UpdateLightList();
 	m_pLightDlg.UpdateLightList();
 	UpdateRegenColliderList();
 	UpdateWaveLlist();
@@ -1199,7 +1200,6 @@ BOOL Center::OnInitDialog()
 	g_hCenter = m_hWnd;
 	g_pCenter = this;
 	m_pDrawInsManager = DrawInsManager::GetInstance();
-
 
 	//최종적으로 여기에만 메니저가 남아있도록.
 	m_pSaver			= CSaver::GetInstance();
