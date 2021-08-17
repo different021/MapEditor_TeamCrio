@@ -50,11 +50,12 @@ void Viewer::InitailzeGraphics(int iWidth, int iHeight)
 	MoveWindow(0, 0, iWidth, iHeight);
 	InitGraphicEngin();
 
+
 	m_pCamController = new CamController;
 	
 	SetMainView(g_vCamPos);
 
-	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);	//그리드 관리자 분리 가능.
+	//DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);	//그리드 관리자 분리 가능.
 
 	m_Gizmo.Setup(m_pEngine);
 
@@ -81,18 +82,6 @@ BOOL Viewer::InitGraphicEngin()
 	return TRUE;
 }
 
-//void Viewer::InitResourceManagers()
-//{
-//	//ResourceManagers
-//	//마테리얼 매니저
-//	//m_pMatManager = MaterialManager::GetInstance();
-//	//m_pMatManager->SetGraphicEngine(m_pEngine);
-//
-//	//모델 메니저
-//	//m_pModelManager = ModelManager::GetModelManager();
-//}
-
-
 Viewer::Viewer(CWnd* pParent)
 {
 }
@@ -110,11 +99,23 @@ void Viewer::Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight)
 	int iFrameY = GetSystemMetrics(SM_CYFRAME);
 	int iCaptionY = GetSystemMetrics(SM_CYCAPTION);
 
+	//MoveWindow(0, 0, iWidth, iHeight);
+
 	int width = iWidth + (iFrameX << 2);
 	int height = iHeight + (iFrameY << 2) + iCaptionY;
 
-	InitailzeGraphics(width, height);
+	MoveWindow(0, 0, width + 2, height + 2);
 
+	CRect rc;
+	GetClientRect(&rc);
+	//ClientToScreen(rc);
+	int cWdith = rc.Width();;
+	int cHeight = rc.Height();
+
+	m_iScreenWidth  = cWdith;
+	m_iScreenHeight = cHeight;
+
+	//InitailzeGraphics(width, height);
 }
 
 void Viewer::CleanUp()
@@ -133,23 +134,24 @@ void Viewer::CleanUp()
 }
 
 
-void Viewer::Update()
-{
-	g_pCenter->Update();
-}
-
 void Viewer::Draw()
 {
-	g_pCenter->DeleteInDeleteList();
+	//약간의 성능 저하 (노트북 기준 6개 오브젝트 75 -> 72~71)
+	//Draw() 에서 다시 메세지를 전달한 꼴...
+	::SendMessageW(g_hCenter, WM_REQUEST_CENTER_DRAW, NULL, NULL);
 
-	Update();
-
+	//g_pCenter->DeleteInDeleteList();		//Center
+	//Update();								//Center
+	//m_pEngine->Loop();						//Center
+	//
+											//이동 가능.
 	int _iDrawPos = m_iScreenWidth - 250;
 	DrawEditMode(_iDrawPos, 10);
 	DrawObjectSelectMode(_iDrawPos, 30);
 	DrawColliderSelectMode(_iDrawPos, 50);
 	DrawLightSelectMode(_iDrawPos, 70);
-	m_pEngine->Loop();
+
+	
 }
 
 //그래픽 인스턴스를 만드는 책임만 있다. -> 그래픽 엔진에 의존적인 작업.
@@ -311,6 +313,34 @@ void Viewer::DrawLightSelectMode(int x, int y)
 	}
 
 	m_pEngine->AddDebugString(dStr);
+}
+
+int Viewer::GetWidth()
+{
+	return m_iScreenWidth;
+}
+
+int Viewer::GetHeight()
+{
+	return m_iScreenHeight;
+}
+
+void Viewer::SetGraphicEngine(HEngine_DX12_3D* pEngine)
+{
+	if (pEngine == nullptr)
+	{
+		OutputDebugStringW(L"[Viewer::SetGraphicEngine()] GraphicEnigne Is NULL\n");
+		assert(false);
+		return;
+	}
+
+	m_pEngine = pEngine;
+	g_hWndViewer = m_hWnd;
+	m_pCamController = new CamController;
+	SetMainView(g_vCamPos);
+	m_Gizmo.Setup(m_pEngine);
+
+	DrawGrid(iDEFAULTGRID_W, iDEFAULTGRID_H, fDEFAULTOFFSET);	//그리드 관리자 분리 가능.
 }
 
 void Viewer::SetObjectSelectMode(bool bSelect)
@@ -606,6 +636,7 @@ void Viewer::SetGridInfo(int iWidth, int iHeight, float offset)
 //가로, 세로, offset,  
 void Viewer::DrawGrid(int iWidth, int iHeight, float offset)
 {
+	if (m_pEngine == nullptr) return;
 	DirectX::XMFLOAT4 rowColor = DirectX::XMFLOAT4(0.1f, 0.9f, 0.1f, 1.f);
 	DirectX::XMFLOAT4 coLColor = DirectX::XMFLOAT4(0.1f, 0.9f, 0.1f, 1.f);
 	DirectX::XMFLOAT4 BLACK = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
@@ -689,6 +720,7 @@ void Viewer::DeleteGrid()
 
 void Viewer::ChangeGrid(int iWidth, int iHeight, float offset)
 {
+	if (m_pEngine == nullptr) return;
 	DeleteGrid();
 	DrawGrid(iWidth, iHeight, offset);
 }

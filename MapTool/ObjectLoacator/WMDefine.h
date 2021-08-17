@@ -75,3 +75,4 @@ enum eMsgResult
 
 //Request : Centerø° ø‰√ª
 #define WM_REQUEST_CENTER_POSITION		WM_REQUEST + 1
+#define WM_REQUEST_CENTER_DRAW			WM_REQUEST + 2

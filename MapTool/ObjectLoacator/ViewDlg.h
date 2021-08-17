@@ -35,7 +35,7 @@ class Viewer :
     public CEditorDlg
 {
 private:
-    HEngine_DX12_3D* m_pEngine;				    //그래픽 엔진    -> 컨테이너로...
+    HEngine_DX12_3D* m_pEngine = nullptr;				    //그래픽 엔진    -> Interface로 변경...
     DirectX::BoundingFrustum    m_camFrustum;   //
 
     //삭제 예정? -> 왜인지 기억 안남?> 필요할 듯? -> 화면 정보에대한 클래스 필요? 
@@ -83,7 +83,6 @@ public:
     virtual void Initialize(CWnd* pParent, UINT id, int iWidth, int iHeight);
     virtual void CleanUp();
 
-    virtual void Update();                                      
     virtual void Draw();   
 
     //Graphic Instance 관련
@@ -95,6 +94,10 @@ public:
     virtual void DrawColliderSelectMode(int x, int y);
     virtual void DrawLightSelectMode(int x, int y);
 
+    virtual int GetWidth();
+    virtual int GetHeight();
+
+    void SetGraphicEngine(HEngine_DX12_3D* pEngine);
     void SetObjectSelectMode(bool bSelect);
     void SetColliderSelectMode(bool bSelect);
     void SetLightSelectMode(bool bSelect);
@@ -140,7 +143,7 @@ private:
     //BOOL CreateMaterialByFolder();
 
     wchar_t* MakeFullPath(CString& dest, CString& path, CString& name, CString& tex ,CString& extend);
-    //HInstanceData* AddGraphicInstance(object* pObj);
+    //HInstanceData* AddGraphicInstance(object* pObj); -> 별도의 엔진 인터페이스 구축 만들 것.
 
 
     void RequestCreateObj(object* pObj);

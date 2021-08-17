@@ -7,6 +7,7 @@
 
 #define MAX_LENGTH 128
 
+//각 데이터별로 파일을 쪼개는 편이 좋을 듯.
 
 enum eMAP_VERSION
 {
@@ -94,6 +95,7 @@ enum eCOLLIDER_TYPE						//ver3 추가
 	eCOLLIDER_MAX,
 };
 
+#pragma pack(push, 1)
 struct collider
 {
 	eCOLLIDER_TYPE	  type;				//ver3 추가.
@@ -122,6 +124,7 @@ public:
 	void GetTM(DirectX::XMFLOAT4X4* pOut);
 	DirectX::XMMATRIX GetTM();
 };
+#pragma pack(pop)
 
 enum eTEX
 {
@@ -150,7 +153,7 @@ enum eLightType
 	eLightTypeMax,
 };
 
-#pragma pack(push, 4)
+#pragma pack(push, 1)
 struct lightData
 {
 	eLightType type;
@@ -173,6 +176,7 @@ enum STAGE_HEADER_VERSION
 	eSTAGE_HEADER_MAX,
 };
 
+#pragma pack(push, 1)
 struct waveData
 {
 	//변경 불가 -> 변경시 인스턴스 재생성
@@ -193,7 +197,7 @@ struct waveData
 	void SetOiler(DirectX::XMFLOAT3& oil);
 	DirectX::XMFLOAT4X4 GetTm();
 };
-
+#pragma pack(pop)
 
 //120byte
 struct STAGE_HEADER
@@ -214,12 +218,12 @@ struct STAGE_HEADER
 struct MAP
 {
 	STAGE_HEADER	_header;
-	object*			_pObjList = NULL;	//오브젝트 리스트
+	object*			_pObjList = NULL;		//오브젝트 리스트
 	collider*		_pColliderList = NULL;	//콜라이더 리스트
-	lightData*		_pLightList = NULL;	//빛 리스트
+	lightData*		_pLightList = NULL;		//빛 리스트
 
-	int				_iWaveCnt = 0;		//ver2추가. -> int가 도중에 들어오지만 이편이 좋겠다.
-	waveData*		_pWaveList = NULL;	//ver2추가.
+	int				_iWaveCnt = 0;			//ver2추가. -> int가 도중에 들어오지만 당장은 이 방법이 편했다.
+	waveData*		_pWaveList = NULL;		//ver2추가.
 };
 
 

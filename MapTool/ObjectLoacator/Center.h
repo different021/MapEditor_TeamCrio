@@ -274,6 +274,7 @@ protected:
 	afx_msg LRESULT OnObjectScale(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnObjectSelectInRect(WPARAM wParam, LPARAM lParam);
 	
+	afx_msg LRESULT OnRequestCenterDraw(WPARAM wParam, LPARAM lParam);
 };
 
 extern HWND g_hCenter;

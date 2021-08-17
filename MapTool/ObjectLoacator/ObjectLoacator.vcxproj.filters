@@ -37,6 +37,9 @@
     <Filter Include="CamGizumo">
       <UniqueIdentifier>{0db10d63-96cc-4f70-9143-246ffb2fd94c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsInterface">
+      <UniqueIdentifier>{5e96b4dd-52f0-4ee0-9ce9-828da02cfc0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -170,6 +173,12 @@
     </ClInclude>
     <ClInclude Include="CamController.h">
       <Filter>CamGizumo</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsInterface.h">
+      <Filter>GraphicsInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicInstance.h">
+      <Filter>GraphicsInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -174,6 +174,7 @@ void Center::selectObjectByDrag(float maxX, float minX, float maxY, float minY)
 	if (pList == NULL) return;
 	if (pList->size() <= 0) return;
 
+	//카메라로 뽑아서 관리 할 것.
 	DirectX::XMMATRIX mView = m_pEngine->GetCamera()->GetView();
 	DirectX::XMMATRIX mProj = m_pEngine->GetCamera()->GetProj();
 
@@ -1193,6 +1194,8 @@ BOOL Center::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	m_pEngine = HEngine_DX12_3D::GetInstance();
+
+	
 	g_hCenter = m_hWnd;
 	g_pCenter = this;
 	m_pDrawInsManager = DrawInsManager::GetInstance();
@@ -1200,20 +1203,36 @@ BOOL Center::OnInitDialog()
 
 	//최종적으로 여기에만 메니저가 남아있도록.
 	m_pSaver			= CSaver::GetInstance();
-	//m_pCharManager	= CharacterManager::GetModelManager();
+	
+	//ResourceManager
 	m_pMatManager		= MaterialManager::GetInstance();
 	m_pModelManager		= ModelManager::GetModelManager();
+
+	//InstanceManager
 	m_pColliderManager	= CColliderManager::GetInstance();
 	m_pLightManager		= CLightManager::GetInstance();
 	m_pWaveManager		= CWaveManager::GetInstance();
 	m_pWaveManager->Initialize();	//엔진이 초기화 된 이후 얻을 것.
+	//m_pCharManager	= CharacterManager::GetModelManager();
 
-	initMainMenu();
-	initializeDlgs(this);
+	initMainMenu();			//Dlg
+	initializeDlgs(this);	//Dlg
 	
+	HWND hViewr = m_Viewer->GetSafeHwnd();
+	int width = m_Viewer->GetWidth();
+	int height = m_Viewer->GetHeight();
+
+	m_pEngine->InitEngine(hViewr, width, height);
+	m_Viewer->SetGraphicEngine(m_pEngine);
+	m_pEngine->StartSetting();
+	m_pEngine->LoadSkyBox(L"Media/Skybox/skybox.dds");
+	m_pEngine->LoadFont(L"Media/Fonts/SegoeUI_18.spritefont");
+	m_pEngine->FinishSetting();
+
+
 	//Resource Load
-	LoadModel();
-	LoadMaterial();
+	LoadModel();			//Graphics
+	LoadMaterial();			//Graphics
 
 	m_ObjectDlg.RequestMatList();
 
@@ -1503,6 +1522,7 @@ BEGIN_MESSAGE_MAP(Center, CDialogEx)
 	ON_MESSAGE(WM_OBJECT_SELECT_IN_RECT, &Center::OnObjectSelectInRect)
 	ON_MESSAGE(WM_VIEWER_LBUTTONUP, &Center::OnViewerLbuttonup)
 	ON_MESSAGE(WM_REQUEST_CENTER_POSITION, &Center::OnRequestCenterPosition)
+	ON_MESSAGE(WM_REQUEST_CENTER_DRAW, &Center::OnRequestCenterDraw)
 END_MESSAGE_MAP()
 
 
@@ -2167,3 +2187,14 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 
 
 
+
+
+afx_msg LRESULT Center::OnRequestCenterDraw(WPARAM wParam, LPARAM lParam)
+{
+	//드로우 콜이 들어왔을 경우
+	DeleteInDeleteList();
+	Update();
+
+	m_pEngine->Loop(); //GraphicEngine Draw;
+	return 0;
+}
