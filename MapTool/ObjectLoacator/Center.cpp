@@ -1196,7 +1196,6 @@ BOOL Center::OnInitDialog()
 	CDialogEx::OnInitDialog();
 	m_pEngine = HEngine_DX12_3D::GetInstance();
 
-	
 	g_hCenter = m_hWnd;
 	g_pCenter = this;
 	m_pDrawInsManager = DrawInsManager::GetInstance();
