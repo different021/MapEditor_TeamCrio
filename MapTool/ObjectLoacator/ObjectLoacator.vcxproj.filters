@@ -40,6 +40,9 @@
     <Filter Include="GraphicsInterface">
       <UniqueIdentifier>{5e96b4dd-52f0-4ee0-9ce9-828da02cfc0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{a79b0c7b-a63d-44e7-93ad-603980bf367e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -180,6 +183,9 @@
     <ClInclude Include="GraphicInstance.h">
       <Filter>GraphicsInterface</Filter>
     </ClInclude>
+    <ClInclude Include="ToolGraphicsEngine.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ObjectLoacator.rc">
@@ -305,6 +311,9 @@
     </ClCompile>
     <ClCompile Include="CamController.cpp">
       <Filter>CamGizumo</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolGraphicsEngine.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

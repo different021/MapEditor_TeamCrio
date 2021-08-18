@@ -420,9 +420,10 @@ HInstanceData* Center::CreateGraphicInstance(object* pSrc)
 		matIndex = 0;
 	}
 
+	//모델에서 인스턴스를 생성하는 인스턴스 드로우 형태. 모델 메니저와의 의존이 있다.
 	HModelData* pModel = m_pModelManager->GetModel(modelIndex)->hModel;
-
 	HMaterialData* pMat = NULL;
+	
 	if (matIndex == 0)
 	{
 		hResult = pModel->AddInstance(ShaderType::COLORCHIP);

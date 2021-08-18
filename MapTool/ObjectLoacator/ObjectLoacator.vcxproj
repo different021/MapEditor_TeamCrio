@@ -253,6 +253,7 @@
     <ClInclude Include="Synchronization.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ToolDefine.h" />
+    <ClInclude Include="ToolGraphicsEngine.h" />
     <ClInclude Include="ViewDlg.h" />
     <ClInclude Include="WMDefine.h" />
   </ItemGroup>
@@ -353,6 +354,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Synchronization.cpp" />
+    <ClCompile Include="ToolGraphicsEngine.cpp" />
     <ClCompile Include="ViewDlg.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
     </ClCompile>

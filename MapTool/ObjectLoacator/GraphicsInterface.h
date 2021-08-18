@@ -2,10 +2,12 @@
 #include <Windows.h>	//HWND
 
 class GraphicObject;
-struct object;
+struct object;				//light, wave와 형식을 맞출 것 고려. object, collider, wave는 공통적으로 TRS정보를 갖고 있다. 추상화 고려??
+
+
 
 class GraphicCollider;
-struct collider;
+struct collider;			//
 
 class GraphicLight;
 struct lightData;
