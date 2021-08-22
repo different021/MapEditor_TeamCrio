@@ -177,14 +177,17 @@
     <ClInclude Include="CamController.h">
       <Filter>CamGizumo</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsInterface.h">
+    <ClInclude Include="IGraphicsEngine.h">
       <Filter>GraphicsInterface</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicInstance.h">
+    <ClInclude Include="IGraphicInstance.h">
       <Filter>GraphicsInterface</Filter>
     </ClInclude>
     <ClInclude Include="ToolGraphicsEngine.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="IModel.h">
+      <Filter>GraphicsInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

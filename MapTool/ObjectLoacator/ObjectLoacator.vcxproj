@@ -234,8 +234,9 @@
     <ClInclude Include="DrawInsManager.h" />
     <ClInclude Include="Gizmo.h" />
     <ClInclude Include="Center.h" />
-    <ClInclude Include="GraphicInstance.h" />
-    <ClInclude Include="GraphicsInterface.h" />
+    <ClInclude Include="IGraphicInstance.h" />
+    <ClInclude Include="IGraphicsEngine.h" />
+    <ClInclude Include="IModel.h" />
     <ClInclude Include="MapUtil.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ModelManager.h" />

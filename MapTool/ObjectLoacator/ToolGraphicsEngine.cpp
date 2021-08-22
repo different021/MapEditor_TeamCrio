@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "ToolGraphicsEngine.h"
 #include "../src/Defines.h"         //object, collider, lightData, waveData 선언
+#include "IModel.h"
 
 ToolGraphicsEngine::ToolGraphicsEngine()
 {
@@ -19,7 +20,7 @@ void ToolGraphicsEngine::cleanup()
 }
 
 
-IGraphicsInterface* ToolGraphicsEngine::CreateInstance()
+IGraphicsEngine* ToolGraphicsEngine::CreateInstance()
 {
     //현재 그래픽 엔진이 싱글톤..
     //인터페이스도 싱글톤으로 가야하나?
@@ -42,8 +43,14 @@ void ToolGraphicsEngine::Draw()
     m_pEngine->Loop();
 }
 
-GraphicObject* ToolGraphicsEngine::CreateGraphicObject(object* pObj)
+IGraphicInstance* ToolGraphicsEngine::CreateGraphicObject(object* pObj, IModel* pModel)
 {
+    IGraphicInstance* pResult = nullptr;
+    if (pObj == nullptr) return pResult;
+    if (pModel == nullptr) return pResult;
+    
+    eShaderType shaderType = pObj->eShaderType;
+    pResult = pModel->AddInstance(shaderType);
 
-    return nullptr;
+    return pResult;
 }
