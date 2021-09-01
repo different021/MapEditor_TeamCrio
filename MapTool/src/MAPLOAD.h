@@ -5,7 +5,6 @@
 
 class MapLoader
 {
-
 public:
 	static BOOL Load(wchar_t* pFileName, MAP* &pDest);									//USE this fuc
 	static BOOL Load(const wchar_t pFileName[], MAP* &pDest);
@@ -40,7 +39,5 @@ public:
 	static BOOL ReadWaveAllVersion(HANDLE& hFile, STAGE_HEADER& header, int cntOfWave, waveData*& pMapDest);	//웨이브 갯수랑 리스트들을 읽어온다.
 	static BOOL ReadWaveCnt(HANDLE& hFile, STAGE_HEADER& header, int* pDest);
 	static BOOL ReadWaveV1(HANDLE& hFile, STAGE_HEADER& header, int cntOfWave, waveData*& pMapDest);	
-	
-
 };
 

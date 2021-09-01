@@ -438,10 +438,18 @@ BOOL MapLoader::ReadCollider(HANDLE& hFile, STAGE_HEADER& header, collider*& pDe
 	DWORD dwLengthOfRead = 0;
 	size_t countOfCollider = header.iColliderCnt;
 	pDest = new collider[countOfCollider];
+	
+	if (pDest == nullptr)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[Fail]MapLoader::ReadCollider() Fail to Memory allocate.\n");
+		assert(false);
+	}
 
 	if (countOfCollider < 0)
 	{
-		OutputDebugStringW(L"[LoadCollider] Number Of Collider is Under 0\n ");
+		//실패 아니라 콜라이더가 0일 뿐 -> 하지만 제대로된 저장이 아닐 경우일 수 있으니 로그는 남길 것
+		OutputDebugStringW(L"MapLoader::ReadCollider() Number Of Collider is Under 0\n ");
 		return TRUE;
 	}
 
@@ -470,10 +478,25 @@ BOOL MapLoader::ReadCollider_v2(HANDLE& hFile, STAGE_HEADER& header, collider*& 
 
 	pDest				= new collider[countOfCollider];
 	collider_v2* pTemp  = new collider_v2[countOfCollider];
+	
+	if (pDest == nullptr)
+	{
+		//메모리 할당 실패 확인
+		OutputDebugStringW(L"[Fail]MapLoader::ReadCollider_v2() Fail to Memory allocate\n");
+		assert(false);
+	}
+
+	if (pTemp == nullptr)
+	{
+		//메모리 할당 실패 확인
+		OutputDebugStringW(L"[Fail]MapLoader::ReadCollider_v2() Fail to Memory allocate\n");
+		assert(false);
+	}
+
 
 	if (countOfCollider < 0)
 	{
-		OutputDebugStringW(L"[LoadCollider] Number Of Collider is Under 0\n ");
+		OutputDebugStringW(L"MapLoader::ReadCollider_v2() Number Of Collider is Under 0\n ");
 		return TRUE;
 	}
 

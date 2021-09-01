@@ -222,7 +222,7 @@ struct MAP
 	collider*		_pColliderList = NULL;	//콜라이더 리스트
 	lightData*		_pLightList = NULL;		//빛 리스트
 
-	int				_iWaveCnt = 0;			//ver2추가. -> int가 도중에 들어오지만 당장은 이 방법이 편했다.
+	int				_iWaveCnt = 0;			//ver2추가. -> 헤더에 포함시, 헤더 byte수가 변경되어 일단은 여기에 추가.
 	waveData*		_pWaveList = NULL;		//ver2추가.
 };
 

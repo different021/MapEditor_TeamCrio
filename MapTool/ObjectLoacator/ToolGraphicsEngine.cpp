@@ -50,7 +50,19 @@ IGraphicInstance* ToolGraphicsEngine::CreateGraphicObject(object* pObj, IModel* 
     if (pModel == nullptr) return pResult;
     
     eShaderType shaderType = pObj->eShaderType;
+    if (shaderType > eShaderType::eSHADER_MAX)
+    {
+        OutputDebugStringW(L"ToolGraphicsEngine::CreateGraphicObject() wrong ShaderType\n");
+        return pResult;
+    }
     pResult = pModel->AddInstance(shaderType);
+
+    return pResult;
+}
+
+IGraphicCollider* ToolGraphicsEngine::CreateGraphicCollider(collider* pCollider)
+{
+    IGraphicCollider* pResult = nullptr;
 
     return pResult;
 }
