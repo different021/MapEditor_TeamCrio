@@ -165,9 +165,9 @@ collider* CColliderManager::Picking(unsigned int mouseX, unsigned int mouseY, in
 {
 	collider* pResult = NULL;							//리턴 값
 	int vectorSize = m_ColliderList.size();				//전체 콜라이더 수 -> 전체 콜라이더를 검사한다. 맵 사이즈가 커질 경우 수정 고려
-	if (vectorSize == 0) return pResult;				//충돌체 0개
+	if (vectorSize == 0) return pResult;				//충돌체 0개 -> 계산없이 리턴
 
-	Camera* pCam = pEngine->GetCamera();				//엔진 독립적 설계를 위해 인터페이스화 시킬 것. cam 위치를 파라미터로 받을 것.
+	Camera* pCam = pEngine->GetCamera();				//인터페이스화 된 cam을 파라미터로 받을 것.
 	DirectX::XMFLOAT4X4 mProj = pCam->GetProj4x4f();	//프로젝션 행렬
 	
 	//광선 구하기
@@ -182,12 +182,13 @@ collider* CColliderManager::Picking(unsigned int mouseX, unsigned int mouseY, in
 	DirectX::XMVECTOR vCamPos_view = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);		//뷰공간은 카메라가 중심인 공간(0, 0, 0, 1)
 	DirectX::XMVECTOR vRayDir_view = XMVectorSet(viewX, viewY, 1.0f, 0.0f);		//뷰공간상의 광선
 
+	//월드 변환
 	XMMATRIX mView = pCam->GetView();					//카메라 공간으로 변환하기 위한 view행렬
 	XMVECTOR det = XMMatrixDeterminant(mView);			//역행렬이 존재하는지 확인하는 판별식
 	XMMATRIX invView = XMMatrixInverse(&det, mView);	//view 역행렬
 
-	XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);		//viwe역행렬을 곱해서 월드 포지션을 구한다.
-	XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);		//
+	XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);		//viwe역행렬을 곱해서 월드 포지션을 구한다.(unView)
+	XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);		//unView
 	mRay_world = XMVector3Normalize(mRay_world);								//정규화
 
 	float fMin = FLT_MAX;	//1.175494351 E - 38 (가장 가까운 콜라이더의 거리를 저장하기 위한 변수)

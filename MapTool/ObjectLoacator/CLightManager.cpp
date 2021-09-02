@@ -674,41 +674,51 @@ size_t CLightManager::GetNumberOfSelected()
 
 
 
+/*
+	[PARAMETER]
+	mouseX : 스크린 좌표계 마우스 X값
+	mouseY : 스크린 좌표계 마우스 Y값
+	screenWidth : 스크린 너비
+	screenHeight: 스크린 높이
 
-Light* CLightManager::Picking(unsigned int screenX, unsigned int screenY, int inWidth, int inHeight)
+	[return value]
+	가장 가까운 Light의 포인터
+	없으면 nullptr
+*/
+Light* CLightManager::Picking(unsigned int mouseX, unsigned int mouseY, int screenWidth, int screenHeight)
 {
-	int vectorSize = m_LightList.size();
+	Light* pResult = NULL;						//리 값
+	int vectorSize = m_LightList.size();		//빛의 갯수
 	if (vectorSize == 0) return NULL;
-	Camera* pCam = m_pEngine->GetCamera();
-	DirectX::XMFLOAT4X4 mProj = pCam->GetProj4x4f();
+
+	Camera* pCam = m_pEngine->GetCamera();				//카메라
+	DirectX::XMFLOAT4X4 mProj = pCam->GetProj4x4f();	//프로젝션 행렬
 
 	//광선 구하기
-	int width = inWidth;		//받아올것.
-	int height = inHeight;
-	float vx = ((2.f * screenX / width) - 1.f) / mProj(0, 0);       //나눠주는것이 무슨 의미가 있었는데 까먹음.
-	float vy = ((-2.f * screenY / height) + 1.f) / mProj(1, 1);
+	int width = screenWidth;		//스크린 사이즈.
+	int height = screenHeight;
+	float viewX = ((2.f * mouseX / width) - 1.f) / mProj(0, 0);		//뷰변환
+	float viewY = ((-2.f * mouseY / height) + 1.f) / mProj(1, 1);		//
 
 	//w값은?
-	//Position = 1.f; 딱히 뺄셈이 아니라 남아 있음
-	//Direction = 0.f; vEnd - vStart = w성분이 삭제됨.
 	DirectX::XMVECTOR vCamPos_view = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);;
-	DirectX::XMVECTOR vRayDir_view = XMVectorSet(vx, vy, 1.0f, 0.0f);;
+	DirectX::XMVECTOR vRayDir_view = XMVectorSet(viewX, viewY, 1.0f, 0.0f);;
 
 	XMMATRIX mView = pCam->GetView();
 	XMVECTOR det = XMMatrixDeterminant(mView);
 	XMMATRIX invView = XMMatrixInverse(&det, mView);
 
-	Light* pResult = NULL;
+	XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);	//proj space-> view space
+	XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);	//
+	mRay_world = XMVector3Normalize(mRay_world);							//정규화
 
-	float fMin = FLT_MAX;	//1.175494351 E - 38
+
+	//라이트 수만큼 탐색 -> 가장 가까운 거리를 찾기위해 모든 라이트들은 검색한다.
+	float fMin = FLT_MAX;	//1.175494351 E - 38	가장 가까운 거리를 찾기 위한 변수
 	for (int i = 0; i < vectorSize; i++)
 	{
 		Light* plight = m_LightList.at(i);
-		XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);
-		XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);
-
-		mRay_world = XMVector3Normalize(mRay_world);
-
+		
 		DirectX::BoundingBox box = BoundingBox();
 		box.Center.x = plight->m_LightData.position[0];									//world Position
 		box.Center.y = plight->m_LightData.position[1];
@@ -719,12 +729,15 @@ Light* CLightManager::Picking(unsigned int screenX, unsigned int screenY, int in
 		box.Extents.z = 5.f;
 
 		float lengthOfRay = 0;
-		bool isHit = box.Intersects(mCam_world, mRay_world, lengthOfRay);
+		bool isHit = box.Intersects(mCam_world, mRay_world, lengthOfRay);			//교차하는지 검사하는 변수
+		
+		//가장 가까운 거리의 라이트 찾기
 		if (isHit == true)
 		{
 			fMin = min(fMin, lengthOfRay);
 			if (fMin == lengthOfRay)
 			{
+				//기존보다 가까우면 갱신
 				pResult = plight;
 			}
 		}
