@@ -76,7 +76,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	bResult = ReadObjectAllVersion(hFile, pDest->_header, pDest->_pObjList);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]MapLoader::Load()-> ReadObject()\n");
+		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadObject()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
 		exit(1);
@@ -86,7 +86,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	bResult = ReadCollider(hFile, pDest->_header, pDest->_pColliderList);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]LOAD MAP_OBJECT\n");
+		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadCollider()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
 		exit(1);
@@ -96,18 +96,26 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	bResult = ReadLight(hFile, pDest->_header, pDest->_pLightList);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]LOAD MAP_OBJECT\n");
+		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadLight()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
 		exit(1);
 	}
 
 	bResult = ReadWaveCnt(hFile, pDest->_header, &pDest->_iWaveCnt);								//추가됨.
-	bResult = ReadWaveAllVersion(hFile, pDest->_header, pDest->_iWaveCnt, pDest->_pWaveList);
-
+	if (pDest->_iWaveCnt > 0)
+	{
+		bResult = ReadWaveAllVersion(hFile, pDest->_header, pDest->_iWaveCnt, pDest->_pWaveList);
+		if (!bResult)
+		{
+			OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadWave()\n");
+			CloseHandle(hFile);
+			assert(FALSE);
+			exit(1);
+		}
+	}
 
 	CloseHandle(hFile);
-
 	//SetEvent(hWaitObj);
 
 	return bResult;
@@ -569,7 +577,8 @@ BOOL MapLoader::ReadLight(HANDLE& hFile, STAGE_HEADER& header, lightData*& pDest
 	return bResult;
 }
 
-
+//실패시 FALSE 리턴
+//파일 입출력에 windows API CreateFile(), ReadFile()을 사용하는 이유로 리턴값은 대문자 BOOL 
 BOOL MapLoader::ReadObjectAllVersion(HANDLE& hFile, STAGE_HEADER& header, object*& pDest)
 {
 	BOOL bResult = FALSE;
@@ -621,23 +630,35 @@ BOOL MapLoader::ReadObject(HANDLE& hFile, STAGE_HEADER& header, object*& pDest)
 	return bResult;
 }
 
-
+//object Version1에 대응하는 함수
+//파일 입출력 : windows API
 BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDest)
 {
 	DWORD dwLengthOfRead = 0;
+	BOOL bResult = FALSE;
 
 	int cntObj = header.iObjCnt;
 	if (pDest != NULL)
 	{
+		//새로 할당할 예정
+		//과거에 쓰던게 있으면 메모리 해제한다.
 		delete[] pDest;
 		pDest = NULL;
 	}
 
 	pDest			= new object[cntObj];		//현재 버젼 오브젝트
 	object_v1* temp = new object_v1[cntObj];	//과거 버젼 오브젝트
-
-	BOOL bResult = FALSE;
-	OVERLAPPED ol{};
+	if (pDest == nullptr || temp == nullptr)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[FAIL]MapLoader::ReadObject_v1(), Fail to Memory Allocate\n");
+		CloseHandle(hFile);
+		assert(false);
+		exit(1);
+	}
+	
+	//오프셋 계산을 위한 overlapped
+	OVERLAPPED ol{};							
 	ol.Offset = sizeof(STAGE_HEADER);
 	DWORD dwReadSize = sizeof(object_v1) * cntObj;
 
@@ -648,7 +669,17 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 		NULL,
 		&ol);
 
-	bResult = GetError(bResult);
+	if (bResult == 0)
+	{
+		//ReadFile 실패
+		DWORD err = GetLastError();
+		wchar_t buffer[256] = {};
+		wsprintfW(buffer, L"[FAIL]MapLoader::Load()::ReadObject_v1() ErrorCode : %d\n", err);
+		OutputDebugStringW(buffer);
+		CloseHandle(hFile);
+		assert(false);
+		exit(1);
+	}
 
 	//Convert Data
 	if ( sizeof(object) == sizeof(object_v1) )
@@ -677,7 +708,7 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 	
 	for (int i = 0; i < cntObj; i++)
 	{
-		//변경하는 부분
+		//변경하는 부분 (과거 버젼과의 차이점) -> 버젼 컨버팅하는 별도의 함수를 만들 것 고려 
 		eOBJECT_TYPE_v1 typeVer1	= temp[i].type;
 		eIsCollision	eCollision	= temp[i].isCollision;
 
