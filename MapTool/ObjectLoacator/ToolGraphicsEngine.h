@@ -44,7 +44,7 @@ public:
 	virtual IGraphicInstance*  PickingObject(unsigned int x, unsigned int y) override;
 
 	//아직 디자인 되지 않음.
-	virtual void LoadModel();
-	virtual void LoadMaterial();
+	virtual void LoadModel() override;
+	virtual void LoadMaterial() override;
 };
 

@@ -148,68 +148,70 @@ void CColliderManager::Sort()
 	std::sort(m_ColliderList.begin(), m_ColliderList.end(), compare);
 }
 
-collider* CColliderManager::Picking(unsigned int screenX, unsigned int screenY, int inWidth, int inHeight)
+
+/*
+	[PARAMETERS]
+	  mouseX : 스크린 좌표계에서 마우스 X좌표
+	  mouseY : 스크린 좌표계에서 마우스 Y좌표
+	  ScreenWidth : 스크린 가로
+	  ScreenHeight: 스크린 세로
+
+	[return value]
+	  선택된 collider 포인터 
+	  없을 경우 nullptr. 
+	  가장 가까운것만 찾아준다.(개선 사항)
+*/
+collider* CColliderManager::Picking(unsigned int mouseX, unsigned int mouseY, int screenWidth, int screenHeight)
 {
-	int vectorSize = m_ColliderList.size();
-	if (vectorSize == 0) return NULL;
-	Camera* pCam = pEngine->GetCamera();
-	DirectX::XMFLOAT4X4 mProj = pCam->GetProj4x4f();
+	collider* pResult = NULL;							//리턴 값
+	int vectorSize = m_ColliderList.size();				//전체 콜라이더 수 -> 전체 콜라이더를 검사한다. 맵 사이즈가 커질 경우 수정 고려
+	if (vectorSize == 0) return pResult;				//충돌체 0개
+
+	Camera* pCam = pEngine->GetCamera();				//엔진 독립적 설계를 위해 인터페이스화 시킬 것. cam 위치를 파라미터로 받을 것.
+	DirectX::XMFLOAT4X4 mProj = pCam->GetProj4x4f();	//프로젝션 행렬
 	
 	//광선 구하기
-	int width  = inWidth;		//받아올것.
-	int height = inHeight;
-	float vx = ( ( 2.f * screenX / width ) - 1.f) / mProj(0, 0);
-	float vy = ( (-2.f * screenY / height) + 1.f) / mProj(1, 1);
+	int width  = screenWidth;		//스크린 사이즈
+	int height = screenHeight;
+	float viewX = ( ( 2.f * mouseX / width ) - 1.f) / mProj(0, 0);		//unProjection (결과로 뷰좌표를 얻게 된다.)
+	float viewY = ( (-2.f * mouseY / height) + 1.f) / mProj(1, 1);		//unProjection (Screen Y 좌표계는 아래로 내려갈수록 Y값 증가 -> 기존 월드와 반대이다.)
 	
-	//w값은?
-	//Position = 1.f; 딱히 뺄셈이 아니라 남아 있음
-	//Direction = 0.f; vEnd - vStart = w성분이 삭제됨.
-	DirectX::XMVECTOR vCamPos_view = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);;
-	DirectX::XMVECTOR vRayDir_view = XMVectorSet(vx, vy, 1.0f, 0.0f);;
+	//w값? 벡터인지, 포지션인지 구분하는 기준이 됨.
+	//Position. = 1.f; 
+	//Direction.w = 0.f; direction = vEnd - vStart ( vEnd.w - vStart.w 로 인해 0값이 됨.)
+	DirectX::XMVECTOR vCamPos_view = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);		//뷰공간은 카메라가 중심인 공간(0, 0, 0, 1)
+	DirectX::XMVECTOR vRayDir_view = XMVectorSet(viewX, viewY, 1.0f, 0.0f);		//뷰공간상의 광선
 
-	XMMATRIX mView = pCam->GetView();
-	XMVECTOR det = XMMatrixDeterminant(mView);
-	XMMATRIX invView = XMMatrixInverse(&det, mView);
+	XMMATRIX mView = pCam->GetView();					//카메라 공간으로 변환하기 위한 view행렬
+	XMVECTOR det = XMMatrixDeterminant(mView);			//역행렬이 존재하는지 확인하는 판별식
+	XMMATRIX invView = XMMatrixInverse(&det, mView);	//view 역행렬
 
-	collider* pResult = NULL;
+	XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);		//viwe역행렬을 곱해서 월드 포지션을 구한다.
+	XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);		//
+	mRay_world = XMVector3Normalize(mRay_world);								//정규화
 
-	float fMin = FLT_MAX;	//1.175494351 E - 38
+	float fMin = FLT_MAX;	//1.175494351 E - 38 (가장 가까운 콜라이더의 거리를 저장하기 위한 변수)
 	for (int i = 0; i < vectorSize; i++)
 	{
-		//월드 공간에서 비교중.
-		//콜라이더 박스의 월드 포지션을 갖고 있기때문에.
-		//월드 공간에서 비교하는 것이 합리적이라고 판단된다.
-		
-		/*
-		//collider* col = m_ColliderList.at(i).first;
-		//XMVECTOR vPos = XMVectorSet(col->pos.x, col->pos.y, col->pos.z, 1.f);
-
-		//XMMATRIX mWorld    = m_ColliderList.at(i).first->GetTm();
-		//XMVECTOR det_world = XMMatrixDeterminant(mWorld);
-		//XMMATRIX invWorld  = XMMatrixInverse(&det_world, mWorld);
-
-		//XMMATRIX mUnVW		= XMMatrixMultiply(invView, invWorld);
-		*/
-
+		//월드 변환
 		collider* col = m_ColliderList.at(i).first;
-		XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);
-		XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);
-
-		mRay_world = XMVector3Normalize(mRay_world);
-
-		DirectX::BoundingBox box = BoundingBox();
+		
+		DirectX::BoundingBox box = BoundingBox();				//상자의 중심 위치 구하기용.
 		box.Center = col->pos;									//world Position
-		box.Extents.x = col->size.x * 0.5f * col->scale.x;
+		box.Extents.x = col->size.x * 0.5f * col->scale.x;		//중심위치를 구하는 로직
 		box.Extents.y = col->size.y * 0.5f * col->scale.y;
 		box.Extents.z = col->size.z * 0.5f * col->scale.z;
 
-		float lengthOfRay = 0;
-		bool isHit = box.Intersects(mCam_world, mRay_world, lengthOfRay);
-		if (isHit == true)
+		float lengthOfRay = 0;													//물체와의 거리를 리턴 받기 위한 변수.
+		bool isHit = box.Intersects(mCam_world, mRay_world, lengthOfRay);		//박스와 벡터가 교차하는지 판별. DirectX boundingBox에서 제공하는 함수. 
+		
+		//가장 가까운 콜라이더를 찾는 과정.
+		if (isHit == true)													
 		{
 			fMin = min(fMin, lengthOfRay);
 			if (fMin == lengthOfRay)
 			{
+				//기존보다 가까우면 갱신. -> 가장 가까운 콜라이더를 리턴한다.
 				pResult = col;
 			}
 		}

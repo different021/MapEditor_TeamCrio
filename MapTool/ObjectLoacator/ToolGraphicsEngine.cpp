@@ -66,3 +66,26 @@ IGraphicCollider* ToolGraphicsEngine::CreateGraphicCollider(collider* pCollider)
 
     return pResult;
 }
+
+IGraphicLight* ToolGraphicsEngine::CreateGraphicLight(lightData* pLight)
+{
+    return nullptr;
+}
+
+IGraphicWave* ToolGraphicsEngine::CreateGraphicWave(waveData* pWave)
+{
+    return nullptr;
+}
+
+IGraphicInstance* ToolGraphicsEngine::PickingObject(unsigned int x, unsigned int y)
+{
+    return nullptr;
+}
+
+void ToolGraphicsEngine::LoadModel()
+{
+}
+
+void ToolGraphicsEngine::LoadMaterial()
+{
+}

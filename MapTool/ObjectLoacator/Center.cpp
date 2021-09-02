@@ -1479,8 +1479,8 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 		break;
 	}
 
-	//return 0;
-	return CDialog::PreTranslateMessage(pMsg);
+	return 0;
+	//return CDialog::PreTranslateMessage(pMsg);
 }
 
 

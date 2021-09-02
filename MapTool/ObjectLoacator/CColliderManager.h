@@ -43,7 +43,7 @@ public:
 	bool IsEnableColliderSelect();
 	void Sort();
 
-	collider* Picking(unsigned int screenX, unsigned int screenY, int width, int height);
+	collider* Picking(unsigned int mouseX, unsigned int mouseY, int width, int height);
 
 	COLLIDER* FindCollider(collider* pTarget);
 	std::vector<COLLIDER>::iterator FindColliderFromSelected(collider* pTarget);
