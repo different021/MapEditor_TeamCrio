@@ -632,6 +632,7 @@ BOOL MapLoader::ReadObject(HANDLE& hFile, STAGE_HEADER& header, object*& pDest)
 
 //object Version1에 대응하는 함수
 //파일 입출력 : windows API
+//이 함수는 해당 포인터(pDest)에 메모리 할당이 발생한다.
 BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDest)
 {
 	DWORD dwLengthOfRead = 0;
@@ -640,8 +641,8 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 	int cntObj = header.iObjCnt;
 	if (pDest != NULL)
 	{
-		//새로 할당할 예정
-		//과거에 쓰던게 있으면 메모리 해제한다.
+		//메모리할당 예정
+		//이미 할당된 메모리가 있다면 해제하고 재할당
 		delete[] pDest;
 		pDest = NULL;
 	}
@@ -681,9 +682,10 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 		exit(1);
 	}
 
-	//Convert Data
+	//Convert data
 	if ( sizeof(object) == sizeof(object_v1) )
 	{
+		//쓸모없는 코드
 		memcpy(pDest, temp, sizeof(object) * cntObj);
 	}
 	else
@@ -706,6 +708,7 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 		}
 	}
 	
+	//Convert data (이번 버전에서 변경된 내용 적용) -> 콜라이더 타입, 오브젝트 타입
 	for (int i = 0; i < cntObj; i++)
 	{
 		//변경하는 부분 (과거 버젼과의 차이점) -> 버젼 컨버팅하는 별도의 함수를 만들 것 고려 
@@ -739,9 +742,9 @@ BOOL MapLoader::ReadObject_v1(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 		pDest[i].regenIndex = -1;		//-1 is not Setting this value;
 	}
 
-	delete[] temp;
+	//메모리 해제(과거 버전 저장용)
+	delete[] temp;		
 	temp = NULL;
-
 
 	return bResult;
 }
