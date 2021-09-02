@@ -2191,10 +2191,10 @@ afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT Center::OnRequestCenterDraw(WPARAM wParam, LPARAM lParam)
 {
-	//드로우 콜이 들어왔을 경우
-	DeleteInDeleteList();
-	Update();
+	//드로우 콜
+	DeleteInDeleteList();	//삭제 리스트에 있는 인스턴스 삭제
+	Update();				//Data copy (CPU -> GPU)
 
-	m_pEngine->Loop(); //GraphicEngine Draw;
+	m_pEngine->Loop();		//GraphicEngine Draw;
 	return 0;
 }

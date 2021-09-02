@@ -76,7 +76,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	bResult = ReadObjectAllVersion(hFile, pDest->_header, pDest->_pObjList);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]LOAD MAP_OBJECT\n");
+		OutputDebugStringW(L"[FAIL]MapLoader::Load()-> ReadObject()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
 		exit(1);
@@ -574,7 +574,7 @@ BOOL MapLoader::ReadObjectAllVersion(HANDLE& hFile, STAGE_HEADER& header, object
 {
 	BOOL bResult = FALSE;
 	int objVer = header.ObjectVersion;
-	if (objVer == 1)
+	if (objVer == eOBJ_VERSION::eOBJ_VERSION1)
 	{
 		bResult = ReadObject_v1(hFile, header, pDest);
 	}
