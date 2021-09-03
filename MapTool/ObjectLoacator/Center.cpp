@@ -2153,6 +2153,11 @@ afx_msg LRESULT Center::OnObjectScale(WPARAM wParam, LPARAM lParam)
 }
 
 
+/*
+	[PARAMETER]
+	 wParam : 사각형의 좌상단, 우하단 좌표 xxyy형태  
+	 lParam : 해당없음
+*/
 afx_msg LRESULT Center::OnObjectSelectInRect(WPARAM wParam, LPARAM lParam)
 {
 	//이미 크기 비교해서 왔지만 다시 하는 중...
