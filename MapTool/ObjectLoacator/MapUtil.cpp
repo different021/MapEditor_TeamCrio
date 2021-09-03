@@ -102,9 +102,23 @@ BOOL MapUtil::CheckDragArea(CPoint p1, CPoint p2, CPoint target)
 	return TRUE;
 }
 
+/*
+	아래 4가지 확인 확인되면 FALSE 리턴.
+	
+	     *
+	---------
+	|		|
+  *	|		|  
+	|		|    *
+	|		|
+	---------
+	   *
+	
+	false 체크,
+	모두 통과하면 true
+*/
 BOOL MapUtil::AABB(float xMin, float xMax, float yMin, float yMax, float x, float y)
 {
-
 	if (x < xMin) return FALSE;
 	if (x > xMax) return FALSE;
 	if (y < yMin) return FALSE;
