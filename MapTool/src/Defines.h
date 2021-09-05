@@ -109,11 +109,11 @@ struct collider
 	BOOL  isVisible;
 	WCHAR name[MAX_LENGTH];
 
-	friend class CColliderManager;
-	friend class MapLoader;
-	friend class CSaver;
+	friend class CColliderManager;			//인스턴스 생성/관리
+	friend class MapLoader;					//맵 데이터 로더
+	friend class CSaver;					//맵 데이터 세이브
 private:
-	collider();
+	collider();								//객체 생성 제한 -> friend
 
 public:
 	void CopyCollider(collider* pDest);
