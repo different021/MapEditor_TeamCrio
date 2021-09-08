@@ -12,14 +12,14 @@ struct Gizmo
         AXIS_MAX,
     };
 
-    HEngine_DX12_3D* _pEngine;			//그래픽 엔진
-    Camera* _pCamera;
+    HEngine_DX12_3D* _pEngine;			//그래픽 엔진 (엔진 종속적)
+    Camera* _pCamera;                   //카메라 클래스 (엔진 종속적)
     
     DirectX::XMFLOAT3 _pos;             //기즈모 중심.
     DirectX::XMFLOAT3 _exPos;           //이전 중심
-    float _gizmoSize            = 0.1;  //기즈모 화살표? 크기
+    float _gizmoSize            = 0.1;  //3방향 직선 사이즈
     float _cubeSize             = 0.02; //큐브 사이즈
-    float _calculatedCubeSize   = 0.f;  
+    float _calculatedCubeSize   = 0.f;  //계산된 큐브 사이즈
 
     int _screenWidth;                   //스크린 가로
     int _screenHeight;                  //스크린 세로
@@ -27,6 +27,7 @@ struct Gizmo
     BOOL _bIsCubeTime = FALSE;         //큐브를 선택한 경우
     BOOL _bSelectAxis[AXIS_MAX];        //선택된 축이 있는지 여부.
 
+    //기즈모 표현을 위한 직선, 사각형, 큐브 (엔진 종속적)  
     HProceduralGeometry_line* _pLine[AXIS_MAX] = {};    //기즈모 X, Y, Z라인
     HProceduralGeometry_rect* _pRect[AXIS_MAX] = {};    //기즈모 끝부분 사각형
     HSimplePrimitive*         _pCube           = NULL;  //기즈모 가운데 큐브 ( 
@@ -43,10 +44,10 @@ private:
 
 public:
     ~Gizmo();
-    void GetPos(DirectX::XMFLOAT3& dest);
-    void Setup(HEngine_DX12_3D* pEngine);
-    void Delete();
-    void SetPos(DirectX::XMFLOAT3& pos);
+    void GetPos(DirectX::XMFLOAT3& out);            //파라미터에 기즈모 좌표 리턴
+    void Setup(HEngine_DX12_3D* pEngine);           //초기화 엔진 인스턴스 (엔진 종속적)
+    void Delete();                                  //기즈모 인스턴스 삭제
+    void SetPos(DirectX::XMFLOAT3& pos);            //
     void SetArrow(DirectX::XMFLOAT3& pos);
     
     void Reset();

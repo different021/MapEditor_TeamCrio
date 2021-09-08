@@ -91,19 +91,19 @@ void Gizmo::CreateCube(Vector3 size)
 
 void Gizmo::SetCubePos(DirectX::XMFLOAT3& pos)
 {
-	XMFLOAT3 myPos = pos;											//
-	XMVECTOR vMyPos = XMLoadFloat3(&myPos);							//
-	XMMATRIX viewMat = _pCamera->GetView();
-	XMVECTOR viewPos = XMVector3TransformCoord(vMyPos, viewMat);
-	float zDistance = XMVectorGetZ(viewPos);
-	_calculatedCubeSize = zDistance * _cubeSize / _pCamera->GetNearZ();
+	XMFLOAT3 myPos = pos;													//
+	XMVECTOR vMyPos = XMLoadFloat3(&myPos);									//
+	XMMATRIX viewMat = _pCamera->GetView();									//view 행렬 -> 카메라로부터 획득
+	XMVECTOR viewPos = XMVector3TransformCoord(vMyPos, viewMat);			//뷰 변환
+	float zDistance = XMVectorGetZ(viewPos);								//z값
+	_calculatedCubeSize = zDistance * _cubeSize / _pCamera->GetNearZ();		//
 
-	DirectX::XMMATRIX mTrans = DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
-	//DirectX::XMMATRIX mRot   = DirectX::XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);
-	DirectX::XMMATRIX mScale = DirectX::XMMatrixScaling(_calculatedCubeSize, _calculatedCubeSize, _calculatedCubeSize);
+	DirectX::XMMATRIX mTrans = DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);											//위치 행렬
+	//DirectX::XMMATRIX mRot   = DirectX::XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z);								//회전 행렬 없음.
+	DirectX::XMMATRIX mScale = DirectX::XMMatrixScaling(_calculatedCubeSize, _calculatedCubeSize, _calculatedCubeSize);		//크기 행렬
 
-	DirectX::XMMATRIX mTM = mScale * mTrans;
-	DirectX::XMStoreFloat4x4(&_pCube->worldTM, mTM);
+	DirectX::XMMATRIX mTM = mScale * mTrans;			//TRS
+	DirectX::XMStoreFloat4x4(&_pCube->worldTM, mTM);	//
 	//Vector3 size = Vector3(cubeSize, cubeSize, cubeSize);
 }
 
@@ -185,12 +185,12 @@ void Gizmo::GetPos(DirectX::XMFLOAT3& dest)
 
 void Gizmo::SetArrow(DirectX::XMFLOAT3& pos)
 {
-	XMFLOAT3 myPos = pos;											//
-	XMVECTOR vMyPos = XMLoadFloat3(&myPos);							//
-	XMMATRIX viewMat = _pCamera->GetView();
-	XMVECTOR viewPos = XMVector3TransformCoord(vMyPos, viewMat);
-	float zDistance = XMVectorGetZ(viewPos);
-	float calculatedGizmoLength = zDistance * _gizmoSize / _pCamera->GetNearZ();
+	XMFLOAT3 myPos		= pos;											//기즈모 중심 좌표
+	XMVECTOR vMyPos		= XMLoadFloat3(&myPos);							//중심 좌표 벡터로 변환
+	XMMATRIX mView		= _pCamera->GetView();							//view 매트릭스
+	XMVECTOR viewPos	= XMVector3TransformCoord(vMyPos, mView);		//뷰 공간 위치값
+	float zDistance		= XMVectorGetZ(viewPos);						//카메라로부터의 거리
+	float calculatedGizmoLength = zDistance * _gizmoSize / _pCamera->GetNearZ();	//이 화면에서의 기즈모 길이 계산
 
 	_pLine[AXIS_X]->dots[0] = _pos;
 	_pLine[AXIS_X]->dots[1] = XMFLOAT3(_pos.x + calculatedGizmoLength, _pos.y, _pos.z);
