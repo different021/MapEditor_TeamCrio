@@ -701,6 +701,8 @@ void Viewer::SetMainView(DirectX::XMFLOAT3 pos)
 
 }
 
+//기즈모를 중심으로 카메라 이동
+//바라 보는 방향이 gizmo
 void Viewer::RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp)
 {
 	DirectX::XMFLOAT3 pos;
@@ -724,7 +726,6 @@ void Viewer::SetCam(DirectX::XMFLOAT3& vTarget, DirectX::XMFLOAT3& vFront, Direc
 	newCamPos.z = vTarget.z - vFront.z * fAway;
 
 	m_pEngine->GetCamera()->LookAt(newCamPos, vTarget, vUp);	//카메라 클래스 별도 관리 할 것.
-
 }
 
 

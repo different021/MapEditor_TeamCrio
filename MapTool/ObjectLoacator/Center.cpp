@@ -262,6 +262,7 @@ void Center::Update()
 	m_pColliderManager->Update();
 	m_pLightManager->Update();
 	m_pWaveManager->Update();
+
 }
 
 

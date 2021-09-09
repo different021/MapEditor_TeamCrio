@@ -107,6 +107,23 @@ void Gizmo::SetCubePos(DirectX::XMFLOAT3& pos)
 	//Vector3 size = Vector3(cubeSize, cubeSize, cubeSize);
 }
 
+
+
+Gizmo::Gizmo()
+{
+}
+
+Gizmo::~Gizmo()
+{
+	Delete();
+}
+
+void Gizmo::Update()
+{
+	SetArrow(_pos);
+	SetCubePos(_pos);
+}
+
 void Gizmo::Setup(HEngine_DX12_3D* pEngine)
 {
 	_pEngine = pEngine;
@@ -160,20 +177,6 @@ void Gizmo::Delete()
 
 }
 
-void Gizmo::SetPos(DirectX::XMFLOAT3& pos)
-{
-	XMFLOAT3 myPos = pos;
-	_exPos = _pos;
-	_pos = pos;
-
-	SetArrow(_pos);
-	SetCubePos(_pos);
-}
-
-Gizmo::~Gizmo()
-{
-	Delete();
-}
 
 void Gizmo::GetPos(DirectX::XMFLOAT3& dest)
 {
@@ -182,27 +185,40 @@ void Gizmo::GetPos(DirectX::XMFLOAT3& dest)
 	dest.z = _pos.z;
 }
 
+void Gizmo::SetPos(DirectX::XMFLOAT3& pos)
+{
+	XMFLOAT3 myPos = pos;
+	_exPos = _pos;
+	_pos = pos;
+
+	//Update (Gizmo Position 정보로 도형들의 정보 수정)
+	Update();
+}
 
 void Gizmo::SetArrow(DirectX::XMFLOAT3& pos)
 {
-	XMFLOAT3 myPos		= pos;											//기즈모 중심 좌표
-	XMVECTOR vMyPos		= XMLoadFloat3(&myPos);							//중심 좌표 벡터로 변환
+	XMFLOAT3 worldPos	= pos;											//기즈모 중심 좌표
+	XMVECTOR vWorldPos	= XMLoadFloat3(&worldPos);						//벡터로 변환
 	XMMATRIX mView		= _pCamera->GetView();							//view 매트릭스
-	XMVECTOR viewPos	= XMVector3TransformCoord(vMyPos, mView);		//뷰 공간 위치값
+	XMVECTOR viewPos	= XMVector3TransformCoord(vWorldPos, mView);	//뷰 변환
+	
 	float zDistance		= XMVectorGetZ(viewPos);						//카메라로부터의 거리
-	float calculatedGizmoLength = zDistance * _gizmoSize / _pCamera->GetNearZ();	//이 화면에서의 기즈모 길이 계산
+	float nearZ			= _pCamera->GetNearZ();							//근평면 거리
+	float calculatedGizmoLength = zDistance * _gizmoSize /nearZ;		//월드 기즈모 길이 계산 (뷰공간으로 이동시 위치는 변하지만 크기가 변하는 것은 아니다.)
 
+	//XYZ축에 계산결과 반영 (월드 좌표 업데이트)
 	_pLine[AXIS_X]->dots[0] = _pos;
-	_pLine[AXIS_X]->dots[1] = XMFLOAT3(_pos.x + calculatedGizmoLength, _pos.y, _pos.z);
+	_pLine[AXIS_X]->dots[1] = XMFLOAT3(_pos.x + calculatedGizmoLength, _pos.y, _pos.z);		//X
 
 	_pLine[AXIS_Y]->dots[0] = _pos;
-	_pLine[AXIS_Y]->dots[1] = XMFLOAT3(_pos.x, _pos.y + calculatedGizmoLength, _pos.z);
+	_pLine[AXIS_Y]->dots[1] = XMFLOAT3(_pos.x, _pos.y + calculatedGizmoLength, _pos.z);		//y
 
 	_pLine[AXIS_Z]->dots[0] = _pos;
-	_pLine[AXIS_Z]->dots[1] = XMFLOAT3(_pos.x, _pos.y, _pos.z + calculatedGizmoLength);
+	_pLine[AXIS_Z]->dots[1] = XMFLOAT3(_pos.x, _pos.y, _pos.z + calculatedGizmoLength);		//z
 
-	float rectOneSide = 0.0125;
-	float calculatedOneSide = zDistance * rectOneSide / _pCamera->GetNearZ();
+	//사각형
+	float rectOneSide = 0.0125;										//사각형 길이
+	float calculatedOneSide = zDistance * rectOneSide / nearZ;		//월드에서의 길이
 
 	_pRect[AXIS_X]->dots[0] = _pLine[AXIS_X]->dots[1];
 	_pRect[AXIS_X]->dots[1] = _pLine[AXIS_X]->dots[1];
@@ -245,23 +261,6 @@ void Gizmo::SetArrow(DirectX::XMFLOAT3& pos)
 	_pRect[AXIS_Z]->dots[2].z = _pRect[AXIS_Z]->dots[2].z + calculatedOneSide;
 	_pRect[AXIS_Z]->dots[3].x = _pRect[AXIS_Z]->dots[3].x + calculatedOneSide;
 	_pRect[AXIS_Z]->dots[3].z = _pRect[AXIS_Z]->dots[3].z - calculatedOneSide;
-}
-
-
-
-
-void Gizmo::Reset()
-{
-	_pRect[AXIS_X]->dots[0] = XMFLOAT3(0.f, 0.f, 0.f);	//각 축의 길이 1
-	_pRect[AXIS_X]->dots[1] = XMFLOAT3(_gizmoSize, 0.f, 0.f);
-
-	_pRect[AXIS_Y]->dots[0] = XMFLOAT3(0.f, 0.f, 0.f);
-	_pRect[AXIS_Y]->dots[1] = XMFLOAT3(0.f, _gizmoSize, 0.f);
-
-	_pRect[AXIS_Z]->dots[0] = XMFLOAT3(0.f, 0.f, 0.f);
-	_pRect[AXIS_Z]->dots[1] = XMFLOAT3(0.f, 0.f, _gizmoSize);
-
-	//SetDirection(XMFLOAT3(0, 0, 0));
 }
 
 

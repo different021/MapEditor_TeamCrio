@@ -43,20 +43,23 @@ private:
     void  SetCubePos(DirectX::XMFLOAT3& pos);
 
 public:
+    Gizmo();
     ~Gizmo();
-    void GetPos(DirectX::XMFLOAT3& out);            //파라미터에 기즈모 좌표 리턴
+
+    void Update();                                  //virtual 전환 -> 엔진 독립적
     void Setup(HEngine_DX12_3D* pEngine);           //초기화 엔진 인스턴스 (엔진 종속적)
     void Delete();                                  //기즈모 인스턴스 삭제
-    void SetPos(DirectX::XMFLOAT3& pos);            //
-    void SetArrow(DirectX::XMFLOAT3& pos);
+
+    void GetPos(DirectX::XMFLOAT3& out);            //파라미터에 기즈모 좌표 리턴
+    void SetPos(DirectX::XMFLOAT3& pos);            //set CPU position data
+    void SetArrow(DirectX::XMFLOAT3& pos);          //private 이동 고려
     
-    void Reset();
     void SetSize(float size);
     BOOL CheckSelectedIndex(unsigned int screenX, unsigned int screenY, int screenWidth, int screenHeight);
     BOOL CheckAxis(AXIS axis);
     BOOL IsPickCube( unsigned int screenX, unsigned int screenY );
-    void ReleaseAxis();
-    void ReleaseCube();
+    void ReleaseAxis();                                 //축 선택 해제 -> 이름 다시 정할 것. 마우스 컨트롤과 관련.
+    void ReleaseCube();                                 //큐브 선택 해제 -> 이름 다시 정할 것.
     HProceduralGeometry_rect* GetDebugRect(AXIS axis);
 };
 
