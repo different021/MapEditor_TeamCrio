@@ -45,7 +45,6 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 {
 	//HANDLE hWaitObj = CreateEvent(NULL, TRUE, FALSE, NULL);
 	//DWORD dwRet = WaitForSingleObject(hWaitObj, INFINITE);
-
 	BOOL bResult = TRUE;
 	HANDLE hFile = NULL;
 
@@ -53,22 +52,21 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	pDest = new MAP;
 	ZeroMemory(pDest, sizeof(MAP));
 
-
 	bResult = OpenMapFileToLoad(hFile, pFileName);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]OPEN Map_File To Load\n");
+		OutputDebugStringW(L"[FAIL]MpaLoader::Load()::OpenMapFileToLoad()\n");
 		assert(FALSE);
-		exit(1);
+		//exit(1);
 	}
 
 	bResult = ReadHeader(hFile, pDest->_header);
 	if (!bResult)
 	{
-		OutputDebugStringW(L"[FAIL]LOAD MAP_HEADER\n");
+		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadHeader()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
-		exit(1);
+		//exit(1);
 		//return FALSE;
 	}
 
@@ -79,17 +77,17 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadObject()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
-		exit(1);
+		//exit(1);
 		//return FALSE;
 	}
 
-	bResult = ReadCollider(hFile, pDest->_header, pDest->_pColliderList);
+	bResult = ReadColliderAllVersion(hFile, pDest->_header, pDest->_pColliderList);
 	if (!bResult)
 	{
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadCollider()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
-		exit(1);
+		//exit(1);
 		//return FALSE;
 	}
 
@@ -99,7 +97,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadLight()\n");
 		CloseHandle(hFile);
 		assert(FALSE);
-		exit(1);
+		//exit(1);
 	}
 
 	bResult = ReadWaveCnt(hFile, pDest->_header, &pDest->_iWaveCnt);								//Ãß°¡µÊ.
@@ -111,7 +109,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 			OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadWave()\n");
 			CloseHandle(hFile);
 			assert(FALSE);
-			exit(1);
+			//exit(1);
 		}
 	}
 
@@ -386,17 +384,18 @@ BOOL MapLoader::OpenMapFileToLoad(HANDLE& hFile, wchar_t* pFileName)
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
 		bResult = FALSE;
+		OutputDebugStringW(L"[Fail]MapLoader:OpenMapFileToLoad()\n");
 		assert(FALSE);
 		exit(1);
 	}
 	else
 	{
+		//Sucess FileOpen
 		LARGE_INTEGER nLargeInteger = {0};
 		GetFileSizeEx(hFile, &nLargeInteger);
 		SYSTEM_INFO si;
 		GetSystemInfo(&si);
 		long readAmount = si.dwPageSize;
-
 	}
 
 
