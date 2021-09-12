@@ -56,6 +56,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	if (!bResult)
 	{
 		OutputDebugStringW(L"[FAIL]MpaLoader::Load()::OpenMapFileToLoad()\n");
+		::MessageBoxW(NULL, L"[FAIL]", L"Fail to Open Map File", MB_OK);
 		assert(FALSE);
 		//exit(1);
 	}
@@ -65,6 +66,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	{
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadHeader()\n");
 		CloseHandle(hFile);
+		::MessageBoxW(NULL, L"[FAIL]", L"Fail to Load Map File, header", MB_OK);
 		assert(FALSE);
 		//exit(1);
 		//return FALSE;
@@ -76,6 +78,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	{
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadObject()\n");
 		CloseHandle(hFile);
+		::MessageBoxW(NULL, L"[FAIL]", L"Fail to Load Map File, Object", MB_OK);
 		assert(FALSE);
 		//exit(1);
 		//return FALSE;
@@ -86,6 +89,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	{
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadCollider()\n");
 		CloseHandle(hFile);
+		::MessageBoxW(NULL, L"[FAIL]", L"Fail to Load Map File, Collider", MB_OK);
 		assert(FALSE);
 		//exit(1);
 		//return FALSE;
@@ -96,6 +100,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 	{
 		OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadLight()\n");
 		CloseHandle(hFile);
+		::MessageBoxW(NULL, L"[FAIL]", L"Fail to Load Map File, Light", MB_OK);
 		assert(FALSE);
 		//exit(1);
 	}
@@ -108,6 +113,7 @@ BOOL MapLoader::Load(wchar_t* pFileName, MAP* &pDest)
 		{
 			OutputDebugStringW(L"[FAIL]MapLoader::Load()::ReadWave()\n");
 			CloseHandle(hFile);
+			::MessageBoxW(NULL, L"[FAIL]", L"Fail to Load Map File, Wave", MB_OK);
 			assert(FALSE);
 			//exit(1);
 		}
