@@ -169,8 +169,9 @@ void DrawInsManager::AddToDeleteListAll()
 }
 
 
-//함수 이름 변경. DeleteSelectedObject() <- public 함수.
-//사용자 입장에서는 어떻게 지워지는지는 중요하지 않다.
+//선택된 리스트들을 삭제하는 함수
+//인스턴스를 직접삭제하지 않는다. -> 삭제리스트에 추가
+// 삭제 리스트에서 일괄 삭제가 일어난다.
 void DrawInsManager::AddDeleteListInSelectedList()
 {
 	//벡터의 마지막부터 지운다.
@@ -181,24 +182,24 @@ void DrawInsManager::AddDeleteListInSelectedList()
 		DRAW_INSTANCE* pIns = *it;
 
 		//삭제
-		std::vector<DRAW_INSTANCE*>::iterator iter = m_List.begin();
-		for (; iter != m_List.end(); iter++)
-		{
-			if (*it == *iter)
-			{
-				m_List.erase(iter);
-				break;
-			}
-		}
-		
-		delete pIns->first;
-		pIns->first = NULL;
+		//std::vector<DRAW_INSTANCE*>::iterator iter = m_List.begin();
+		//for (; iter != m_List.end(); iter++)
+		//{
+		//	if (*it == *iter)
+		//	{
+		//		m_List.erase(iter);
+		//		break;
+		//	}
+		//}
+		//
+		//delete pIns->first;
+		//pIns->first = NULL;
 
-		pIns->second->Delete();
-		pIns->second = NULL;
+		//pIns->second->Delete();
+		//pIns->second = NULL;
 
 
-		//AddDeleteList(pIns);			//삭제 리스트에 추가
+		AddDeleteList(pIns);			//삭제 리스트에 추가
 		it = m_SelectedList.erase(it);
 	}
 }
@@ -816,5 +817,10 @@ std::vector<DRAW_INSTANCE*>* DrawInsManager::GetDrawInsList()
 std::vector<DRAW_INSTANCE*>* DrawInsManager::GetSelectedList()
 {
 	return &m_SelectedList;
+}
+
+std::vector<DRAW_INSTANCE*>* DrawInsManager::GetDeleteList()
+{
+	return &m_DeleteList;
 }
 

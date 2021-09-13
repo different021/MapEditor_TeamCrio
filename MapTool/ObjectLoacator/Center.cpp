@@ -518,9 +518,8 @@ size_t Center::GetNumberOfSelectedObj()
 //선택된 오브젝트 삭제
 void Center::DeleteSelectedObject()
 {
-	m_pDrawInsManager->AddDeleteListInSelectedList();
-
-	UpdateObjList();
+	m_pDrawInsManager->AddDeleteListInSelectedList();	//선택한 오브젝트 삭제 리스트에 추가 (삭제 리스트를 바탕으로 삭제)
+	UpdateObjectComboBoxByDeleteList();				//콤보박스에서 Delete 리스트에 있는 오브젝트 제거
 }
 
 //선택된 오브젝트 리스트를 복사한다.
@@ -551,6 +550,18 @@ void Center::DuplicateObjectInSelectedList()
 	}
 	pNewObjList.clear();
 
+}
+
+void Center::UpdateObjectComboBoxByDeleteList()
+{
+	DrawInsList* pDeleteList = m_pDrawInsManager->GetDeleteList();
+	DrawInsList::iterator it;
+	for (it = pDeleteList->begin(); it != pDeleteList->end(); it++)
+	{
+		DRAW_INSTANCE* pIns = *it;
+		object* pDel = pIns->first;
+		m_ObjectDlg.DeleteItemInComboBox(pDel);
+	}
 }
 
 void Center::UpdateRegenColliderListInObjLocator()
@@ -1189,14 +1200,7 @@ void Center::UpdateListBox()
 void Center::UpdateObjList()	
 {
 	DrawInsList* pList = m_pDrawInsManager->GetDrawInsList();
-	DrawInsList::iterator it = pList->begin();
-	for (; it != pList->end(); it++)
-	{
-		DRAW_INSTANCE* pIns = *it;
-		object* pDel = pIns->first;
-		m_ObjectDlg.DeleteItemInComboBox(pDel);
-	}
-	//m_ObjectDlg.UpdateObjListBox(pList);
+	m_ObjectDlg.UpdateObjListBox(pList);
 }
 
 
@@ -1437,8 +1441,8 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 			DuplicateColliderInSelectedList();
 			DuplicateLightSelectedList();
 
-			//UpdateList
-			UpdateObjList();
+			//새로운 인스턴스들이 추가됨. 추가된 인스턴스들을 구해서 콤보박스에 추가하는 로직 필요.
+			UpdateObjList();	 
 			UpdateColliderList();
 			UpdateLightList();
 			UpdateRegenColliderListInObjLocator();

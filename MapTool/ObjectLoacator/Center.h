@@ -128,6 +128,10 @@ public:
 	void	DeleteSelectedObject();						//선택된 오브젝트 삭제. 	
 	void	DuplicateObjectInSelectedList();			//선택된 오브젝트 복사
 	
+
+	//
+	void UpdateObjectComboBoxByDeleteList();			//DeleteList를 바탕으로 ObjectDlg의 오브젝트 리스트 삭제( 함수이름 + 함수내용 개선 필요)
+
 	//리젠 콜라이더
 	void	UpdateRegenColliderListInObjLocator();
 
@@ -183,6 +187,8 @@ public:
 	void UpdateLightList();
 	void UpdateRegenColliderList();
 	void UpdateWaveLlist();
+
+	
 
 	//라이트.
 	void DuplicateLightSelectedList();						

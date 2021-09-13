@@ -100,5 +100,6 @@ public:
 	//GetList -> 삭제대상
 	std::vector<DRAW_INSTANCE*>* GetDrawInsList();
 	std::vector<DRAW_INSTANCE*>* GetSelectedList();
+	std::vector<DRAW_INSTANCE*>* GetDeleteList();
 };
 
