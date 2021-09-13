@@ -607,12 +607,53 @@ void CObjectDlg::UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList)
 
 	for (int i = 0; i < objCnt; i++)
 	{
-		int idx = m_objListBox.AddString(pList->at(i)->first->objectName);
-		m_objListBox.SetItemDataPtr(idx, (void*)(pList->at(i)->first));
+		AddObjectInComboBox(pList->at(i)->first);
+		/*int idx = m_objListBox.AddString(pList->at(i)->first->objectName);
+		m_objListBox.SetItemDataPtr(idx, (void*)(pList->at(i)->first));*/
 	}
 
 	m_objListBox.UpdateWindow();
 }
+
+
+//ADD Object in ComboBox by object
+// return : object combobox Index
+// return -1 : when  incaildate parameter
+int CObjectDlg::AddObjectInComboBox(object* pNew)
+{
+	int index = -1;
+	object* pObj = pNew;
+	if (pObj == nullptr) return index;
+
+	index = m_objListBox.AddString(pObj->objectName);
+	m_objListBox.SetItemDataPtr(index, (void*)(pObj));
+
+	return index;
+}
+
+//return false When Can't find object in ComboBox
+//return true when delete item same object
+bool CObjectDlg::DeleteItemInComboBox(object* pDeleteTarget)
+{
+	bool bResult = false;
+	object* pTarget = pDeleteTarget;
+	if (pTarget == nullptr) return bResult;
+
+	int count = m_objListBox.GetCount();		//순회해야할 총 횟수 (= 리스트박스 품목 갯수 만큼)
+	for (int i = 0; i < count; i++)
+	{
+		object* pObj = (object*)m_objListBox.GetItemData(i);
+		if (pObj == pTarget)
+		{
+			m_objListBox.DeleteString(i);
+			bResult = true;
+			break;
+		}
+	}
+
+	return bResult;
+}
+
 
 void CObjectDlg::UpdateModelListBox(std::vector<MODEL*>* pModelList)
 {
@@ -662,27 +703,6 @@ void CObjectDlg::UpdateMatListBox(std::vector<MATERIAL*>* pMatList)
 	}
 
 	m_MatListBox.UpdateWindow();
-}
-
-bool CObjectDlg::DeleteItemInComboBox(object* pDeleteTarget)
-{
-	bool bResult = false;
-	object* pTarget = pDeleteTarget;
-	if (pTarget == nullptr) return bResult;
-
-	int count = m_objListBox.GetCount();		//순회해야할 총 횟수 (= 리스트박스 품목 갯수 만큼)
-	for (int i = 0; i < count; i++)
-	{
-		object* pObj = (object*)m_objListBox.GetItemData(i);
-		if (pObj == pTarget)
-		{
-			m_objListBox.DeleteString(i);
-			bResult = true;
-			break;
-		}
-	}
-
-	return bResult;
 }
 
 void CObjectDlg::DeleteObjInListBox(std::vector<object*>* pList)

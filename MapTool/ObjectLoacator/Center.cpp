@@ -547,6 +547,10 @@ void Center::DuplicateObjectInSelectedList()
 	for (itr = pNewObjList.begin(); itr != pNewObjList.end(); itr++)
 	{
 		m_pDrawInsManager->AddObjectInSelectedList(*itr);
+
+		object* pObj = (*itr);
+		m_ObjectDlg.AddObjectInComboBox(pObj);
+	
 	}
 	pNewObjList.clear();
 
@@ -1204,7 +1208,6 @@ void Center::UpdateObjList()
 }
 
 
-
 void Center::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -1442,7 +1445,7 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 			DuplicateLightSelectedList();
 
 			//새로운 인스턴스들이 추가됨. 추가된 인스턴스들을 구해서 콤보박스에 추가하는 로직 필요.
-			UpdateObjList();	 
+			//UpdateObjList();	 -> duplicateObject에서 적절하게 처리 하도록 수정.
 			UpdateColliderList();
 			UpdateLightList();
 			UpdateRegenColliderListInObjLocator();

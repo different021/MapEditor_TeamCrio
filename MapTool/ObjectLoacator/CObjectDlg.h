@@ -97,10 +97,12 @@ private:
 	//콘트롤러 수치Get/Set/Update
 public:
 	void UpdateObjListBox(std::vector<DRAW_INSTANCE*>* pList);									//dlg박스의 다이얼로그 인스턴스 업데이트
+	int	 AddObjectInComboBox(object* pObj);
+	bool DeleteItemInComboBox(object* pObj);
+
 	void UpdateModelListBox(std::vector<MODEL*>* pModelList);
 	void UpdateMatListBox(std::vector<MATERIAL*>* pMatList);
 	
-	bool DeleteItemInComboBox(object* pObj);
 
 	//받은 리스트내에 오브젝트 삭제.
 	void DeleteObjInListBox(std::vector<object*>* pList);
