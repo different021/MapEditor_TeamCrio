@@ -664,6 +664,27 @@ void CObjectDlg::UpdateMatListBox(std::vector<MATERIAL*>* pMatList)
 	m_MatListBox.UpdateWindow();
 }
 
+bool CObjectDlg::DeleteItemInComboBox(object* pDeleteTarget)
+{
+	bool bResult = false;
+	object* pTarget = pDeleteTarget;
+	if (pTarget == nullptr) return bResult;
+
+	int count = m_objListBox.GetCount();		//순회해야할 총 횟수 (= 리스트박스 품목 갯수 만큼)
+	for (int i = 0; i < count; i++)
+	{
+		object* pObj = (object*)m_objListBox.GetItemData(i);
+		if (pObj == pTarget)
+		{
+			m_objListBox.DeleteString(i);
+			bResult = true;
+			break;
+		}
+	}
+
+	return bResult;
+}
+
 void CObjectDlg::DeleteObjInListBox(std::vector<object*>* pList)
 {
 	if (pList == nullptr) return;

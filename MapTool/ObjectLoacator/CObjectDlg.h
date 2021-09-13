@@ -100,6 +100,8 @@ public:
 	void UpdateModelListBox(std::vector<MODEL*>* pModelList);
 	void UpdateMatListBox(std::vector<MATERIAL*>* pMatList);
 	
+	bool DeleteItemInComboBox(object* pObj);
+
 	//받은 리스트내에 오브젝트 삭제.
 	void DeleteObjInListBox(std::vector<object*>* pList);
 

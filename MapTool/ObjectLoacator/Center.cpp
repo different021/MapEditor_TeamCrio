@@ -452,7 +452,12 @@ void Center::DeleteAllDrawInsList()
 }
 
 //성공 체크 필요.
-bool Center::CreateObj(object* pSrc)
+//DRAW_INSTANCE 생성 및 매니저에 추가 
+//파라미터로 object에 의한 생성
+//리턴은 DRAW_INSTANCE 생성 성공에 따른 것. 
+// 생성 실패시 파라미터로 받은 CPU인스턴스를 삭제
+// 그래픽 엔진 종속적.
+bool Center::CreateDrawInstance(object* pSrc)
 {
 	object* pObj = pSrc;
 	bool bResult = false;
@@ -514,13 +519,14 @@ size_t Center::GetNumberOfSelectedObj()
 void Center::DeleteSelectedObject()
 {
 	m_pDrawInsManager->AddDeleteListInSelectedList();
+
 	UpdateObjList();
 }
 
 //선택된 오브젝트 리스트를 복사한다.
 void Center::DuplicateObjectInSelectedList()
 {
-	std::vector<object*> pNewObjList;
+	std::vector<object*> pNewObjList;						//새로 생성된 오브젝트들을 저장할 임시 저장소.
 	std::vector<DRAW_INSTANCE*>* pSelectedList = m_pDrawInsManager->GetSelectedList();
 	std::vector<DRAW_INSTANCE*>::iterator it;
 	for (it = pSelectedList->begin(); it != pSelectedList->end(); it++)
@@ -531,7 +537,7 @@ void Center::DuplicateObjectInSelectedList()
 		ZeroMemory(pObj, sizeof(object));
 
 		pSrc->CopyObject(pObj);
-		CreateObj(pObj);
+		CreateDrawInstance(pObj);
 		pNewObjList.push_back(pObj);
 	}
 
@@ -604,7 +610,7 @@ void Center::CreateObjectsFromList(int CountOfObject, object* pList)
 		SetModelIndexByName(pObj);
 		SetMatIndexByName(pObj);
 
-		CreateObj(pObj);
+		CreateDrawInstance(pObj);
 		//OnCreateObj((WPARAM)m_hWnd, (LPARAM)(pObj));
 	}
 }
@@ -1183,7 +1189,14 @@ void Center::UpdateListBox()
 void Center::UpdateObjList()	
 {
 	DrawInsList* pList = m_pDrawInsManager->GetDrawInsList();
-	m_ObjectDlg.UpdateObjListBox(pList);
+	DrawInsList::iterator it = pList->begin();
+	for (; it != pList->end(); it++)
+	{
+		DRAW_INSTANCE* pIns = *it;
+		object* pDel = pIns->first;
+		m_ObjectDlg.DeleteItemInComboBox(pDel);
+	}
+	//m_ObjectDlg.UpdateObjListBox(pList);
 }
 
 
@@ -2013,7 +2026,7 @@ afx_msg LRESULT Center::OnObjectCreate(WPARAM wParam, LPARAM lParam)
 	object* pObjArray = (object*)pMsgArray->pArray;
 	for (int i = 0; i < cnt; i++)
 	{
-		CreateObj(&pObjArray[i]);
+		CreateDrawInstance(&pObjArray[i]);
 	}
 
 	result = eMsgResult::eMsgSuccess;

@@ -118,8 +118,8 @@ public:
 	HInstanceData* CreateGraphicInstance(object* pSrc);		//리턴값 변경 -> 엔진 독립적으로 만들기 위해.
 	object* GetLastSelectedObject();						//선택된 오브젝트 중 마지막
 	void	DeleteAllDrawInsList();							//오브젝트 전부 삭제.
-	bool	CreateObj(object* pObj);						//오브젝트 생성.
-	void	RescaleSelected(float ratio);				//선택한 모두의 스케일 조절
+	bool	CreateDrawInstance(object* pObj);				//그래픽 엔진 종속적
+	void	RescaleSelected(float ratio);					//선택한 모두의 스케일 조절
 
 	//그래픽 인스턴스
 	//bool	DeleteGraphicInstance(object* pObj);			//그래픽 인스턴스 삭제.

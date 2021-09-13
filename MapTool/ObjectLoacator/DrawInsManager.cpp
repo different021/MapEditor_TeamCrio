@@ -179,7 +179,26 @@ void DrawInsManager::AddDeleteListInSelectedList()
 	{
 		it--;
 		DRAW_INSTANCE* pIns = *it;
-		AddDeleteList(pIns);			//삭제 리스트에 추가
+
+		//삭제
+		std::vector<DRAW_INSTANCE*>::iterator iter = m_List.begin();
+		for (; iter != m_List.end(); iter++)
+		{
+			if (*it == *iter)
+			{
+				m_List.erase(iter);
+				break;
+			}
+		}
+		
+		delete pIns->first;
+		pIns->first = NULL;
+
+		pIns->second->Delete();
+		pIns->second = NULL;
+
+
+		//AddDeleteList(pIns);			//삭제 리스트에 추가
 		it = m_SelectedList.erase(it);
 	}
 }
@@ -209,7 +228,7 @@ void DrawInsManager::AddDeleteList(object* pObj)
 void DrawInsManager::DeleteInDeleteList(std::vector<object*>* pOut)
 {
 	std::vector<object*>* pObjList = pOut;
-	ClearSelectedListByDeleteList();
+	ClearSelectedListByDeleteList();				//셀렉티드 리스트 클리어해도 괜찮을듯?
 	int count = 0;
 	std::vector<DRAW_INSTANCE*>::iterator delete_it;
 	for (delete_it = m_DeleteList.begin(); delete_it != m_DeleteList.end(); delete_it++)
