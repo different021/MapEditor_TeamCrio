@@ -52,6 +52,7 @@ void CColliderManager::SetSelectMode(eSELECT_MODE mode)
 	m_selectMode = mode;
 }
 
+//CPU Data Copy to GPU Data
 void CColliderManager::Update()
 {
 	std::vector<COLLIDER>::iterator it;
@@ -75,12 +76,15 @@ collider* CColliderManager::CreateCollider()
 	return pCollider;
 }
 
+//return collider Pointer 
+//collider* pArray = collider[input]
 collider* CColliderManager::CreateColliderArray(int numberOfCollider)
 {
 	collider* pColList = new collider[numberOfCollider];
 	return pColList;
 }
 
+//현재 콜라이더 중 가장 높은 인덱스 값을 반환한다.
 int CColliderManager::GetHighestColliderIndex()
 {
 	int max = 0;
@@ -94,6 +98,8 @@ int CColliderManager::GetHighestColliderIndex()
 	return max;
 }
 
+//가장 높은 인덱스를 찾아 셋팅
+//데이터를 로드 했을 경우 등, 새로이 찾아야할 필요성이 있을때 사용
 void CColliderManager::SetIndexWhenYouLoad()
 {
 	m_HighestIndex = GetHighestColliderIndex() + 1;
@@ -109,6 +115,7 @@ const std::vector<COLLIDER>* CColliderManager::GetSelected()
 	return &m_SelectedList;
 }
 
+//삭제리스트에 있는 인스턴스 삭제 수행
 void CColliderManager::DeleteColliderList()
 {
 	std::vector<COLLIDER>::iterator it;
@@ -125,17 +132,20 @@ void CColliderManager::DeleteColliderList()
 
 }
 
+//선택 가능/불가능 상태 전환 
 void CColliderManager::EnableSelect(bool bSelect)
 {
 	m_bSelectEnable = bSelect;
 	if (!m_bSelectEnable) m_SelectedList.clear();
 }
 
+//현재 선택 가능/불가능 상태 확인 시 사용
 bool CColliderManager::IsEnableColliderSelect()
 {
 	return m_bSelectEnable;
 }
 
+//콜라이더 타입 순으로 정렬할때 사용.
 bool compare(COLLIDER& pCol1, COLLIDER& pCol2)
 {
 	eCOLLIDER_TYPE type1 = pCol1.first->type;
