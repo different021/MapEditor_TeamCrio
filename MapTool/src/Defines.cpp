@@ -310,7 +310,7 @@ void collider::SaveCollider(collider* pDest)
 	memcpy(pDest, this, sizeof(collider));
 }
 
-void collider::CopyCollider(collider* pDest)
+void collider::CopyTo(collider* pDest)
 {
 	pDest->type	 = this->type;
 	pDest->index = this->index;

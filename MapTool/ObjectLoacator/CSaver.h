@@ -54,7 +54,9 @@ public:
 	void SetLightList(std::vector<Light*>* pLightList);
 	void SetWaveList(const std::vector<WAVE*>* pWaveList);
 
-	int	MakeObjectArrayFromVector(object* pOutconst,const std::vector<DRAW_INSTANCE*>* pDrawInsList);		//return number of instance copied
+	//return number of instance copied
+	int	MakeObjectArrayFromVector(object* &pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList);		
+	int MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLIDER>* pColliderList);		
 
 public:
 	void Save();

@@ -116,7 +116,7 @@ private:
 	collider();								//按眉 积己 力茄 -> friend
 
 public:
-	void CopyCollider(collider* pDest);
+	void CopyTo(collider* pDest);
 	void CopyExceptIndex(collider* pDest);
 	void SaveCollider(collider* pDest);
 	void MakeName();

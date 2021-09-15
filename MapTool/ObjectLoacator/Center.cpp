@@ -645,7 +645,7 @@ void Center::CreateCollidersFromList(STAGE_HEADER* pHeader, collider* pColliderL
 	{
 		collider* pCur = pColliderList + i;
 		collider* pTemp = CreateCollider();
-		pCur->CopyCollider(pTemp);
+		pCur->CopyTo(pTemp);
 	
 		HRESULT hr = m_pColliderManager->InsertColliderList(pTemp);
 		if (hr != S_OK)

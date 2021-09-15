@@ -362,17 +362,17 @@ void CSaver::SetWaveList(const std::vector<WAVE*>* pList)
 
 //return -1 : invaild parameter
 // return value is Number of instance copied
-int CSaver::MakeObjectArrayFromVector(object* pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList)
+int CSaver::MakeObjectArrayFromVector(object* &pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList)
 {
 	object* pArray = nullptr;
 	if (pDrawInsList == nullptr) return -1;		
 
-	size_t size = pDrawInsList->size();			//복사할 사이즈;
+	size_t size = pDrawInsList->size();		//복사할 사이즈
 	if (size < 1) return 0;
 
 	try
 	{
-		pArray = new object[size];			//결과물 어레이
+		pArray = new object[size];			//저장할 메모리 할당
 	}
 	catch (const std::bad_alloc& e)
 	{
@@ -388,6 +388,40 @@ int CSaver::MakeObjectArrayFromVector(object* pOut, const std::vector<DRAW_INSTA
 		pTemp->CopyTo(pArray + i);
 		i++;
 	}
+
+	pOut = pArray;
+
+	return i;
+}
+
+int CSaver::MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLIDER>* pColliderList)
+{
+	collider* pArray = nullptr;
+	if (pColliderList == nullptr) return -1;
+
+	size_t size = pColliderList->size();		//복사할 사이즈
+	if (size < 1) return 0;
+
+	try
+	{
+		pArray = new collider[size];			//저장할 메모리 할당
+	}
+	catch (const std::bad_alloc& e)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[CSaver]MakeObjectArrayFromVector() Fail to MemoryAllocate\n");
+	}
+
+	int i = 0;
+	std::vector<COLLIDER>::const_iterator it;
+	for (it = pColliderList->begin(); it != pColliderList->end(); it++)
+	{
+		collider* pTemp = (*it).first;
+		pTemp->CopyTo(pArray + i);
+		i++;
+	}
+
+	pOut = pArray;
 
 	return i;
 }
