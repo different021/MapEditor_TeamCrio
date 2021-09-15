@@ -76,7 +76,7 @@ public:
 	void SetPrvRot(DirectX::XMFLOAT4& rot);
 	void SetMatIndex(int index);
 	void SetRegenIndex(int index);
-	void CopyObject(object* pDest);
+	void CopyTo(object* pDest);
 
 	void GetTm(DirectX::XMFLOAT4X4& out) const; 
 	DirectX::XMFLOAT4X4 GetTm();

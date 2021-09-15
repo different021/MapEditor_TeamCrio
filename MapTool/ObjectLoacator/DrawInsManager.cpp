@@ -286,7 +286,7 @@ void DrawInsManager::MakeDrawInstance(object* pObj, HInstanceData* pGraphicsData
 
 void DrawInsManager::EditObject(object* pDest, object* pSrc)
 {
-	pSrc->CopyObject(pDest);
+	pSrc->CopyTo(pDest);
 }
 
 

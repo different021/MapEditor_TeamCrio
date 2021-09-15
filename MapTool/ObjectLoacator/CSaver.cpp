@@ -171,7 +171,7 @@ DWORD CSaver::SaveObject(HANDLE hFile)
 		for (size_t i = 0; i < iObjCnt; i++)
 		{
 			object* pTemp = m_pDrawInsVector->at(i)->first;
-			pTemp->CopyObject(&pBuf[i]);
+			pTemp->CopyTo(&pBuf[i]);
 		}
 
 		MapLoader::WriteObjectFromFile(hFile, pBuf, size);
@@ -358,6 +358,37 @@ void CSaver::SetLightList(std::vector<Light*>* pLightList)
 void CSaver::SetWaveList(const std::vector<WAVE*>* pList)
 {
 	m_pWaveVector = (std::vector<WAVE*>*)pList;
+}
+
+//return -1 : invaild parameter
+int CSaver::MakeObjectArrayFromVector(object* pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList)
+{
+	object* pArray = nullptr;
+	if (pDrawInsList == nullptr) return -1;		
+
+	size_t size = pDrawInsList->size();			//복사할 사이즈;
+	if (size < 1) return 0;
+
+	try
+	{
+		pArray = new object[size];			//결과물 어레이
+	}
+	catch (const std::bad_alloc& e)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[CSaver]MakeObjectArrayFromVector() Fail to MemoryAllocate\n");
+	}
+	
+	int i = 0;
+	std::vector<DRAW_INSTANCE*>::const_iterator it;
+	for (it = pDrawInsList->begin(); it != pDrawInsList->end(); it++)
+	{
+		object* pTemp = (*it)->first;
+		pTemp->CopyTo(pArray + i);
+		i++;
+	}
+
+	return 0;
 }
 
 

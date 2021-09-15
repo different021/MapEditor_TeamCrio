@@ -63,7 +63,7 @@ void object::SetRegenIndex(int index)
 	regenIndex = index;
 }
 
-void object::CopyObject(object* pDest)
+void object::CopyTo(object* pDest)
 {
 	memcpy(pDest, this, sizeof(object));
 }

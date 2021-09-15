@@ -97,7 +97,7 @@ public:
 
 	void EditRegenIndexDefault(int regenColliderIndex);
 
-	//GetList -> 삭제대상
+	//GetList ->
 	std::vector<DRAW_INSTANCE*>* GetDrawInsList();
 	std::vector<DRAW_INSTANCE*>* GetSelectedList();
 	std::vector<DRAW_INSTANCE*>* GetDeleteList();

@@ -143,6 +143,8 @@ bool compare(COLLIDER& pCol1, COLLIDER& pCol2)
 	return static_cast<int>(type1) < static_cast<int>(type2);
 }
 
+//타입 순으로 정렬한다.
+//compare함수 참조
 void CColliderManager::Sort()
 {
 	std::sort(m_ColliderList.begin(), m_ColliderList.end(), compare);

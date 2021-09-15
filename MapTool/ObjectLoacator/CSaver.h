@@ -14,6 +14,7 @@ public:
 	STAGE_HEADER	m_StageHeader;
 	int		m_cntWave;
 
+	//벡터 제거  
 	std::vector<DRAW_INSTANCE*>* m_pDrawInsVector;				//매니저에 있는걸 가져왔다는 의미.....
 	std::vector<COLLIDER>*		m_pColliderVector;
 	std::vector<Light*>*		m_pLightVector;
@@ -52,6 +53,8 @@ public:
 	void SetColliderList(std::vector<COLLIDER>* pColliderList);
 	void SetLightList(std::vector<Light*>* pLightList);
 	void SetWaveList(const std::vector<WAVE*>* pWaveList);
+
+	int	MakeObjectArrayFromVector(object* pOutconst,const std::vector<DRAW_INSTANCE*>* pDrawInsList);
 
 public:
 	void Save();

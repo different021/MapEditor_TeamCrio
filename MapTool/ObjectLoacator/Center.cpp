@@ -535,7 +535,7 @@ void Center::DuplicateObjectInSelectedList()
 		object* pObj = new object;
 		ZeroMemory(pObj, sizeof(object));
 
-		pSrc->CopyObject(pObj);
+		pSrc->CopyTo(pObj);
 		CreateDrawInstance(pObj);
 		pNewObjList.push_back(pObj);
 	}
@@ -621,7 +621,7 @@ void Center::CreateObjectsFromList(int CountOfObject, object* pList)
 		object* pObj = new object;
 		ZeroMemory(pObj, sizeof(object));
 
-		(pList + i)->CopyObject(pObj);
+		(pList + i)->CopyTo(pObj);
 		SetModelIndexByName(pObj);
 		SetMatIndexByName(pObj);
 
