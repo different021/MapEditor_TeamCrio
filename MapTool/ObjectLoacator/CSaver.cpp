@@ -361,6 +361,7 @@ void CSaver::SetWaveList(const std::vector<WAVE*>* pList)
 }
 
 //return -1 : invaild parameter
+// return value is Number of instance copied
 int CSaver::MakeObjectArrayFromVector(object* pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList)
 {
 	object* pArray = nullptr;
@@ -388,7 +389,7 @@ int CSaver::MakeObjectArrayFromVector(object* pOut, const std::vector<DRAW_INSTA
 		i++;
 	}
 
-	return 0;
+	return i;
 }
 
 

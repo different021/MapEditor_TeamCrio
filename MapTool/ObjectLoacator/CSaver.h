@@ -54,7 +54,7 @@ public:
 	void SetLightList(std::vector<Light*>* pLightList);
 	void SetWaveList(const std::vector<WAVE*>* pWaveList);
 
-	int	MakeObjectArrayFromVector(object* pOutconst,const std::vector<DRAW_INSTANCE*>* pDrawInsList);
+	int	MakeObjectArrayFromVector(object* pOutconst,const std::vector<DRAW_INSTANCE*>* pDrawInsList);		//return number of instance copied
 
 public:
 	void Save();
