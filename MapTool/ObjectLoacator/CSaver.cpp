@@ -13,7 +13,7 @@ OVERLAPPED g_OverLapped;
 
 CSaver::CSaver()
 {
-	m_pDrawInsVector  = NULL;			
+	//m_pDrawInsVector  = NULL;			
 	m_pColliderVector = NULL;
 	
 	memset(&m_StageHeader, 0, sizeof(STAGE_HEADER));
@@ -148,7 +148,8 @@ DWORD CSaver::WriteHeader(HANDLE hFile, wchar_t* pFileName)
 	m_StageHeader.MapVersion	= (int)(eMAP_VERSION::eMAP_VERSION_MAX) - 1;
 	m_StageHeader.ObjectVersion = (int)(eOBJ_VERSION::eOBJ_VERSION_MAX) - 1;
 	m_StageHeader.iCamCnt		= 0;					//수정
-	m_StageHeader.iObjCnt		= m_pDrawInsVector->size();
+	//m_StageHeader.iObjCnt		= m_pDrawInsVector->size();
+	m_StageHeader.iObjCnt		= m_ObjectCnt;
 	m_StageHeader.iColliderCnt	= m_pColliderVector->size();;
 	m_StageHeader.iLightCnt		= m_pLightVector->size();
 
@@ -161,22 +162,25 @@ DWORD CSaver::WriteHeader(HANDLE hFile, wchar_t* pFileName)
 DWORD CSaver::SaveObject(HANDLE hFile)
 {
 	DWORD dwRet = 0;
-	size_t iObjCnt = m_pDrawInsVector->size();
-	if (iObjCnt > 0)
-	{
-		DWORD size = sizeof(object) * iObjCnt;
+	//size_t iObjCnt = m_pDrawInsVector->size();
+	//if (iObjCnt > 0)
+	//{
+	//	DWORD size = sizeof(object) * iObjCnt;
 
-		object* pBuf = new object[iObjCnt];
+	//	object* pBuf = new object[iObjCnt];
 
-		for (size_t i = 0; i < iObjCnt; i++)
-		{
-			object* pTemp = m_pDrawInsVector->at(i)->first;
-			pTemp->CopyTo(&pBuf[i]);
-		}
+	//	for (size_t i = 0; i < iObjCnt; i++)
+	//	{
+	//		object* pTemp = m_pDrawInsVector->at(i)->first;
+	//		pTemp->CopyTo(&pBuf[i]);
+	//	}
 
-		MapLoader::WriteObjectFromFile(hFile, pBuf, size);
-		delete[] pBuf;
-	}
+	//	MapLoader::WriteObjectFromFile(hFile, pBuf, size);
+	//	delete[] pBuf;
+	//}
+	DWORD size = sizeof(object) * m_ObjectCnt;
+	MapLoader::WriteObjectFromFile(hFile, m_pObjList, size);
+
 
 	return dwRet;
 }
@@ -339,30 +343,35 @@ void CSaver::SetHeader(STAGE_HEADER& header)
 
 
 
-void CSaver::SetObjList(std::vector<DRAW_INSTANCE*>* pDrawInsList)
-{
-	m_pDrawInsVector = pDrawInsList;
-}
-
+//void CSaver::SetObjList(std::vector<DRAW_INSTANCE*>* pDrawInsList)
+//{
+//	//m_pDrawInsVector = pDrawInsList;
+//	MakeObjectArrayFromVector(pDrawInsList);
+//}
+//
 
 void CSaver::SetColliderList(std::vector<COLLIDER>* pColliderList)
 {
 	m_pColliderVector = pColliderList;
+	//MakeColliderArrayFromVector(m_pColliderList, pColliderList);
 }
 
 void CSaver::SetLightList(std::vector<Light*>* pLightList)
 {
 	m_pLightVector = pLightList;
+	//MakeLightArrayFromVector(m_pLightDataList ,pLightList);
 }
 
 void CSaver::SetWaveList(const std::vector<WAVE*>* pList)
 {
+	//이럴거면 왜???
 	m_pWaveVector = (std::vector<WAVE*>*)pList;
+	//MakeWaveArrayFromVector(m_pWaveList, pList);
 }
 
 //return -1 : invaild parameter
 // return value is Number of instance copied
-int CSaver::MakeObjectArrayFromVector(object* &pOut, const std::vector<DRAW_INSTANCE*>* pDrawInsList)
+int CSaver::MakeObjectArrayFromVector(const std::vector<DRAW_INSTANCE*>* pDrawInsList)
 {
 	object* pArray = nullptr;
 	if (pDrawInsList == nullptr) return -1;		
@@ -389,7 +398,8 @@ int CSaver::MakeObjectArrayFromVector(object* &pOut, const std::vector<DRAW_INST
 		i++;
 	}
 
-	pOut = pArray;
+	m_pObjList = pArray;
+	m_ObjectCnt = i;
 
 	return i;
 }
@@ -398,9 +408,15 @@ int CSaver::MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLI
 {
 	collider* pArray = nullptr;
 	if (pColliderList == nullptr) return -1;
-
+	
 	size_t size = pColliderList->size();		//복사할 사이즈
 	if (size < 1) return 0;
+
+	if (pOut != nullptr) 
+	{ 
+		delete[] pOut;
+		pOut = nullptr;
+	};
 
 	try
 	{
@@ -409,7 +425,7 @@ int CSaver::MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLI
 	catch (const std::bad_alloc& e)
 	{
 		//메모리 할당 실패
-		OutputDebugStringW(L"[CSaver]MakeObjectArrayFromVector() Fail to MemoryAllocate\n");
+		OutputDebugStringW(L"[CSaver]MakeColliderArrayFromVector() Fail to MemoryAllocate\n");
 	}
 
 	int i = 0;
@@ -422,6 +438,85 @@ int CSaver::MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLI
 	}
 
 	pOut = pArray;
+	m_ColliderCnt = i;		//콜라이더 갯수 업데이트.
+
+	return i;
+}
+
+int CSaver::MakeLightArrayFromVector(lightData*& pOut, const std::vector<Light*>* pLightList)
+{
+	lightData* pArray = nullptr;
+	if (pLightList == nullptr) return -1;
+
+	size_t size = pLightList->size();		//복사할 사이즈
+	if (size < 1) return 0;
+
+	if (pOut != nullptr)
+	{
+		delete[] pOut;
+		pOut = nullptr;
+	};
+
+	try
+	{
+		pArray = new lightData[size];			//저장할 메모리 할당
+	}
+	catch (const std::bad_alloc& e)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[CSaver]MakeLightArrayFromVector() Fail to MemoryAllocate\n");
+	}
+
+	int i = 0;
+	std::vector<Light*>::const_iterator it;
+	for (it = pLightList->begin(); it != pLightList->end(); it++)
+	{
+		Light* pTemp = (*it);		//멤버로 갖고 있는 클래스가 됨.
+		pTemp->CopyData(pArray[i]);
+		i++;
+	}
+
+	pOut = pArray;
+	m_LightCnt = i;
+
+	return i;
+}
+
+int CSaver::MakeWaveArrayFromVector(waveData*& pOut, const std::vector<WAVE*>* pWaveList)
+{
+	waveData* pArray = nullptr;
+	if (pWaveList == nullptr) return -1;
+
+	size_t size = pWaveList->size();		//복사할 사이즈
+	if (size < 1) return 0;
+
+	if (pOut != nullptr)
+	{
+		delete[] pOut;
+		pOut = nullptr;
+	};
+
+	try
+	{
+		pArray = new waveData[size];			//저장할 메모리 할당
+	}
+	catch (const std::bad_alloc& e)
+	{
+		//메모리 할당 실패
+		OutputDebugStringW(L"[CSaver]MakeWaveArrayFromVector() Fail to MemoryAllocate\n");
+	}
+
+	int i = 0;
+	std::vector<WAVE*>::const_iterator it;
+	for (it = pWaveList->begin(); it != pWaveList->end(); it++)
+	{
+		WAVE* pTemp = (*it);		//멤버로 갖고 있는 클래스가 됨.
+		pTemp->CopyTo(pArray + i);
+		i++;
+	}
+
+	pOut = pArray;
+	m_WaveCnt = i;
 
 	return i;
 }

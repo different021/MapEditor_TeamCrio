@@ -847,8 +847,8 @@ void Center::SaveMap()
 	m_pSaver->SetHeader(m_MapHeader);		
 
 	//Object
-	DrawInsList* pList = (DrawInsList*)m_pDrawInsManager->GetDrawInsList();		
-	m_pSaver->SetObjList(pList);
+	const DrawInsList* pList = m_pDrawInsManager->GetDrawInsList();		
+	m_pSaver->MakeObjectArrayFromVector(pList);
 
 	//Collider
 	m_pColliderManager->Sort();

@@ -440,5 +440,12 @@ void WAVE::AddPos(float dx, float dy, float dz)
 
 void WAVE::Rotation(DirectX::XMFLOAT4& quaternion)
 {
+	//Not implement
+	OutputDebugStringW(L"[WAVE]Rotation() is not Implement\n");
+}
 
+void WAVE::CopyTo(waveData* pDest)
+{
+	if (pDest == nullptr) return;
+	memcpy_s(pDest, sizeof(waveData), &info, sizeof(waveData));
 }

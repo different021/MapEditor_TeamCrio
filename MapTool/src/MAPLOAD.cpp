@@ -787,31 +787,23 @@ BOOL MapLoader::ReadObject_v2(HANDLE& hFile, STAGE_HEADER& header, object*& pDes
 	bResult = GetError(bResult);
 
 	//Convert data
-	if (sizeof(object) == sizeof(object_v2))
+	for (int i = 0; i < cntObj; i++)
 	{
-		//두 데이터 구조가 같다.
-		memcpy(pDest, temp, sizeof(object) * cntObj);
-	}
-	else
-	{
-		for (int i = 0; i < cntObj; i++)
-		{
-			pDest[i].regenIndex		= -1;		//voidSpace가 regenIndex로 변해서 오브젝트 사이즈 차이는 없다.(DWORD -> int)
+		pDest[i].regenIndex		= -1;		//voidSpace가 regenIndex로 변해서 오브젝트 사이즈 차이는 없다.(DWORD -> int)
 
-			pDest[i].eShaderType	= temp[i].eShaderType;
-			pDest[i].pos			= temp[i].pos;
-			pDest[i].oiler			= temp[i].oiler;
-			pDest[i].quaternion		= temp[i].quaternion;
-			pDest[i].prevRot		= temp[i].prevRot;
-			pDest[i].scale			= temp[i].scale;
+		pDest[i].eShaderType	= temp[i].eShaderType;
+		pDest[i].pos			= temp[i].pos;
+		pDest[i].oiler			= temp[i].oiler;
+		pDest[i].quaternion		= temp[i].quaternion;
+		pDest[i].prevRot		= temp[i].prevRot;
+		pDest[i].scale			= temp[i].scale;
 
-			memcpy(pDest[i].objectName, temp[i].objectName, sizeof(WCHAR) * MAX_LENGTH);	//Object	Name
-			memcpy(pDest[i].modelName, temp[i].modelName, sizeof(WCHAR) * MAX_LENGTH);	//Model		Name
-			memcpy(pDest[i].matName, temp[i].matName, sizeof(WCHAR) * MAX_LENGTH);	//Material	Name
+		memcpy(pDest[i].objectName, temp[i].objectName, sizeof(WCHAR) * MAX_LENGTH);	//Object	Name
+		memcpy(pDest[i].modelName, temp[i].modelName, sizeof(WCHAR) * MAX_LENGTH);		//Model		Name
+		memcpy(pDest[i].matName, temp[i].matName, sizeof(WCHAR) * MAX_LENGTH);			//Material	Name
 
-			pDest[i].modelIndex		= temp[i].modelIndex;
-			pDest[i].matIndex		= temp[i].matIndex;
-		}
+		pDest[i].modelIndex		= temp[i].modelIndex;
+		pDest[i].matIndex		= temp[i].matIndex;
 	}
 
 	delete[] temp;

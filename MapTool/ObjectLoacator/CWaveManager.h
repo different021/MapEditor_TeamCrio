@@ -8,15 +8,16 @@ class HEngine_DX12_3D;
 
 struct WAVE
 {
-	waveData  info;
+	waveData  info;					//CPU data 이름 수정 고려
 	HWaveData* pGraphicInstance;	//그래픽 인스턴스
 	
 	WAVE();
 	~WAVE();
 
-	void Update();
-	void AddPos(float dx, float dy, float dz);
+	void Update();									//Data Copy (CPU -> GPU)
+	void AddPos(float dx, float dy, float dz);		
 	void Rotation(DirectX::XMFLOAT4& quaternion);
+	void CopyTo(waveData* pDest);
 };
 
 class CWaveManager

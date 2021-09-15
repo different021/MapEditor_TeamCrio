@@ -387,4 +387,3 @@ DirectX::XMFLOAT4X4 waveData::GetTm()
 
 	return out;
 }
-
