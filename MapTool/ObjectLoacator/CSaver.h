@@ -12,18 +12,12 @@ class CSaver
 public:
 	static CSaver*	m_pInstance;
 	STAGE_HEADER	m_StageHeader;
-	int		m_cntWave;
+	//int		m_cntWave;
 
-	//삭제 에정 변수 아래 포인터만으로 
-	//std::vector<DRAW_INSTANCE*>* m_pDrawInsVector;		
-	std::vector<COLLIDER>*		m_pColliderVector;
-	std::vector<Light*>*		m_pLightVector;
-	std::vector<WAVE*>*			m_pWaveVector;
-
-	size_t m_ObjectCnt	= 0;
-	size_t m_ColliderCnt = 0;
-	size_t m_LightCnt	= 0;
-	size_t m_WaveCnt	= 0;
+	int m_ObjectCnt	= 0;
+	int m_ColliderCnt = 0;
+	int m_LightCnt	= 0;
+	int m_WaveCnt	= 0;
 
 	object*			m_pObjList		 = NULL;
 	collider*		m_pColliderList  = NULL;
@@ -54,18 +48,13 @@ public:
 	BOOL ReadWave(HANDLE hFile, STAGE_HEADER& header, waveData*& pOut);
 
 	void SetHeader(STAGE_HEADER& header);
-	//삭제 예정 함수들. 아래 함수들로 대체 가능
-	//void SetObjList(std::vector<DRAW_INSTANCE*>* drawInsList);
-	void SetColliderList(std::vector<COLLIDER>* pColliderList);
-	void SetLightList(std::vector<Light*>* pLightList);
-	void SetWaveList(const std::vector<WAVE*>* pWaveList);
 
 	//return number of instance copied
 	//pOut에 새로이 메모리 할당된 배열이 넘어가니 비우고 넘길것.
 	int	MakeObjectArrayFromVector(const std::vector<DRAW_INSTANCE*>* pDrawInsList);		
-	int MakeColliderArrayFromVector(collider*& pOut, const std::vector<COLLIDER>* pColliderList);		
-	int MakeLightArrayFromVector(lightData*& pOut, const std::vector<Light*>* pLightList);
-	int MakeWaveArrayFromVector(waveData*& pOut, const std::vector<WAVE*>* pWaveList);
+	int MakeColliderArrayFromVector(const std::vector<COLLIDER>* pColliderList);		
+	int MakeLightArrayFromVector(const std::vector<Light*>* pLightList);
+	int MakeWaveArrayFromVector(const std::vector<WAVE*>* pWaveList);
 
 public:
 	void Save();

@@ -618,8 +618,18 @@ void Center::CreateObjectsFromList(int CountOfObject, object* pList)
 	int numOfObj = CountOfObject;
 	for (int i = 0; i < numOfObj; i++)
 	{
-		object* pObj = new object;
-		ZeroMemory(pObj, sizeof(object));
+		object* pObj = nullptr;
+		try
+		{
+			pObj = new object;
+			//ZeroMemory(pObj, sizeof(object));
+		}
+		catch (const std::bad_alloc& e)
+		{
+			//Fail to memory alloc
+			OutputDebugStringW(L"[FAIL]Center::CreateObjectFromFIle(), fail to memory allocation \n");
+		}
+		
 
 		(pList + i)->CopyTo(pObj);
 		SetModelIndexByName(pObj);
@@ -852,15 +862,17 @@ void Center::SaveMap()
 
 	//Collider
 	m_pColliderManager->Sort();
-	std::vector<COLLIDER>* pColliderList = (std::vector<COLLIDER>*)m_pColliderManager->GetList();	
-	m_pSaver->SetColliderList(pColliderList);
-
+	const std::vector<COLLIDER>* pColliderList = m_pColliderManager->GetList();	
+	m_pSaver->MakeColliderArrayFromVector(pColliderList);
+	
 	//Light
 	std::vector<Light*>* pLightList = m_pLightManager->GetList();
-	m_pSaver->SetLightList(pLightList);
+	m_pSaver->MakeLightArrayFromVector(pLightList);
+	//m_pSaver->SetLightList(pLightList);
 
 	const std::vector<WAVE*>* pWaveList = m_pWaveManager->GetList();
-	m_pSaver->SetWaveList(pWaveList);
+	m_pSaver->MakeWaveArrayFromVector(pWaveList);
+	//m_pSaver->SetWaveList(pWaveList);
 
 	std::thread t1(&CSaver::Save, m_pSaver);
 	t1.join();
@@ -1179,7 +1191,7 @@ void Center::Load(STAGE_HEADER* pHeader, CSaver* pSaver)
 	collider* pColliderList			= pSaver->m_pColliderList;
 	lightData* pLightDataList		= pSaver->m_pLightDataList;
 	
-	int waveCnt = pSaver->m_cntWave;
+	int waveCnt = pSaver->m_WaveCnt;
 	waveData* pWaveDataList			= pSaver->m_pWaveList;
 
 	CreateObjectsFromList(pHeader->iObjCnt, pObjList);
