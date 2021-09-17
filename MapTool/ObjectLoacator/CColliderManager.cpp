@@ -199,9 +199,9 @@ collider* CColliderManager::Picking(unsigned int mouseX, unsigned int mouseY, in
 	XMVECTOR det = XMMatrixDeterminant(mView);			//역행렬이 존재하는지 확인하는 판별식
 	XMMATRIX invView = XMMatrixInverse(&det, mView);	//view 역행렬
 
-	XMVECTOR mCam_world = XMVector3TransformCoord(vCamPos_view, invView);		//viwe역행렬을 곱해서 월드 포지션을 구한다.(unView)
-	XMVECTOR mRay_world = XMVector3TransformNormal(vRayDir_view, invView);		//unView
-	mRay_world = XMVector3Normalize(mRay_world);								//정규화
+	XMVECTOR vCam_world = XMVector3TransformCoord(vCamPos_view, invView);		//viwe역행렬을 곱해서 월드 포지션을 구한다.(unView)
+	XMVECTOR vRay_world = XMVector3TransformNormal(vRayDir_view, invView);		//unView
+	vRay_world = XMVector3Normalize(vRay_world);								//정규화
 
 	float fMin = FLT_MAX;	//1.175494351 E - 38 (가장 가까운 콜라이더의 거리를 저장하기 위한 변수)
 	for (int i = 0; i < vectorSize; i++)
@@ -216,7 +216,7 @@ collider* CColliderManager::Picking(unsigned int mouseX, unsigned int mouseY, in
 		box.Extents.z = col->size.z * 0.5f * col->scale.z;
 
 		float lengthOfRay = 0;													//물체와의 거리를 리턴 받기 위한 변수.
-		bool isHit = box.Intersects(mCam_world, mRay_world, lengthOfRay);		//박스와 벡터가 교차하는지 판별. DirectX boundingBox에서 제공하는 함수. 
+		bool isHit = box.Intersects(vCam_world, vRay_world, lengthOfRay);		//박스와 벡터가 교차하는지 판별. DirectX boundingBox에서 제공하는 함수. 
 		
 		//가장 가까운 콜라이더를 찾는 과정.
 		if (isHit == true)													

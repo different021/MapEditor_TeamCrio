@@ -23,17 +23,19 @@
 class CGrid;
 class CLightManager;
 class WAVE;
-enum OBJ_EDIT_MODE
-{
-    EDIT_POS = 0,
-    EDIT_ROT,
-    EDIT_SCALE,
-    EDIT_MAX,
-};
 
 class Viewer :
     public CEditorDlg
 {
+public:
+    enum OBJ_EDIT_MODE
+    {
+        EDIT_POS = 0,
+        EDIT_ROT,
+        EDIT_SCALE,
+        EDIT_MAX,
+    };
+
 private:
     HEngine_DX12_3D* m_pEngine = nullptr;				    //그래픽 엔진    -> Interface로 변경...
     DirectX::BoundingFrustum    m_camFrustum;   //
@@ -126,6 +128,9 @@ public:
     void ControlCamVelo(float delta);
     void SetMainView(DirectX::XMFLOAT3 pos);
     void RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp);
+
+    //Edit Mode
+    void SetEditMode(OBJ_EDIT_MODE mode);
 
 private:
     wchar_t* MakeFullPath(CString& dest, CString& path, CString& name, CString& tex ,CString& extend);

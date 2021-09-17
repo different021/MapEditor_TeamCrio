@@ -710,6 +710,18 @@ void Viewer::RollCam(DirectX::XMFLOAT3& vFront, DirectX::XMFLOAT3 vUp)
 	SetCam(pos, vFront, vUp);
 }
 
+//기즈모를 통해 물체의 위치, 회전, 스케일 중 어떤 것을 수정할지 결정한다.
+//OBJ_EDIT_MODE 는 viewer 클래스 내부에 선언된 enum
+void Viewer::SetEditMode(OBJ_EDIT_MODE mode)
+{
+	if (mode > OBJ_EDIT_MODE::EDIT_MAX) 
+	{ 
+		OutputDebugStringW(L"Edit Mode Out of Range\n");
+		assert(false); 
+	}
+	m_EditMode = mode;
+}
+
 //*--------------------------------------------------*//
 //					target : 관촬대상				  //
 //					front  : 정면 방향				  //
@@ -790,15 +802,15 @@ void Viewer::GetKeyUp(WPARAM wParam)
 	}
 
 	//기즈모 컨트롤 모드 변경
-	case 'W':
-		m_EditMode = EDIT_POS;
-		break;
-	case 'E':
-		m_EditMode = EDIT_ROT;
-		break;
-	case 'R':
-		m_EditMode = EDIT_SCALE;
-		break;
+	//case 'W':
+	//	m_EditMode = EDIT_POS;
+	//	break;
+	//case 'E':
+	//	m_EditMode = EDIT_ROT;
+	//	break;
+	//case 'R':
+	//	m_EditMode = EDIT_SCALE;
+	//	break;
 
 
 		//뷰 변경
@@ -836,19 +848,7 @@ void Viewer::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		OutputDebugString(L"[KEY_DOWN] Contorl\n");
 	}
 
-	switch (nChar)
-	{
-	case 'W':
-		m_EditMode = EDIT_POS;
-		break;
-	case 'E':
-		m_EditMode = EDIT_ROT;
-		break;
-	case 'R':
-		m_EditMode = EDIT_SCALE;
-		break;
-	}
-
+	
 lb_return:
 	CDialogEx::OnKeyDown(nChar, nRepCnt, nFlags);
 }

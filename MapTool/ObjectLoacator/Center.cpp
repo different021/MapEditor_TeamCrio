@@ -1347,18 +1347,23 @@ BOOL Center::PreTranslateMessage(MSG* pMsg)
 			m_pLightManager->SetSelectMode(eSELECT_MODE::eSELECT_MULTI);
 			break;
 		
-		case 'L':
-			{
-
-				int a = 0;
-				break;
-			}
-
-		case 'P':
+		case 'W':
 		{
-			int a = 0;
+			m_Viewer->SetEditMode(Viewer::OBJ_EDIT_MODE::EDIT_POS);
 			break;
 		}
+
+		case 'E':
+		{
+			m_Viewer->SetEditMode(Viewer::OBJ_EDIT_MODE::EDIT_ROT);
+			break;
+		}
+		case 'R':
+		{
+			m_Viewer->SetEditMode(Viewer::OBJ_EDIT_MODE::EDIT_SCALE);
+			break;
+		}
+
 			
 		case VK_OEM_7://쿼테이션
 		{
