@@ -36,7 +36,7 @@ const char* g_szDdsA = ".dds";
 
 bool HGUtility::GetEnvDir_A(char* szEnvDirName, char* pOut, int bufferSize)
 {
-	return GetEnvDir_A((const char*)szEnvDirName, pOut, bufferSize);
+	return GetEnvDir_A(std::move(szEnvDirName), pOut, bufferSize);
 }
 
 bool HGUtility::GetEnvDir_A(const char* szEnvDirName, char* pOut, int bufferSize)

@@ -143,12 +143,27 @@ void MapLoader::DeleteMap(MAP* pMap)
 		{
 			delete[] pMap->_pObjList;
 			pMap->_pObjList = NULL;
+			pMap->_header.iObjCnt = 0;
 		}
 		if (pMap->_pColliderList)
 		{
 			delete[] pMap->_pColliderList;
 			pMap->_pColliderList = NULL;
+			pMap->_header.iColliderCnt = 0;
 		}
+		if (pMap->_pLightList)
+		{
+			delete[] pMap->_pLightList;
+			pMap->_pLightList = NULL;
+			pMap->_header.iLightCnt = 0;
+		}
+		if (pMap->_pWaveList)
+		{
+			delete[] pMap->_pWaveList;
+			pMap->_pWaveList = NULL;
+			pMap->_iWaveCnt = 0;
+		}
+
 
 		delete pMap; 
 		pMap = NULL;
